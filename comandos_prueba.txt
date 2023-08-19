@@ -1,0 +1,1 @@
+execute -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/prueba.adsj

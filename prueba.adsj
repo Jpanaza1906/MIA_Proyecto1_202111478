@@ -1,0 +1,2 @@
+mkdisk -size=5 -unit=M -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk
+rep
