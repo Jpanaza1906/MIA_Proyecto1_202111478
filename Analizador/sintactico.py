@@ -4,7 +4,9 @@ import ply.yacc as yacc
 #================================ PRODUCCION INICIAL =================================
 def p_command(p):
     '''command : mkdisk_command
-               | execute_command'''
+               | execute_command
+               | rmdisk_command
+    '''
     p[0] = p[1]
 
 # =============================== Reglas de producción para MKDISK ===============================
@@ -91,6 +93,26 @@ def p_execute_command(p):
         }
     
 # =============================== FIN EXECUTE ===============================
+
+#============================== Reglas de producción para RMDISK ===============================
+def p_rmdisk_command(p):
+    '''rmdisk_command : RMDISK PATH IGUAL RUTA
+                      | RMDISK PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE'''
+                    
+    #Se guarda el contenido
+    if len(p) > 5:
+        p[0] = {
+            'command': 'rmdisk',
+            'path': p[5]
+        }
+    else:
+        p[0] = {
+            'command': 'rmdisk',
+            'path': p[4]
+        }
+#============================== FIN RMDISK ===============================
+
+
 def p_error(p):
     print("Syntax error in input!")
 

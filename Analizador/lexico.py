@@ -3,6 +3,7 @@ import ply.lex as lex
 # Lista de palabras reservadas
 reserved = {
     'mkdisk': 'MKDISK',
+    'rmdisk': 'RMDISK',
     '-path': 'PATH',
     '-unit': 'UNIT',
     '-fit': 'FIT',

@@ -1,17 +1,23 @@
 import ctypes
 import struct
-from .Utilities import * 
 from .Partition import *
+from .Load import *
 
 const = "I 10s I 1s"
+
 class Mbr(ctypes.Structure):
+    
+    #Tipos----------------------------------------------------------------------
+     
     _fields_ = [
         ('mbr_tamano', ctypes.c_int), # 4 bytes
         ('mbr_fecha_creacion', ctypes.c_char * 10), # 10 bytes
         ('mbr_dsk_signature', ctypes.c_int), # 4 bytes
         ('dsk_fit', ctypes.c_char), # 1 byte
     ]
-    #Constructor
+    
+    #Constructor----------------------------------------------------------------
+    
     def __init__(self):
         self.mbr_tamano = 0
         self.mbr_fecha_creacion = b'\x00'*10
@@ -19,21 +25,24 @@ class Mbr(ctypes.Structure):
         self.dsk_fit = b'\x00'
         self.mbr_partition = [Partition() for _ in range(4)]
     
-    #Setters
-    def set_mbr_tamano(self, tamano):
+    #Setters--------------------------------------------------------------------
+    
+    def set_mbr_tamano(self, tamano): # Definir el tamaño
         self.mbr_tamano = tamano
     
-    def set_mbr_fecha_creacion(self, fecha):
+    def set_mbr_fecha_creacion(self, fecha): # Definir la fecha
         self.mbr_fecha_creacion = coding_str(fecha, 10)
         
-    def set_mbr_dsk_signature(self, signature):
+    def set_mbr_dsk_signature(self, signature): # Definir la firma
         self.mbr_dsk_signature = signature
     
-    def set_dsk_fit(self, fit):
+    def set_dsk_fit(self, fit): # Definir el fit
         self.dsk_fit = coding_str(fit, 1)
         
-    def set_mbr_partition(self, partition, index):
+    def set_mbr_partition(self, partition, index): # Definir una particion especifica
         self.mbr_partition[index] = partition
+    
+    #Definir el MBR----------------------------------------------------------------
     
     def set_mbr(self, tamano, fecha, signature, fit):
         self.set_mbr_tamano(tamano)
@@ -41,13 +50,14 @@ class Mbr(ctypes.Structure):
         self.set_mbr_dsk_signature(signature)
         self.set_dsk_fit(fit)
     
-    #Get const
-    def get_const(self):
+    #Getters--------------------------------------------------------------------
+    
+    def get_const(self): # Obtener la constante
         return const
     
-    #Serialize
+    #Serialize------------------------------------------------------------------
     
-    def doSerialize(self):
+    def doSerialize(self): # Serializar el MBR
         mbr_data = struct.pack(
             const,
             self.mbr_tamano,
@@ -57,13 +67,15 @@ class Mbr(ctypes.Structure):
         )
         return mbr_data + self.doSerializePartitions()
     
-    def doSerializePartitions(self):
+    def doSerializePartitions(self): # Serializar las particiones
         partitions = b''
         for partition in self.mbr_partition:
             partitions += partition.doSerialize()
         return partitions
     
-    def doDeserialize(self, data):
+    #Deserialize----------------------------------------------------------------
+    
+    def doDeserialize(self, data): # Deserializar el MBR
         #Obtener el tamaño del MBR y Particion
         sizeMbr = struct.calcsize(const)
         sizePartition = struct.calcsize(self.mbr_partition[0].get_const())
@@ -78,19 +90,18 @@ class Mbr(ctypes.Structure):
         
         #Llamar funcion para Deserializar las particiones
         self.doDeserializePartitions(data[sizePartition:])
-    
-    def doDeserializePartitions(self, data):
+        
+    def doDeserializePartitions(self, data): # Deserializar las particiones
         #Obtener el tamaño de la particion
-        #sizePartition = struct.calcsize(self.mbr_partition[0].get_const())
-        #sizePartition = len(self.mbr_partition[0].doSerialize())
+        sizePartition = struct.calcsize(self.mbr_partition[0].get_const())
         
         #Deserializar las particiones
         for i in range(4):            
-            sizePartition = len(self.mbr_partition[i].doSerialize())
             partition_data = data[i*sizePartition:(i+1)*sizePartition]
             self.mbr_partition[i].doDeseralize(partition_data)
         
-        
+    #Display--------------------------------------------------------------------
+    
     def display_info(self):
         print("MBR")
         print(f"Size: {self.mbr_tamano}")

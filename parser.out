@@ -5,34 +5,38 @@ Grammar
 Rule 0     S' -> command
 Rule 1     command -> mkdisk_command
 Rule 2     command -> execute_command
-Rule 3     mkdisk_command -> MKDISK opciones
-Rule 4     opciones -> opciones opciones_element
-Rule 5     opciones -> opciones_element
-Rule 6     opciones_element -> opcion_size
-Rule 7     opciones_element -> opcion_path
-Rule 8     opciones_element -> opcion_unit
-Rule 9     opciones_element -> opcion_fit
-Rule 10    opcion_size -> SIZE IGUAL NUMERO
-Rule 11    opcion_path -> PATH IGUAL RUTA
-Rule 12    opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
-Rule 13    opcion_unit -> UNIT IGUAL ID
-Rule 14    opcion_fit -> FIT IGUAL ID
-Rule 15    execute_command -> EXECUTE PATH IGUAL RUTA
-Rule 16    execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
+Rule 3     command -> rmdisk_command
+Rule 4     mkdisk_command -> MKDISK opciones
+Rule 5     opciones -> opciones opciones_element
+Rule 6     opciones -> opciones_element
+Rule 7     opciones_element -> opcion_size
+Rule 8     opciones_element -> opcion_path
+Rule 9     opciones_element -> opcion_unit
+Rule 10    opciones_element -> opcion_fit
+Rule 11    opcion_size -> SIZE IGUAL NUMERO
+Rule 12    opcion_path -> PATH IGUAL RUTA
+Rule 13    opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
+Rule 14    opcion_unit -> UNIT IGUAL ID
+Rule 15    opcion_fit -> FIT IGUAL ID
+Rule 16    execute_command -> EXECUTE PATH IGUAL RUTA
+Rule 17    execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
+Rule 18    rmdisk_command -> RMDISK PATH IGUAL RUTA
+Rule 19    rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
 
 Terminals, with rules where they appear
 
-COMILLADOBLE         : 12 12 16 16
-EXECUTE              : 15 16
-FIT                  : 14
-ID                   : 13 14
-IGUAL                : 10 11 12 13 14 15 16
-MKDISK               : 3
-NUMERO               : 10
-PATH                 : 11 12 15 16
-RUTA                 : 11 12 15 16
-SIZE                 : 10
-UNIT                 : 13
+COMILLADOBLE         : 13 13 17 17 19 19
+EXECUTE              : 16 17
+FIT                  : 15
+ID                   : 14 15
+IGUAL                : 11 12 13 14 15 16 17 18 19
+MKDISK               : 4
+NUMERO               : 11
+PATH                 : 12 13 16 17 18 19
+RMDISK               : 18 19
+RUTA                 : 12 13 16 17 18 19
+SIZE                 : 11
+UNIT                 : 14
 error                : 
 
 Nonterminals, with rules where they appear
@@ -40,12 +44,13 @@ Nonterminals, with rules where they appear
 command              : 0
 execute_command      : 2
 mkdisk_command       : 1
-opcion_fit           : 9
-opcion_path          : 7
-opcion_size          : 6
-opcion_unit          : 8
-opciones             : 3 4
-opciones_element     : 4 5
+opcion_fit           : 10
+opcion_path          : 8
+opcion_size          : 7
+opcion_unit          : 9
+opciones             : 4 5
+opciones_element     : 5 6
+rmdisk_command       : 3
 
 Parsing method: LALR
 
@@ -54,16 +59,21 @@ state 0
     (0) S' -> . command
     (1) command -> . mkdisk_command
     (2) command -> . execute_command
-    (3) mkdisk_command -> . MKDISK opciones
-    (15) execute_command -> . EXECUTE PATH IGUAL RUTA
-    (16) execute_command -> . EXECUTE PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
+    (3) command -> . rmdisk_command
+    (4) mkdisk_command -> . MKDISK opciones
+    (16) execute_command -> . EXECUTE PATH IGUAL RUTA
+    (17) execute_command -> . EXECUTE PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
+    (18) rmdisk_command -> . RMDISK PATH IGUAL RUTA
+    (19) rmdisk_command -> . RMDISK PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
 
-    MKDISK          shift and go to state 4
-    EXECUTE         shift and go to state 5
+    MKDISK          shift and go to state 5
+    EXECUTE         shift and go to state 6
+    RMDISK          shift and go to state 7
 
     command                        shift and go to state 1
     mkdisk_command                 shift and go to state 2
     execute_command                shift and go to state 3
+    rmdisk_command                 shift and go to state 4
 
 state 1
 
@@ -87,202 +97,202 @@ state 3
 
 state 4
 
-    (3) mkdisk_command -> MKDISK . opciones
-    (4) opciones -> . opciones opciones_element
-    (5) opciones -> . opciones_element
-    (6) opciones_element -> . opcion_size
-    (7) opciones_element -> . opcion_path
-    (8) opciones_element -> . opcion_unit
-    (9) opciones_element -> . opcion_fit
-    (10) opcion_size -> . SIZE IGUAL NUMERO
-    (11) opcion_path -> . PATH IGUAL RUTA
-    (12) opcion_path -> . PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
-    (13) opcion_unit -> . UNIT IGUAL ID
-    (14) opcion_fit -> . FIT IGUAL ID
+    (3) command -> rmdisk_command .
 
-    SIZE            shift and go to state 12
-    PATH            shift and go to state 13
-    UNIT            shift and go to state 14
-    FIT             shift and go to state 15
+    $end            reduce using rule 3 (command -> rmdisk_command .)
 
-    opciones                       shift and go to state 6
-    opciones_element               shift and go to state 7
-    opcion_size                    shift and go to state 8
-    opcion_path                    shift and go to state 9
-    opcion_unit                    shift and go to state 10
-    opcion_fit                     shift and go to state 11
 
 state 5
 
-    (15) execute_command -> EXECUTE . PATH IGUAL RUTA
-    (16) execute_command -> EXECUTE . PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
+    (4) mkdisk_command -> MKDISK . opciones
+    (5) opciones -> . opciones opciones_element
+    (6) opciones -> . opciones_element
+    (7) opciones_element -> . opcion_size
+    (8) opciones_element -> . opcion_path
+    (9) opciones_element -> . opcion_unit
+    (10) opciones_element -> . opcion_fit
+    (11) opcion_size -> . SIZE IGUAL NUMERO
+    (12) opcion_path -> . PATH IGUAL RUTA
+    (13) opcion_path -> . PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
+    (14) opcion_unit -> . UNIT IGUAL ID
+    (15) opcion_fit -> . FIT IGUAL ID
 
-    PATH            shift and go to state 16
+    SIZE            shift and go to state 14
+    PATH            shift and go to state 15
+    UNIT            shift and go to state 16
+    FIT             shift and go to state 17
 
+    opciones                       shift and go to state 8
+    opciones_element               shift and go to state 9
+    opcion_size                    shift and go to state 10
+    opcion_path                    shift and go to state 11
+    opcion_unit                    shift and go to state 12
+    opcion_fit                     shift and go to state 13
 
 state 6
 
-    (3) mkdisk_command -> MKDISK opciones .
-    (4) opciones -> opciones . opciones_element
-    (6) opciones_element -> . opcion_size
-    (7) opciones_element -> . opcion_path
-    (8) opciones_element -> . opcion_unit
-    (9) opciones_element -> . opcion_fit
-    (10) opcion_size -> . SIZE IGUAL NUMERO
-    (11) opcion_path -> . PATH IGUAL RUTA
-    (12) opcion_path -> . PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
-    (13) opcion_unit -> . UNIT IGUAL ID
-    (14) opcion_fit -> . FIT IGUAL ID
+    (16) execute_command -> EXECUTE . PATH IGUAL RUTA
+    (17) execute_command -> EXECUTE . PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
 
-    $end            reduce using rule 3 (mkdisk_command -> MKDISK opciones .)
-    SIZE            shift and go to state 12
-    PATH            shift and go to state 13
-    UNIT            shift and go to state 14
-    FIT             shift and go to state 15
+    PATH            shift and go to state 18
 
-    opciones_element               shift and go to state 17
-    opcion_size                    shift and go to state 8
-    opcion_path                    shift and go to state 9
-    opcion_unit                    shift and go to state 10
-    opcion_fit                     shift and go to state 11
 
 state 7
 
-    (5) opciones -> opciones_element .
+    (18) rmdisk_command -> RMDISK . PATH IGUAL RUTA
+    (19) rmdisk_command -> RMDISK . PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
 
-    SIZE            reduce using rule 5 (opciones -> opciones_element .)
-    PATH            reduce using rule 5 (opciones -> opciones_element .)
-    UNIT            reduce using rule 5 (opciones -> opciones_element .)
-    FIT             reduce using rule 5 (opciones -> opciones_element .)
-    $end            reduce using rule 5 (opciones -> opciones_element .)
+    PATH            shift and go to state 19
 
 
 state 8
 
-    (6) opciones_element -> opcion_size .
+    (4) mkdisk_command -> MKDISK opciones .
+    (5) opciones -> opciones . opciones_element
+    (7) opciones_element -> . opcion_size
+    (8) opciones_element -> . opcion_path
+    (9) opciones_element -> . opcion_unit
+    (10) opciones_element -> . opcion_fit
+    (11) opcion_size -> . SIZE IGUAL NUMERO
+    (12) opcion_path -> . PATH IGUAL RUTA
+    (13) opcion_path -> . PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
+    (14) opcion_unit -> . UNIT IGUAL ID
+    (15) opcion_fit -> . FIT IGUAL ID
 
-    SIZE            reduce using rule 6 (opciones_element -> opcion_size .)
-    PATH            reduce using rule 6 (opciones_element -> opcion_size .)
-    UNIT            reduce using rule 6 (opciones_element -> opcion_size .)
-    FIT             reduce using rule 6 (opciones_element -> opcion_size .)
-    $end            reduce using rule 6 (opciones_element -> opcion_size .)
+    $end            reduce using rule 4 (mkdisk_command -> MKDISK opciones .)
+    SIZE            shift and go to state 14
+    PATH            shift and go to state 15
+    UNIT            shift and go to state 16
+    FIT             shift and go to state 17
 
+    opciones_element               shift and go to state 20
+    opcion_size                    shift and go to state 10
+    opcion_path                    shift and go to state 11
+    opcion_unit                    shift and go to state 12
+    opcion_fit                     shift and go to state 13
 
 state 9
 
-    (7) opciones_element -> opcion_path .
+    (6) opciones -> opciones_element .
 
-    SIZE            reduce using rule 7 (opciones_element -> opcion_path .)
-    PATH            reduce using rule 7 (opciones_element -> opcion_path .)
-    UNIT            reduce using rule 7 (opciones_element -> opcion_path .)
-    FIT             reduce using rule 7 (opciones_element -> opcion_path .)
-    $end            reduce using rule 7 (opciones_element -> opcion_path .)
+    SIZE            reduce using rule 6 (opciones -> opciones_element .)
+    PATH            reduce using rule 6 (opciones -> opciones_element .)
+    UNIT            reduce using rule 6 (opciones -> opciones_element .)
+    FIT             reduce using rule 6 (opciones -> opciones_element .)
+    $end            reduce using rule 6 (opciones -> opciones_element .)
 
 
 state 10
 
-    (8) opciones_element -> opcion_unit .
+    (7) opciones_element -> opcion_size .
 
-    SIZE            reduce using rule 8 (opciones_element -> opcion_unit .)
-    PATH            reduce using rule 8 (opciones_element -> opcion_unit .)
-    UNIT            reduce using rule 8 (opciones_element -> opcion_unit .)
-    FIT             reduce using rule 8 (opciones_element -> opcion_unit .)
-    $end            reduce using rule 8 (opciones_element -> opcion_unit .)
+    SIZE            reduce using rule 7 (opciones_element -> opcion_size .)
+    PATH            reduce using rule 7 (opciones_element -> opcion_size .)
+    UNIT            reduce using rule 7 (opciones_element -> opcion_size .)
+    FIT             reduce using rule 7 (opciones_element -> opcion_size .)
+    $end            reduce using rule 7 (opciones_element -> opcion_size .)
 
 
 state 11
 
-    (9) opciones_element -> opcion_fit .
+    (8) opciones_element -> opcion_path .
 
-    SIZE            reduce using rule 9 (opciones_element -> opcion_fit .)
-    PATH            reduce using rule 9 (opciones_element -> opcion_fit .)
-    UNIT            reduce using rule 9 (opciones_element -> opcion_fit .)
-    FIT             reduce using rule 9 (opciones_element -> opcion_fit .)
-    $end            reduce using rule 9 (opciones_element -> opcion_fit .)
+    SIZE            reduce using rule 8 (opciones_element -> opcion_path .)
+    PATH            reduce using rule 8 (opciones_element -> opcion_path .)
+    UNIT            reduce using rule 8 (opciones_element -> opcion_path .)
+    FIT             reduce using rule 8 (opciones_element -> opcion_path .)
+    $end            reduce using rule 8 (opciones_element -> opcion_path .)
 
 
 state 12
 
-    (10) opcion_size -> SIZE . IGUAL NUMERO
+    (9) opciones_element -> opcion_unit .
 
-    IGUAL           shift and go to state 18
+    SIZE            reduce using rule 9 (opciones_element -> opcion_unit .)
+    PATH            reduce using rule 9 (opciones_element -> opcion_unit .)
+    UNIT            reduce using rule 9 (opciones_element -> opcion_unit .)
+    FIT             reduce using rule 9 (opciones_element -> opcion_unit .)
+    $end            reduce using rule 9 (opciones_element -> opcion_unit .)
 
 
 state 13
 
-    (11) opcion_path -> PATH . IGUAL RUTA
-    (12) opcion_path -> PATH . IGUAL COMILLADOBLE RUTA COMILLADOBLE
+    (10) opciones_element -> opcion_fit .
 
-    IGUAL           shift and go to state 19
+    SIZE            reduce using rule 10 (opciones_element -> opcion_fit .)
+    PATH            reduce using rule 10 (opciones_element -> opcion_fit .)
+    UNIT            reduce using rule 10 (opciones_element -> opcion_fit .)
+    FIT             reduce using rule 10 (opciones_element -> opcion_fit .)
+    $end            reduce using rule 10 (opciones_element -> opcion_fit .)
 
 
 state 14
 
-    (13) opcion_unit -> UNIT . IGUAL ID
-
-    IGUAL           shift and go to state 20
-
-
-state 15
-
-    (14) opcion_fit -> FIT . IGUAL ID
+    (11) opcion_size -> SIZE . IGUAL NUMERO
 
     IGUAL           shift and go to state 21
 
 
-state 16
+state 15
 
-    (15) execute_command -> EXECUTE PATH . IGUAL RUTA
-    (16) execute_command -> EXECUTE PATH . IGUAL COMILLADOBLE RUTA COMILLADOBLE
+    (12) opcion_path -> PATH . IGUAL RUTA
+    (13) opcion_path -> PATH . IGUAL COMILLADOBLE RUTA COMILLADOBLE
 
     IGUAL           shift and go to state 22
 
 
+state 16
+
+    (14) opcion_unit -> UNIT . IGUAL ID
+
+    IGUAL           shift and go to state 23
+
+
 state 17
 
-    (4) opciones -> opciones opciones_element .
+    (15) opcion_fit -> FIT . IGUAL ID
 
-    SIZE            reduce using rule 4 (opciones -> opciones opciones_element .)
-    PATH            reduce using rule 4 (opciones -> opciones opciones_element .)
-    UNIT            reduce using rule 4 (opciones -> opciones opciones_element .)
-    FIT             reduce using rule 4 (opciones -> opciones opciones_element .)
-    $end            reduce using rule 4 (opciones -> opciones opciones_element .)
+    IGUAL           shift and go to state 24
 
 
 state 18
 
-    (10) opcion_size -> SIZE IGUAL . NUMERO
+    (16) execute_command -> EXECUTE PATH . IGUAL RUTA
+    (17) execute_command -> EXECUTE PATH . IGUAL COMILLADOBLE RUTA COMILLADOBLE
 
-    NUMERO          shift and go to state 23
+    IGUAL           shift and go to state 25
 
 
 state 19
 
-    (11) opcion_path -> PATH IGUAL . RUTA
-    (12) opcion_path -> PATH IGUAL . COMILLADOBLE RUTA COMILLADOBLE
+    (18) rmdisk_command -> RMDISK PATH . IGUAL RUTA
+    (19) rmdisk_command -> RMDISK PATH . IGUAL COMILLADOBLE RUTA COMILLADOBLE
 
-    RUTA            shift and go to state 24
-    COMILLADOBLE    shift and go to state 25
+    IGUAL           shift and go to state 26
 
 
 state 20
 
-    (13) opcion_unit -> UNIT IGUAL . ID
+    (5) opciones -> opciones opciones_element .
 
-    ID              shift and go to state 26
+    SIZE            reduce using rule 5 (opciones -> opciones opciones_element .)
+    PATH            reduce using rule 5 (opciones -> opciones opciones_element .)
+    UNIT            reduce using rule 5 (opciones -> opciones opciones_element .)
+    FIT             reduce using rule 5 (opciones -> opciones opciones_element .)
+    $end            reduce using rule 5 (opciones -> opciones opciones_element .)
 
 
 state 21
 
-    (14) opcion_fit -> FIT IGUAL . ID
+    (11) opcion_size -> SIZE IGUAL . NUMERO
 
-    ID              shift and go to state 27
+    NUMERO          shift and go to state 27
 
 
 state 22
 
-    (15) execute_command -> EXECUTE PATH IGUAL . RUTA
-    (16) execute_command -> EXECUTE PATH IGUAL . COMILLADOBLE RUTA COMILLADOBLE
+    (12) opcion_path -> PATH IGUAL . RUTA
+    (13) opcion_path -> PATH IGUAL . COMILLADOBLE RUTA COMILLADOBLE
 
     RUTA            shift and go to state 28
     COMILLADOBLE    shift and go to state 29
@@ -290,97 +300,157 @@ state 22
 
 state 23
 
-    (10) opcion_size -> SIZE IGUAL NUMERO .
+    (14) opcion_unit -> UNIT IGUAL . ID
 
-    SIZE            reduce using rule 10 (opcion_size -> SIZE IGUAL NUMERO .)
-    PATH            reduce using rule 10 (opcion_size -> SIZE IGUAL NUMERO .)
-    UNIT            reduce using rule 10 (opcion_size -> SIZE IGUAL NUMERO .)
-    FIT             reduce using rule 10 (opcion_size -> SIZE IGUAL NUMERO .)
-    $end            reduce using rule 10 (opcion_size -> SIZE IGUAL NUMERO .)
+    ID              shift and go to state 30
 
 
 state 24
 
-    (11) opcion_path -> PATH IGUAL RUTA .
+    (15) opcion_fit -> FIT IGUAL . ID
 
-    SIZE            reduce using rule 11 (opcion_path -> PATH IGUAL RUTA .)
-    PATH            reduce using rule 11 (opcion_path -> PATH IGUAL RUTA .)
-    UNIT            reduce using rule 11 (opcion_path -> PATH IGUAL RUTA .)
-    FIT             reduce using rule 11 (opcion_path -> PATH IGUAL RUTA .)
-    $end            reduce using rule 11 (opcion_path -> PATH IGUAL RUTA .)
+    ID              shift and go to state 31
 
 
 state 25
 
-    (12) opcion_path -> PATH IGUAL COMILLADOBLE . RUTA COMILLADOBLE
+    (16) execute_command -> EXECUTE PATH IGUAL . RUTA
+    (17) execute_command -> EXECUTE PATH IGUAL . COMILLADOBLE RUTA COMILLADOBLE
 
-    RUTA            shift and go to state 30
+    RUTA            shift and go to state 32
+    COMILLADOBLE    shift and go to state 33
 
 
 state 26
 
-    (13) opcion_unit -> UNIT IGUAL ID .
+    (18) rmdisk_command -> RMDISK PATH IGUAL . RUTA
+    (19) rmdisk_command -> RMDISK PATH IGUAL . COMILLADOBLE RUTA COMILLADOBLE
 
-    SIZE            reduce using rule 13 (opcion_unit -> UNIT IGUAL ID .)
-    PATH            reduce using rule 13 (opcion_unit -> UNIT IGUAL ID .)
-    UNIT            reduce using rule 13 (opcion_unit -> UNIT IGUAL ID .)
-    FIT             reduce using rule 13 (opcion_unit -> UNIT IGUAL ID .)
-    $end            reduce using rule 13 (opcion_unit -> UNIT IGUAL ID .)
+    RUTA            shift and go to state 34
+    COMILLADOBLE    shift and go to state 35
 
 
 state 27
 
-    (14) opcion_fit -> FIT IGUAL ID .
+    (11) opcion_size -> SIZE IGUAL NUMERO .
 
-    SIZE            reduce using rule 14 (opcion_fit -> FIT IGUAL ID .)
-    PATH            reduce using rule 14 (opcion_fit -> FIT IGUAL ID .)
-    UNIT            reduce using rule 14 (opcion_fit -> FIT IGUAL ID .)
-    FIT             reduce using rule 14 (opcion_fit -> FIT IGUAL ID .)
-    $end            reduce using rule 14 (opcion_fit -> FIT IGUAL ID .)
+    SIZE            reduce using rule 11 (opcion_size -> SIZE IGUAL NUMERO .)
+    PATH            reduce using rule 11 (opcion_size -> SIZE IGUAL NUMERO .)
+    UNIT            reduce using rule 11 (opcion_size -> SIZE IGUAL NUMERO .)
+    FIT             reduce using rule 11 (opcion_size -> SIZE IGUAL NUMERO .)
+    $end            reduce using rule 11 (opcion_size -> SIZE IGUAL NUMERO .)
 
 
 state 28
 
-    (15) execute_command -> EXECUTE PATH IGUAL RUTA .
+    (12) opcion_path -> PATH IGUAL RUTA .
 
-    $end            reduce using rule 15 (execute_command -> EXECUTE PATH IGUAL RUTA .)
+    SIZE            reduce using rule 12 (opcion_path -> PATH IGUAL RUTA .)
+    PATH            reduce using rule 12 (opcion_path -> PATH IGUAL RUTA .)
+    UNIT            reduce using rule 12 (opcion_path -> PATH IGUAL RUTA .)
+    FIT             reduce using rule 12 (opcion_path -> PATH IGUAL RUTA .)
+    $end            reduce using rule 12 (opcion_path -> PATH IGUAL RUTA .)
 
 
 state 29
 
-    (16) execute_command -> EXECUTE PATH IGUAL COMILLADOBLE . RUTA COMILLADOBLE
+    (13) opcion_path -> PATH IGUAL COMILLADOBLE . RUTA COMILLADOBLE
 
-    RUTA            shift and go to state 31
+    RUTA            shift and go to state 36
 
 
 state 30
 
-    (12) opcion_path -> PATH IGUAL COMILLADOBLE RUTA . COMILLADOBLE
+    (14) opcion_unit -> UNIT IGUAL ID .
 
-    COMILLADOBLE    shift and go to state 32
+    SIZE            reduce using rule 14 (opcion_unit -> UNIT IGUAL ID .)
+    PATH            reduce using rule 14 (opcion_unit -> UNIT IGUAL ID .)
+    UNIT            reduce using rule 14 (opcion_unit -> UNIT IGUAL ID .)
+    FIT             reduce using rule 14 (opcion_unit -> UNIT IGUAL ID .)
+    $end            reduce using rule 14 (opcion_unit -> UNIT IGUAL ID .)
 
 
 state 31
 
-    (16) execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA . COMILLADOBLE
+    (15) opcion_fit -> FIT IGUAL ID .
 
-    COMILLADOBLE    shift and go to state 33
+    SIZE            reduce using rule 15 (opcion_fit -> FIT IGUAL ID .)
+    PATH            reduce using rule 15 (opcion_fit -> FIT IGUAL ID .)
+    UNIT            reduce using rule 15 (opcion_fit -> FIT IGUAL ID .)
+    FIT             reduce using rule 15 (opcion_fit -> FIT IGUAL ID .)
+    $end            reduce using rule 15 (opcion_fit -> FIT IGUAL ID .)
 
 
 state 32
 
-    (12) opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .
+    (16) execute_command -> EXECUTE PATH IGUAL RUTA .
 
-    SIZE            reduce using rule 12 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
-    PATH            reduce using rule 12 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
-    UNIT            reduce using rule 12 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
-    FIT             reduce using rule 12 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
-    $end            reduce using rule 12 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
+    $end            reduce using rule 16 (execute_command -> EXECUTE PATH IGUAL RUTA .)
 
 
 state 33
 
-    (16) execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .
+    (17) execute_command -> EXECUTE PATH IGUAL COMILLADOBLE . RUTA COMILLADOBLE
 
-    $end            reduce using rule 16 (execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
+    RUTA            shift and go to state 37
+
+
+state 34
+
+    (18) rmdisk_command -> RMDISK PATH IGUAL RUTA .
+
+    $end            reduce using rule 18 (rmdisk_command -> RMDISK PATH IGUAL RUTA .)
+
+
+state 35
+
+    (19) rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE . RUTA COMILLADOBLE
+
+    RUTA            shift and go to state 38
+
+
+state 36
+
+    (13) opcion_path -> PATH IGUAL COMILLADOBLE RUTA . COMILLADOBLE
+
+    COMILLADOBLE    shift and go to state 39
+
+
+state 37
+
+    (17) execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA . COMILLADOBLE
+
+    COMILLADOBLE    shift and go to state 40
+
+
+state 38
+
+    (19) rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE RUTA . COMILLADOBLE
+
+    COMILLADOBLE    shift and go to state 41
+
+
+state 39
+
+    (13) opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .
+
+    SIZE            reduce using rule 13 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
+    PATH            reduce using rule 13 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
+    UNIT            reduce using rule 13 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
+    FIT             reduce using rule 13 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
+    $end            reduce using rule 13 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
+
+
+state 40
+
+    (17) execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .
+
+    $end            reduce using rule 17 (execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
+
+
+state 41
+
+    (19) rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .
+
+    $end            reduce using rule 19 (rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
 
