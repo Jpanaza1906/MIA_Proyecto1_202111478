@@ -20,9 +20,9 @@ class Mbr(ctypes.Structure):
     
     def __init__(self):
         self.mbr_tamano = 0
-        self.mbr_fecha_creacion = b'\x00'*10
+        self.mbr_fecha_creacion = b'\0'*10
         self.mbr_dsk_signature = 0
-        self.dsk_fit = b'\x00'
+        self.dsk_fit = b'\0'
         self.mbr_partition = [Partition() for _ in range(4)]
     
     #Setters--------------------------------------------------------------------
@@ -55,6 +55,16 @@ class Mbr(ctypes.Structure):
     def get_const(self): # Obtener la constante
         return const
     
+    def exist_partition(self, name): # Verificar si existe una particion
+        for partition in self.mbr_partition:
+            if partition.part_name.decode() == name:
+                return True
+    
+    def get_partition(self, name): # Obtener una particion
+        for partition in self.mbr_partition:
+            if partition.part_name.decode() == name:
+                return partition
+    
     #Serialize------------------------------------------------------------------
     
     def doSerialize(self): # Serializar el MBR
@@ -78,7 +88,6 @@ class Mbr(ctypes.Structure):
     def doDeserialize(self, data): # Deserializar el MBR
         #Obtener el tamaño del MBR y Particion
         sizeMbr = struct.calcsize(const)
-        sizePartition = struct.calcsize(self.mbr_partition[0].get_const())
         
         #Deserializar el MBR
         mbr_data = data[:sizeMbr]
@@ -89,7 +98,7 @@ class Mbr(ctypes.Structure):
         self.dsk_fit = unpacked[3]
         
         #Llamar funcion para Deserializar las particiones
-        self.doDeserializePartitions(data[sizePartition:])
+        self.doDeserializePartitions(data[sizeMbr:])
         
     def doDeserializePartitions(self, data): # Deserializar las particiones
         #Obtener el tamaño de la particion
@@ -105,11 +114,11 @@ class Mbr(ctypes.Structure):
     def display_info(self):
         print("MBR")
         print(f"Size: {self.mbr_tamano}")
-        print(f"Date: {self.mbr_fecha_creacion}")
+        print(f"Date: {self.mbr_fecha_creacion.decode()}")
         print(f"Signature: {self.mbr_dsk_signature}")
-        print(f"Fit: {self.dsk_fit}")
+        print(f"Fit: {self.dsk_fit.decode()}")
         print("")
-        print("Partitions:")
+        print("Partitions:\n")
         cont = 0
         for partition in self.mbr_partition:
             print("Partition ", cont," :")

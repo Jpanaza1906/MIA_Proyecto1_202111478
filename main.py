@@ -18,6 +18,7 @@ from Analizador.sintactico import *
 from Comandos.MkDisk import *
 from Comandos.Execute import *
 from Comandos.RmDisk import *
+from Comandos.FDisk import *
 
 #Funcion ejecutar comando-------------------------------------------------------
 
@@ -33,14 +34,11 @@ def exe_command(result):
                         lines = file.readlines()
                         for line in lines:
                             print(line)
-                            if(line.strip().lower() == 'rep'):                                
-                                pass
-                            else:
-                                result = parser.parse(line)
-                                exe_command(result)
-                    print("\t Execute>>> Comando ejecutado con exito")
+                            result = parser.parse(line)
+                            exe_command(result)
+                    print("\t Execute>>> Comando ejecutado con exito\n")
                 else:
-                    print("\t Execute>>> Error al ejecutar el comando")
+                    print("\t Execute>>> Error al ejecutar el comando\n")
         # Comando MkDisk
         elif(result['command'] == 'mkdisk'):
             #Se verifica que tenga los parametros obligatorios
@@ -58,20 +56,65 @@ def exe_command(result):
                 #Se ejecuta el comando
                 c_mkdisk = MkDisk()
                 if(c_mkdisk.run(size, path, fit, unit)):
-                    print("\t MkDisk>>> Comando ejecutado con exito")
+                    print("\t MkDisk>>> Comando ejecutado con exito\n")
                 else:
-                    print("\t MkDisk>>> Error al ejecutar el comando")
+                    print("\t MkDisk>>> Error al ejecutar el comando\n")
             else:
-                print("\t MkDisk>>> Falta un parametro obligatorio")
+                print("\t MkDisk>>> Falta un parametro obligatorio\n")
                 return
         # Comando RmDisk
         elif(result['command'] == 'rmdisk'):
             if('path' in result):
                 c_rmdisk = RmDisk()
                 if(c_rmdisk.run(result['path'])):
-                    print("\t RmDisk>>> Comando ejecutado con exito")
+                    print("\t RmDisk>>> Comando ejecutado con exito\n")
                 else:
-                    print("\t RmDisk>>> Error al ejecutar el comando")
+                    print("\t RmDisk>>> Error al ejecutar el comando\n")
+        
+        # Comando Fdisk
+        elif(result['command'] == 'fdisk'):
+            if ('path' in result and 'name' in result):
+                path = result['path']
+                name = result['name']
+                
+                if(not 'delete' in result and not 'add' in result):
+                    if(not 'size' in result):
+                        print("\t Fdisk>>> Falta un parametro obligatorio\n")
+                        return
+                    
+                
+                #Se verifica si tiene los parametros opcionales
+                size = None
+                unit = None
+                type = None
+                fit = None
+                delete = None
+                add = None
+                
+                if('size' in result):
+                    size = result['size']
+                if('unit' in result):
+                    unit = result['unit']
+                if('type' in result):
+                    type = result['type']
+                if('fit' in result):
+                    fit = result['fit']
+                if('delete' in result):
+                    delete = result['delete']
+                if('add' in result):
+                    add = result['add']
+                
+                #Se ejecuta el comando
+                c_fdisk = FDisk()
+                if(c_fdisk.run(size, path, name, unit, type, fit, delete, add)):
+                    print("\t Fdisk>>> Comando ejecutado con exito\n")
+                else:
+                    print("\t Fdisk>>> Error al ejecutar el comando\n")
+                
+            else:
+                print("\t Fdisk>>> Falta un parametro obligatorio\n")
+                return
+                
                 
 
 #Main--------------------------------------------------------------------------

@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'COMILLADOBLE EXECUTE FIT ID IGUAL MKDISK NUMERO PATH RMDISK RUTA SIZE UNITcommand : mkdisk_command\n               | execute_command\n               | rmdisk_command\n    mkdisk_command : MKDISK opcionesopciones : opciones opciones_element \n                | opciones_elementopciones_element : opcion_size\n                        | opcion_path\n                        | opcion_unit\n                        | opcion_fitopcion_size : SIZE IGUAL NUMEROopcion_path : PATH IGUAL RUTA\n                   | PATH IGUAL COMILLADOBLE RUTA COMILLADOBLEopcion_unit : UNIT IGUAL IDopcion_fit : FIT IGUAL IDexecute_command : EXECUTE PATH IGUAL RUTA\n                       | EXECUTE PATH IGUAL COMILLADOBLE RUTA COMILLADOBLErmdisk_command : RMDISK PATH IGUAL RUTA\n                      | RMDISK PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE'
+_lr_signature = 'ADD ADJ COMILLADOBLE DELETE DSK EXECUTE FDISK FIT ID IGUAL MKDISK NAME NEGATIVO NUMERO PATH RMDISK RUTA SIZE TYPE UNITcommand : mkdisk_command\n               | execute_command\n               | rmdisk_command\n               | fdisk_commandmkdisk_command : MKDISK opcionesopciones : opciones opciones_element \n                | opciones_elementopciones_element : opcion_size\n                        | opcion_path\n                        | opcion_unit\n                        | opcion_fitopcion_size : SIZE IGUAL NUMEROopcion_path : PATH IGUAL RUTA DSK\n                   | PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLEopcion_unit : UNIT IGUAL IDopcion_fit : FIT IGUAL IDexecute_command : EXECUTE PATH IGUAL RUTA ADJ\n                       | EXECUTE PATH IGUAL COMILLADOBLE RUTA ADJ COMILLADOBLErmdisk_command : RMDISK PATH IGUAL RUTA DSK\n                      | RMDISK PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLEfdisk_command : FDISK opciones_fdiskopciones_fdisk : opciones_fdisk opciones_element_fdisk \n                      | opciones_element_fdiskopciones_element_fdisk : opcionfdisk_size\n                              | opcionfdisk_path\n                              | opcionfdisk_name\n                              | opcionfdisk_unit\n                              | opcionfdisk_type\n                              | opcionfdisk_fit\n                              | opcionfdisk_delete\n                              | opcionfdisk_addopcionfdisk_size : SIZE IGUAL NUMEROopcionfdisk_path : PATH IGUAL RUTA DSK\n                        | PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLEopcionfdisk_name : NAME IGUAL ID\n                        | NAME IGUAL COMILLADOBLE ID COMILLADOBLEopcionfdisk_unit : UNIT IGUAL IDopcionfdisk_type : TYPE IGUAL IDopcionfdisk_fit : FIT IGUAL IDopcionfdisk_delete : DELETE IGUAL IDopcionfdisk_add : ADD IGUAL NUMERO\n                       | ADD IGUAL ID'
     
-_lr_action_items = {'MKDISK':([0,],[5,]),'EXECUTE':([0,],[6,]),'RMDISK':([0,],[7,]),'$end':([1,2,3,4,8,9,10,11,12,13,20,27,28,30,31,32,34,39,40,41,],[0,-1,-2,-3,-4,-6,-7,-8,-9,-10,-5,-11,-12,-14,-15,-16,-18,-13,-17,-19,]),'SIZE':([5,8,9,10,11,12,13,20,27,28,30,31,39,],[14,14,-6,-7,-8,-9,-10,-5,-11,-12,-14,-15,-13,]),'PATH':([5,6,7,8,9,10,11,12,13,20,27,28,30,31,39,],[15,18,19,15,-6,-7,-8,-9,-10,-5,-11,-12,-14,-15,-13,]),'UNIT':([5,8,9,10,11,12,13,20,27,28,30,31,39,],[16,16,-6,-7,-8,-9,-10,-5,-11,-12,-14,-15,-13,]),'FIT':([5,8,9,10,11,12,13,20,27,28,30,31,39,],[17,17,-6,-7,-8,-9,-10,-5,-11,-12,-14,-15,-13,]),'IGUAL':([14,15,16,17,18,19,],[21,22,23,24,25,26,]),'NUMERO':([21,],[27,]),'RUTA':([22,25,26,29,33,35,],[28,32,34,36,37,38,]),'COMILLADOBLE':([22,25,26,36,37,38,],[29,33,35,39,40,41,]),'ID':([23,24,],[30,31,]),}
+_lr_action_items = {'MKDISK':([0,],[6,]),'EXECUTE':([0,],[7,]),'RMDISK':([0,],[8,]),'FDISK':([0,],[9,]),'$end':([1,2,3,4,5,10,11,12,13,14,15,22,23,24,25,26,27,28,29,30,31,40,47,56,59,60,65,68,70,71,72,73,74,75,76,78,80,82,89,90,91,92,93,],[0,-1,-2,-3,-4,-5,-7,-8,-9,-10,-11,-21,-23,-24,-25,-26,-27,-28,-29,-30,-31,-6,-22,-12,-15,-16,-32,-35,-37,-38,-39,-40,-41,-42,-13,-17,-19,-33,-36,-14,-18,-20,-34,]),'SIZE':([6,9,10,11,12,13,14,15,22,23,24,25,26,27,28,29,30,31,40,47,56,59,60,65,68,70,71,72,73,74,75,76,82,89,90,93,],[16,32,16,-7,-8,-9,-10,-11,32,-23,-24,-25,-26,-27,-28,-29,-30,-31,-6,-22,-12,-15,-16,-32,-35,-37,-38,-39,-40,-41,-42,-13,-33,-36,-14,-34,]),'PATH':([6,7,8,9,10,11,12,13,14,15,22,23,24,25,26,27,28,29,30,31,40,47,56,59,60,65,68,70,71,72,73,74,75,76,82,89,90,93,],[17,20,21,33,17,-7,-8,-9,-10,-11,33,-23,-24,-25,-26,-27,-28,-29,-30,-31,-6,-22,-12,-15,-16,-32,-35,-37,-38,-39,-40,-41,-42,-13,-33,-36,-14,-34,]),'UNIT':([6,9,10,11,12,13,14,15,22,23,24,25,26,27,28,29,30,31,40,47,56,59,60,65,68,70,71,72,73,74,75,76,82,89,90,93,],[18,35,18,-7,-8,-9,-10,-11,35,-23,-24,-25,-26,-27,-28,-29,-30,-31,-6,-22,-12,-15,-16,-32,-35,-37,-38,-39,-40,-41,-42,-13,-33,-36,-14,-34,]),'FIT':([6,9,10,11,12,13,14,15,22,23,24,25,26,27,28,29,30,31,40,47,56,59,60,65,68,70,71,72,73,74,75,76,82,89,90,93,],[19,37,19,-7,-8,-9,-10,-11,37,-23,-24,-25,-26,-27,-28,-29,-30,-31,-6,-22,-12,-15,-16,-32,-35,-37,-38,-39,-40,-41,-42,-13,-33,-36,-14,-34,]),'NAME':([9,22,23,24,25,26,27,28,29,30,31,47,65,68,70,71,72,73,74,75,82,89,93,],[34,34,-23,-24,-25,-26,-27,-28,-29,-30,-31,-22,-32,-35,-37,-38,-39,-40,-41,-42,-33,-36,-34,]),'TYPE':([9,22,23,24,25,26,27,28,29,30,31,47,65,68,70,71,72,73,74,75,82,89,93,],[36,36,-23,-24,-25,-26,-27,-28,-29,-30,-31,-22,-32,-35,-37,-38,-39,-40,-41,-42,-33,-36,-34,]),'DELETE':([9,22,23,24,25,26,27,28,29,30,31,47,65,68,70,71,72,73,74,75,82,89,93,],[38,38,-23,-24,-25,-26,-27,-28,-29,-30,-31,-22,-32,-35,-37,-38,-39,-40,-41,-42,-33,-36,-34,]),'ADD':([9,22,23,24,25,26,27,28,29,30,31,47,65,68,70,71,72,73,74,75,82,89,93,],[39,39,-23,-24,-25,-26,-27,-28,-29,-30,-31,-22,-32,-35,-37,-38,-39,-40,-41,-42,-33,-36,-34,]),'IGUAL':([16,17,18,19,20,21,32,33,34,35,36,37,38,39,],[41,42,43,44,45,46,48,49,50,51,52,53,54,55,]),'NUMERO':([41,48,55,],[56,65,74,]),'RUTA':([42,45,46,49,58,62,64,67,],[57,61,63,66,77,79,81,83,]),'COMILLADOBLE':([42,45,46,49,50,84,85,86,87,88,],[58,62,64,67,69,89,90,91,92,93,]),'ID':([43,44,50,51,52,53,54,55,69,],[59,60,68,70,71,72,73,75,84,]),'DSK':([57,63,66,77,81,83,],[76,80,82,85,87,88,]),'ADJ':([61,79,],[78,86,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'command':([0,],[1,]),'mkdisk_command':([0,],[2,]),'execute_command':([0,],[3,]),'rmdisk_command':([0,],[4,]),'opciones':([5,],[8,]),'opciones_element':([5,8,],[9,20,]),'opcion_size':([5,8,],[10,10,]),'opcion_path':([5,8,],[11,11,]),'opcion_unit':([5,8,],[12,12,]),'opcion_fit':([5,8,],[13,13,]),}
+_lr_goto_items = {'command':([0,],[1,]),'mkdisk_command':([0,],[2,]),'execute_command':([0,],[3,]),'rmdisk_command':([0,],[4,]),'fdisk_command':([0,],[5,]),'opciones':([6,],[10,]),'opciones_element':([6,10,],[11,40,]),'opcion_size':([6,10,],[12,12,]),'opcion_path':([6,10,],[13,13,]),'opcion_unit':([6,10,],[14,14,]),'opcion_fit':([6,10,],[15,15,]),'opciones_fdisk':([9,],[22,]),'opciones_element_fdisk':([9,22,],[23,47,]),'opcionfdisk_size':([9,22,],[24,24,]),'opcionfdisk_path':([9,22,],[25,25,]),'opcionfdisk_name':([9,22,],[26,26,]),'opcionfdisk_unit':([9,22,],[27,27,]),'opcionfdisk_type':([9,22,],[28,28,]),'opcionfdisk_fit':([9,22,],[29,29,]),'opcionfdisk_delete':([9,22,],[30,30,]),'opcionfdisk_add':([9,22,],[31,31,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -30,6 +30,7 @@ _lr_productions = [
   ('command -> mkdisk_command','command',1,'p_command','sintactico.py',6),
   ('command -> execute_command','command',1,'p_command','sintactico.py',7),
   ('command -> rmdisk_command','command',1,'p_command','sintactico.py',8),
+  ('command -> fdisk_command','command',1,'p_command','sintactico.py',9),
   ('mkdisk_command -> MKDISK opciones','mkdisk_command',2,'p_mkdisk_command','sintactico.py',14),
   ('opciones -> opciones opciones_element','opciones',2,'p_opciones','sintactico.py',22),
   ('opciones -> opciones_element','opciones',1,'p_opciones','sintactico.py',23),
@@ -38,12 +39,34 @@ _lr_productions = [
   ('opciones_element -> opcion_unit','opciones_element',1,'p_opciones_element','sintactico.py',37),
   ('opciones_element -> opcion_fit','opciones_element',1,'p_opciones_element','sintactico.py',38),
   ('opcion_size -> SIZE IGUAL NUMERO','opcion_size',3,'p_opcion_size','sintactico.py',44),
-  ('opcion_path -> PATH IGUAL RUTA','opcion_path',3,'p_opcion_path','sintactico.py',51),
-  ('opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE','opcion_path',5,'p_opcion_path','sintactico.py',52),
+  ('opcion_path -> PATH IGUAL RUTA DSK','opcion_path',4,'p_opcion_path','sintactico.py',51),
+  ('opcion_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE','opcion_path',6,'p_opcion_path','sintactico.py',52),
   ('opcion_unit -> UNIT IGUAL ID','opcion_unit',3,'p_opcion_unit','sintactico.py',64),
   ('opcion_fit -> FIT IGUAL ID','opcion_fit',3,'p_opcion_fit','sintactico.py',71),
-  ('execute_command -> EXECUTE PATH IGUAL RUTA','execute_command',4,'p_execute_command','sintactico.py',81),
-  ('execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE','execute_command',6,'p_execute_command','sintactico.py',82),
-  ('rmdisk_command -> RMDISK PATH IGUAL RUTA','rmdisk_command',4,'p_rmdisk_command','sintactico.py',99),
-  ('rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE','rmdisk_command',6,'p_rmdisk_command','sintactico.py',100),
+  ('execute_command -> EXECUTE PATH IGUAL RUTA ADJ','execute_command',5,'p_execute_command','sintactico.py',81),
+  ('execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA ADJ COMILLADOBLE','execute_command',7,'p_execute_command','sintactico.py',82),
+  ('rmdisk_command -> RMDISK PATH IGUAL RUTA DSK','rmdisk_command',5,'p_rmdisk_command','sintactico.py',99),
+  ('rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE','rmdisk_command',7,'p_rmdisk_command','sintactico.py',100),
+  ('fdisk_command -> FDISK opciones_fdisk','fdisk_command',2,'p_fdisk_command','sintactico.py',117),
+  ('opciones_fdisk -> opciones_fdisk opciones_element_fdisk','opciones_fdisk',2,'p_opciones_fdisk','sintactico.py',124),
+  ('opciones_fdisk -> opciones_element_fdisk','opciones_fdisk',1,'p_opciones_fdisk','sintactico.py',125),
+  ('opciones_element_fdisk -> opcionfdisk_size','opciones_element_fdisk',1,'p_opciones_element_fdisk','sintactico.py',137),
+  ('opciones_element_fdisk -> opcionfdisk_path','opciones_element_fdisk',1,'p_opciones_element_fdisk','sintactico.py',138),
+  ('opciones_element_fdisk -> opcionfdisk_name','opciones_element_fdisk',1,'p_opciones_element_fdisk','sintactico.py',139),
+  ('opciones_element_fdisk -> opcionfdisk_unit','opciones_element_fdisk',1,'p_opciones_element_fdisk','sintactico.py',140),
+  ('opciones_element_fdisk -> opcionfdisk_type','opciones_element_fdisk',1,'p_opciones_element_fdisk','sintactico.py',141),
+  ('opciones_element_fdisk -> opcionfdisk_fit','opciones_element_fdisk',1,'p_opciones_element_fdisk','sintactico.py',142),
+  ('opciones_element_fdisk -> opcionfdisk_delete','opciones_element_fdisk',1,'p_opciones_element_fdisk','sintactico.py',143),
+  ('opciones_element_fdisk -> opcionfdisk_add','opciones_element_fdisk',1,'p_opciones_element_fdisk','sintactico.py',144),
+  ('opcionfdisk_size -> SIZE IGUAL NUMERO','opcionfdisk_size',3,'p_opcionfdisk_size','sintactico.py',149),
+  ('opcionfdisk_path -> PATH IGUAL RUTA DSK','opcionfdisk_path',4,'p_opcionfdisk_path','sintactico.py',155),
+  ('opcionfdisk_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE','opcionfdisk_path',6,'p_opcionfdisk_path','sintactico.py',156),
+  ('opcionfdisk_name -> NAME IGUAL ID','opcionfdisk_name',3,'p_opcionfdisk_name','sintactico.py',167),
+  ('opcionfdisk_name -> NAME IGUAL COMILLADOBLE ID COMILLADOBLE','opcionfdisk_name',5,'p_opcionfdisk_name','sintactico.py',168),
+  ('opcionfdisk_unit -> UNIT IGUAL ID','opcionfdisk_unit',3,'p_opcionfdisk_unit','sintactico.py',179),
+  ('opcionfdisk_type -> TYPE IGUAL ID','opcionfdisk_type',3,'p_opcionfdisk_type','sintactico.py',185),
+  ('opcionfdisk_fit -> FIT IGUAL ID','opcionfdisk_fit',3,'p_opcionfdisk_fit','sintactico.py',191),
+  ('opcionfdisk_delete -> DELETE IGUAL ID','opcionfdisk_delete',3,'p_opcionfdisk_delete','sintactico.py',197),
+  ('opcionfdisk_add -> ADD IGUAL NUMERO','opcionfdisk_add',3,'p_opcionfdisk_add','sintactico.py',203),
+  ('opcionfdisk_add -> ADD IGUAL ID','opcionfdisk_add',3,'p_opcionfdisk_add','sintactico.py',204),
 ]

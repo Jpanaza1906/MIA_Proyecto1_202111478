@@ -1,3 +1,4 @@
+from copy import deepcopy
 import ctypes
 import struct
 from .Load import *
@@ -20,12 +21,12 @@ class Partition(ctypes.Structure):
     #Constructor----------------------------------------------------------------
     
     def __init__(self):
-        self.part_status = b'\x00'
-        self.part_type = b'\x00'
-        self.part_fit = b'\x00'
+        self.part_status = b'\0'
+        self.part_type = b'\0'
+        self.part_fit = b'\0'
         self.part_start = 0
         self.part_size = 0
-        self.part_name = b'\x00'*16
+        self.part_name = b'\0'*16
     
     #Setters--------------------------------------------------------------------
     
@@ -65,7 +66,7 @@ class Partition(ctypes.Structure):
     #Serialize------------------------------------------------------------------
     
     def doSerialize(self): # Serializar la particion
-        serialize = struct.pack(
+        return struct.pack(
             const,
             self.part_status,
             self.part_type,
@@ -74,7 +75,6 @@ class Partition(ctypes.Structure):
             self.part_size,
             self.part_name
         )
-        return serialize
     
     #Deserialize----------------------------------------------------------------
     
@@ -86,16 +86,17 @@ class Partition(ctypes.Structure):
         self.part_start = unpacked[3]
         self.part_size = unpacked[4]
         self.part_name = unpacked[5]
+        
     
     #Display--------------------------------------------------------------------
     
     def display_info(self):
-        print("Status: ", self.part_status)
-        print("Type: ", self.part_type)
-        print("Fit: ", self.part_fit)
-        print("Start: ", self.part_start)
-        print("Size: ", self.part_size)
-        print("Name: ", self.part_name)
+        print(f"Status: {self.part_status.decode()}")
+        print(f"Type: {self.part_type.decode()}")
+        print(f"Fit: {self.part_fit.decode()}")
+        print(f"Start: {self.part_start}")
+        print(f"Size: {self.part_size}")
+        print(f"Name: {self.part_name.decode()}")       
         print("")
     
     

@@ -4,10 +4,17 @@ import ply.lex as lex
 reserved = {
     'mkdisk': 'MKDISK',
     'rmdisk': 'RMDISK',
+    'fdisk': 'FDISK',
     '-path': 'PATH',
     '-unit': 'UNIT',
     '-fit': 'FIT',
     '-size': 'SIZE',
+    '-name': 'NAME',
+    '-type': 'TYPE',
+    '-delete': 'DELETE',
+    '-add': 'ADD',
+    'adsj': 'ADJ',
+    'dsk': 'DSK',
     'execute': 'EXECUTE',
 }
 
@@ -18,14 +25,18 @@ tokens = [
     'IGUAL',
     'COMILLADOBLE',
     'NUMERO',
+    'NEGATIVO',
+    #'MENOS',
     #'PUNTO',
     #'DIAGONAL',
 ] + list(reserved.values())
 
 # Expresiones regulares para tokens simples
-t_RUTA = r'\/[^\r\n\"]*'
+t_RUTA = r'\/[^\.\r\n\"]*'
 t_NUMERO = r'\d+'
+t_NEGATIVO = r'\-\d+'
 t_IGUAL = r'\='
+#t_MENOS = r'\-'
 #t_PUNTO = r'\.'
 #t_DIAGONAL = r'\/'
 t_COMILLADOBLE = r'\"'

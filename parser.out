@@ -1,55 +1,101 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    NEGATIVO
+
 Grammar
 
 Rule 0     S' -> command
 Rule 1     command -> mkdisk_command
 Rule 2     command -> execute_command
 Rule 3     command -> rmdisk_command
-Rule 4     mkdisk_command -> MKDISK opciones
-Rule 5     opciones -> opciones opciones_element
-Rule 6     opciones -> opciones_element
-Rule 7     opciones_element -> opcion_size
-Rule 8     opciones_element -> opcion_path
-Rule 9     opciones_element -> opcion_unit
-Rule 10    opciones_element -> opcion_fit
-Rule 11    opcion_size -> SIZE IGUAL NUMERO
-Rule 12    opcion_path -> PATH IGUAL RUTA
-Rule 13    opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
-Rule 14    opcion_unit -> UNIT IGUAL ID
-Rule 15    opcion_fit -> FIT IGUAL ID
-Rule 16    execute_command -> EXECUTE PATH IGUAL RUTA
-Rule 17    execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
-Rule 18    rmdisk_command -> RMDISK PATH IGUAL RUTA
-Rule 19    rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
+Rule 4     command -> fdisk_command
+Rule 5     mkdisk_command -> MKDISK opciones
+Rule 6     opciones -> opciones opciones_element
+Rule 7     opciones -> opciones_element
+Rule 8     opciones_element -> opcion_size
+Rule 9     opciones_element -> opcion_path
+Rule 10    opciones_element -> opcion_unit
+Rule 11    opciones_element -> opcion_fit
+Rule 12    opcion_size -> SIZE IGUAL NUMERO
+Rule 13    opcion_path -> PATH IGUAL RUTA DSK
+Rule 14    opcion_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE
+Rule 15    opcion_unit -> UNIT IGUAL ID
+Rule 16    opcion_fit -> FIT IGUAL ID
+Rule 17    execute_command -> EXECUTE PATH IGUAL RUTA ADJ
+Rule 18    execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA ADJ COMILLADOBLE
+Rule 19    rmdisk_command -> RMDISK PATH IGUAL RUTA DSK
+Rule 20    rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE
+Rule 21    fdisk_command -> FDISK opciones_fdisk
+Rule 22    opciones_fdisk -> opciones_fdisk opciones_element_fdisk
+Rule 23    opciones_fdisk -> opciones_element_fdisk
+Rule 24    opciones_element_fdisk -> opcionfdisk_size
+Rule 25    opciones_element_fdisk -> opcionfdisk_path
+Rule 26    opciones_element_fdisk -> opcionfdisk_name
+Rule 27    opciones_element_fdisk -> opcionfdisk_unit
+Rule 28    opciones_element_fdisk -> opcionfdisk_type
+Rule 29    opciones_element_fdisk -> opcionfdisk_fit
+Rule 30    opciones_element_fdisk -> opcionfdisk_delete
+Rule 31    opciones_element_fdisk -> opcionfdisk_add
+Rule 32    opcionfdisk_size -> SIZE IGUAL NUMERO
+Rule 33    opcionfdisk_path -> PATH IGUAL RUTA DSK
+Rule 34    opcionfdisk_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE
+Rule 35    opcionfdisk_name -> NAME IGUAL ID
+Rule 36    opcionfdisk_name -> NAME IGUAL COMILLADOBLE ID COMILLADOBLE
+Rule 37    opcionfdisk_unit -> UNIT IGUAL ID
+Rule 38    opcionfdisk_type -> TYPE IGUAL ID
+Rule 39    opcionfdisk_fit -> FIT IGUAL ID
+Rule 40    opcionfdisk_delete -> DELETE IGUAL ID
+Rule 41    opcionfdisk_add -> ADD IGUAL NUMERO
+Rule 42    opcionfdisk_add -> ADD IGUAL ID
 
 Terminals, with rules where they appear
 
-COMILLADOBLE         : 13 13 17 17 19 19
-EXECUTE              : 16 17
-FIT                  : 15
-ID                   : 14 15
-IGUAL                : 11 12 13 14 15 16 17 18 19
-MKDISK               : 4
-NUMERO               : 11
-PATH                 : 12 13 16 17 18 19
-RMDISK               : 18 19
-RUTA                 : 12 13 16 17 18 19
-SIZE                 : 11
-UNIT                 : 14
+ADD                  : 41 42
+ADJ                  : 17 18
+COMILLADOBLE         : 14 14 18 18 20 20 34 34 36 36
+DELETE               : 40
+DSK                  : 13 14 19 20 33 34
+EXECUTE              : 17 18
+FDISK                : 21
+FIT                  : 16 39
+ID                   : 15 16 35 36 37 38 39 40 42
+IGUAL                : 12 13 14 15 16 17 18 19 20 32 33 34 35 36 37 38 39 40 41 42
+MKDISK               : 5
+NAME                 : 35 36
+NEGATIVO             : 
+NUMERO               : 12 32 41
+PATH                 : 13 14 17 18 19 20 33 34
+RMDISK               : 19 20
+RUTA                 : 13 14 17 18 19 20 33 34
+SIZE                 : 12 32
+TYPE                 : 38
+UNIT                 : 15 37
 error                : 
 
 Nonterminals, with rules where they appear
 
 command              : 0
 execute_command      : 2
+fdisk_command        : 4
 mkdisk_command       : 1
-opcion_fit           : 10
-opcion_path          : 8
-opcion_size          : 7
-opcion_unit          : 9
-opciones             : 4 5
-opciones_element     : 5 6
+opcion_fit           : 11
+opcion_path          : 9
+opcion_size          : 8
+opcion_unit          : 10
+opciones             : 5 6
+opciones_element     : 6 7
+opciones_element_fdisk : 22 23
+opciones_fdisk       : 21 22
+opcionfdisk_add      : 31
+opcionfdisk_delete   : 30
+opcionfdisk_fit      : 29
+opcionfdisk_name     : 26
+opcionfdisk_path     : 25
+opcionfdisk_size     : 24
+opcionfdisk_type     : 28
+opcionfdisk_unit     : 27
 rmdisk_command       : 3
 
 Parsing method: LALR
@@ -60,20 +106,24 @@ state 0
     (1) command -> . mkdisk_command
     (2) command -> . execute_command
     (3) command -> . rmdisk_command
-    (4) mkdisk_command -> . MKDISK opciones
-    (16) execute_command -> . EXECUTE PATH IGUAL RUTA
-    (17) execute_command -> . EXECUTE PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
-    (18) rmdisk_command -> . RMDISK PATH IGUAL RUTA
-    (19) rmdisk_command -> . RMDISK PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
+    (4) command -> . fdisk_command
+    (5) mkdisk_command -> . MKDISK opciones
+    (17) execute_command -> . EXECUTE PATH IGUAL RUTA ADJ
+    (18) execute_command -> . EXECUTE PATH IGUAL COMILLADOBLE RUTA ADJ COMILLADOBLE
+    (19) rmdisk_command -> . RMDISK PATH IGUAL RUTA DSK
+    (20) rmdisk_command -> . RMDISK PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE
+    (21) fdisk_command -> . FDISK opciones_fdisk
 
-    MKDISK          shift and go to state 5
-    EXECUTE         shift and go to state 6
-    RMDISK          shift and go to state 7
+    MKDISK          shift and go to state 6
+    EXECUTE         shift and go to state 7
+    RMDISK          shift and go to state 8
+    FDISK           shift and go to state 9
 
     command                        shift and go to state 1
     mkdisk_command                 shift and go to state 2
     execute_command                shift and go to state 3
     rmdisk_command                 shift and go to state 4
+    fdisk_command                  shift and go to state 5
 
 state 1
 
@@ -104,353 +154,969 @@ state 4
 
 state 5
 
-    (4) mkdisk_command -> MKDISK . opciones
-    (5) opciones -> . opciones opciones_element
-    (6) opciones -> . opciones_element
-    (7) opciones_element -> . opcion_size
-    (8) opciones_element -> . opcion_path
-    (9) opciones_element -> . opcion_unit
-    (10) opciones_element -> . opcion_fit
-    (11) opcion_size -> . SIZE IGUAL NUMERO
-    (12) opcion_path -> . PATH IGUAL RUTA
-    (13) opcion_path -> . PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
-    (14) opcion_unit -> . UNIT IGUAL ID
-    (15) opcion_fit -> . FIT IGUAL ID
+    (4) command -> fdisk_command .
 
-    SIZE            shift and go to state 14
-    PATH            shift and go to state 15
-    UNIT            shift and go to state 16
-    FIT             shift and go to state 17
+    $end            reduce using rule 4 (command -> fdisk_command .)
 
-    opciones                       shift and go to state 8
-    opciones_element               shift and go to state 9
-    opcion_size                    shift and go to state 10
-    opcion_path                    shift and go to state 11
-    opcion_unit                    shift and go to state 12
-    opcion_fit                     shift and go to state 13
 
 state 6
 
-    (16) execute_command -> EXECUTE . PATH IGUAL RUTA
-    (17) execute_command -> EXECUTE . PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
+    (5) mkdisk_command -> MKDISK . opciones
+    (6) opciones -> . opciones opciones_element
+    (7) opciones -> . opciones_element
+    (8) opciones_element -> . opcion_size
+    (9) opciones_element -> . opcion_path
+    (10) opciones_element -> . opcion_unit
+    (11) opciones_element -> . opcion_fit
+    (12) opcion_size -> . SIZE IGUAL NUMERO
+    (13) opcion_path -> . PATH IGUAL RUTA DSK
+    (14) opcion_path -> . PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE
+    (15) opcion_unit -> . UNIT IGUAL ID
+    (16) opcion_fit -> . FIT IGUAL ID
 
-    PATH            shift and go to state 18
+    SIZE            shift and go to state 16
+    PATH            shift and go to state 17
+    UNIT            shift and go to state 18
+    FIT             shift and go to state 19
 
+    opciones                       shift and go to state 10
+    opciones_element               shift and go to state 11
+    opcion_size                    shift and go to state 12
+    opcion_path                    shift and go to state 13
+    opcion_unit                    shift and go to state 14
+    opcion_fit                     shift and go to state 15
 
 state 7
 
-    (18) rmdisk_command -> RMDISK . PATH IGUAL RUTA
-    (19) rmdisk_command -> RMDISK . PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
+    (17) execute_command -> EXECUTE . PATH IGUAL RUTA ADJ
+    (18) execute_command -> EXECUTE . PATH IGUAL COMILLADOBLE RUTA ADJ COMILLADOBLE
 
-    PATH            shift and go to state 19
+    PATH            shift and go to state 20
 
 
 state 8
 
-    (4) mkdisk_command -> MKDISK opciones .
-    (5) opciones -> opciones . opciones_element
-    (7) opciones_element -> . opcion_size
-    (8) opciones_element -> . opcion_path
-    (9) opciones_element -> . opcion_unit
-    (10) opciones_element -> . opcion_fit
-    (11) opcion_size -> . SIZE IGUAL NUMERO
-    (12) opcion_path -> . PATH IGUAL RUTA
-    (13) opcion_path -> . PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE
-    (14) opcion_unit -> . UNIT IGUAL ID
-    (15) opcion_fit -> . FIT IGUAL ID
+    (19) rmdisk_command -> RMDISK . PATH IGUAL RUTA DSK
+    (20) rmdisk_command -> RMDISK . PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE
 
-    $end            reduce using rule 4 (mkdisk_command -> MKDISK opciones .)
-    SIZE            shift and go to state 14
-    PATH            shift and go to state 15
-    UNIT            shift and go to state 16
-    FIT             shift and go to state 17
+    PATH            shift and go to state 21
 
-    opciones_element               shift and go to state 20
-    opcion_size                    shift and go to state 10
-    opcion_path                    shift and go to state 11
-    opcion_unit                    shift and go to state 12
-    opcion_fit                     shift and go to state 13
 
 state 9
 
-    (6) opciones -> opciones_element .
+    (21) fdisk_command -> FDISK . opciones_fdisk
+    (22) opciones_fdisk -> . opciones_fdisk opciones_element_fdisk
+    (23) opciones_fdisk -> . opciones_element_fdisk
+    (24) opciones_element_fdisk -> . opcionfdisk_size
+    (25) opciones_element_fdisk -> . opcionfdisk_path
+    (26) opciones_element_fdisk -> . opcionfdisk_name
+    (27) opciones_element_fdisk -> . opcionfdisk_unit
+    (28) opciones_element_fdisk -> . opcionfdisk_type
+    (29) opciones_element_fdisk -> . opcionfdisk_fit
+    (30) opciones_element_fdisk -> . opcionfdisk_delete
+    (31) opciones_element_fdisk -> . opcionfdisk_add
+    (32) opcionfdisk_size -> . SIZE IGUAL NUMERO
+    (33) opcionfdisk_path -> . PATH IGUAL RUTA DSK
+    (34) opcionfdisk_path -> . PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE
+    (35) opcionfdisk_name -> . NAME IGUAL ID
+    (36) opcionfdisk_name -> . NAME IGUAL COMILLADOBLE ID COMILLADOBLE
+    (37) opcionfdisk_unit -> . UNIT IGUAL ID
+    (38) opcionfdisk_type -> . TYPE IGUAL ID
+    (39) opcionfdisk_fit -> . FIT IGUAL ID
+    (40) opcionfdisk_delete -> . DELETE IGUAL ID
+    (41) opcionfdisk_add -> . ADD IGUAL NUMERO
+    (42) opcionfdisk_add -> . ADD IGUAL ID
 
-    SIZE            reduce using rule 6 (opciones -> opciones_element .)
-    PATH            reduce using rule 6 (opciones -> opciones_element .)
-    UNIT            reduce using rule 6 (opciones -> opciones_element .)
-    FIT             reduce using rule 6 (opciones -> opciones_element .)
-    $end            reduce using rule 6 (opciones -> opciones_element .)
+    SIZE            shift and go to state 32
+    PATH            shift and go to state 33
+    NAME            shift and go to state 34
+    UNIT            shift and go to state 35
+    TYPE            shift and go to state 36
+    FIT             shift and go to state 37
+    DELETE          shift and go to state 38
+    ADD             shift and go to state 39
 
+    opciones_fdisk                 shift and go to state 22
+    opciones_element_fdisk         shift and go to state 23
+    opcionfdisk_size               shift and go to state 24
+    opcionfdisk_path               shift and go to state 25
+    opcionfdisk_name               shift and go to state 26
+    opcionfdisk_unit               shift and go to state 27
+    opcionfdisk_type               shift and go to state 28
+    opcionfdisk_fit                shift and go to state 29
+    opcionfdisk_delete             shift and go to state 30
+    opcionfdisk_add                shift and go to state 31
 
 state 10
 
-    (7) opciones_element -> opcion_size .
+    (5) mkdisk_command -> MKDISK opciones .
+    (6) opciones -> opciones . opciones_element
+    (8) opciones_element -> . opcion_size
+    (9) opciones_element -> . opcion_path
+    (10) opciones_element -> . opcion_unit
+    (11) opciones_element -> . opcion_fit
+    (12) opcion_size -> . SIZE IGUAL NUMERO
+    (13) opcion_path -> . PATH IGUAL RUTA DSK
+    (14) opcion_path -> . PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE
+    (15) opcion_unit -> . UNIT IGUAL ID
+    (16) opcion_fit -> . FIT IGUAL ID
 
-    SIZE            reduce using rule 7 (opciones_element -> opcion_size .)
-    PATH            reduce using rule 7 (opciones_element -> opcion_size .)
-    UNIT            reduce using rule 7 (opciones_element -> opcion_size .)
-    FIT             reduce using rule 7 (opciones_element -> opcion_size .)
-    $end            reduce using rule 7 (opciones_element -> opcion_size .)
+    $end            reduce using rule 5 (mkdisk_command -> MKDISK opciones .)
+    SIZE            shift and go to state 16
+    PATH            shift and go to state 17
+    UNIT            shift and go to state 18
+    FIT             shift and go to state 19
 
+    opciones_element               shift and go to state 40
+    opcion_size                    shift and go to state 12
+    opcion_path                    shift and go to state 13
+    opcion_unit                    shift and go to state 14
+    opcion_fit                     shift and go to state 15
 
 state 11
 
-    (8) opciones_element -> opcion_path .
+    (7) opciones -> opciones_element .
 
-    SIZE            reduce using rule 8 (opciones_element -> opcion_path .)
-    PATH            reduce using rule 8 (opciones_element -> opcion_path .)
-    UNIT            reduce using rule 8 (opciones_element -> opcion_path .)
-    FIT             reduce using rule 8 (opciones_element -> opcion_path .)
-    $end            reduce using rule 8 (opciones_element -> opcion_path .)
+    SIZE            reduce using rule 7 (opciones -> opciones_element .)
+    PATH            reduce using rule 7 (opciones -> opciones_element .)
+    UNIT            reduce using rule 7 (opciones -> opciones_element .)
+    FIT             reduce using rule 7 (opciones -> opciones_element .)
+    $end            reduce using rule 7 (opciones -> opciones_element .)
 
 
 state 12
 
-    (9) opciones_element -> opcion_unit .
+    (8) opciones_element -> opcion_size .
 
-    SIZE            reduce using rule 9 (opciones_element -> opcion_unit .)
-    PATH            reduce using rule 9 (opciones_element -> opcion_unit .)
-    UNIT            reduce using rule 9 (opciones_element -> opcion_unit .)
-    FIT             reduce using rule 9 (opciones_element -> opcion_unit .)
-    $end            reduce using rule 9 (opciones_element -> opcion_unit .)
+    SIZE            reduce using rule 8 (opciones_element -> opcion_size .)
+    PATH            reduce using rule 8 (opciones_element -> opcion_size .)
+    UNIT            reduce using rule 8 (opciones_element -> opcion_size .)
+    FIT             reduce using rule 8 (opciones_element -> opcion_size .)
+    $end            reduce using rule 8 (opciones_element -> opcion_size .)
 
 
 state 13
 
-    (10) opciones_element -> opcion_fit .
+    (9) opciones_element -> opcion_path .
 
-    SIZE            reduce using rule 10 (opciones_element -> opcion_fit .)
-    PATH            reduce using rule 10 (opciones_element -> opcion_fit .)
-    UNIT            reduce using rule 10 (opciones_element -> opcion_fit .)
-    FIT             reduce using rule 10 (opciones_element -> opcion_fit .)
-    $end            reduce using rule 10 (opciones_element -> opcion_fit .)
+    SIZE            reduce using rule 9 (opciones_element -> opcion_path .)
+    PATH            reduce using rule 9 (opciones_element -> opcion_path .)
+    UNIT            reduce using rule 9 (opciones_element -> opcion_path .)
+    FIT             reduce using rule 9 (opciones_element -> opcion_path .)
+    $end            reduce using rule 9 (opciones_element -> opcion_path .)
 
 
 state 14
 
-    (11) opcion_size -> SIZE . IGUAL NUMERO
+    (10) opciones_element -> opcion_unit .
 
-    IGUAL           shift and go to state 21
+    SIZE            reduce using rule 10 (opciones_element -> opcion_unit .)
+    PATH            reduce using rule 10 (opciones_element -> opcion_unit .)
+    UNIT            reduce using rule 10 (opciones_element -> opcion_unit .)
+    FIT             reduce using rule 10 (opciones_element -> opcion_unit .)
+    $end            reduce using rule 10 (opciones_element -> opcion_unit .)
 
 
 state 15
 
-    (12) opcion_path -> PATH . IGUAL RUTA
-    (13) opcion_path -> PATH . IGUAL COMILLADOBLE RUTA COMILLADOBLE
+    (11) opciones_element -> opcion_fit .
 
-    IGUAL           shift and go to state 22
+    SIZE            reduce using rule 11 (opciones_element -> opcion_fit .)
+    PATH            reduce using rule 11 (opciones_element -> opcion_fit .)
+    UNIT            reduce using rule 11 (opciones_element -> opcion_fit .)
+    FIT             reduce using rule 11 (opciones_element -> opcion_fit .)
+    $end            reduce using rule 11 (opciones_element -> opcion_fit .)
 
 
 state 16
 
-    (14) opcion_unit -> UNIT . IGUAL ID
+    (12) opcion_size -> SIZE . IGUAL NUMERO
 
-    IGUAL           shift and go to state 23
+    IGUAL           shift and go to state 41
 
 
 state 17
 
-    (15) opcion_fit -> FIT . IGUAL ID
+    (13) opcion_path -> PATH . IGUAL RUTA DSK
+    (14) opcion_path -> PATH . IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE
 
-    IGUAL           shift and go to state 24
+    IGUAL           shift and go to state 42
 
 
 state 18
 
-    (16) execute_command -> EXECUTE PATH . IGUAL RUTA
-    (17) execute_command -> EXECUTE PATH . IGUAL COMILLADOBLE RUTA COMILLADOBLE
+    (15) opcion_unit -> UNIT . IGUAL ID
 
-    IGUAL           shift and go to state 25
+    IGUAL           shift and go to state 43
 
 
 state 19
 
-    (18) rmdisk_command -> RMDISK PATH . IGUAL RUTA
-    (19) rmdisk_command -> RMDISK PATH . IGUAL COMILLADOBLE RUTA COMILLADOBLE
+    (16) opcion_fit -> FIT . IGUAL ID
 
-    IGUAL           shift and go to state 26
+    IGUAL           shift and go to state 44
 
 
 state 20
 
-    (5) opciones -> opciones opciones_element .
+    (17) execute_command -> EXECUTE PATH . IGUAL RUTA ADJ
+    (18) execute_command -> EXECUTE PATH . IGUAL COMILLADOBLE RUTA ADJ COMILLADOBLE
 
-    SIZE            reduce using rule 5 (opciones -> opciones opciones_element .)
-    PATH            reduce using rule 5 (opciones -> opciones opciones_element .)
-    UNIT            reduce using rule 5 (opciones -> opciones opciones_element .)
-    FIT             reduce using rule 5 (opciones -> opciones opciones_element .)
-    $end            reduce using rule 5 (opciones -> opciones opciones_element .)
+    IGUAL           shift and go to state 45
 
 
 state 21
 
-    (11) opcion_size -> SIZE IGUAL . NUMERO
+    (19) rmdisk_command -> RMDISK PATH . IGUAL RUTA DSK
+    (20) rmdisk_command -> RMDISK PATH . IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE
 
-    NUMERO          shift and go to state 27
+    IGUAL           shift and go to state 46
 
 
 state 22
 
-    (12) opcion_path -> PATH IGUAL . RUTA
-    (13) opcion_path -> PATH IGUAL . COMILLADOBLE RUTA COMILLADOBLE
+    (21) fdisk_command -> FDISK opciones_fdisk .
+    (22) opciones_fdisk -> opciones_fdisk . opciones_element_fdisk
+    (24) opciones_element_fdisk -> . opcionfdisk_size
+    (25) opciones_element_fdisk -> . opcionfdisk_path
+    (26) opciones_element_fdisk -> . opcionfdisk_name
+    (27) opciones_element_fdisk -> . opcionfdisk_unit
+    (28) opciones_element_fdisk -> . opcionfdisk_type
+    (29) opciones_element_fdisk -> . opcionfdisk_fit
+    (30) opciones_element_fdisk -> . opcionfdisk_delete
+    (31) opciones_element_fdisk -> . opcionfdisk_add
+    (32) opcionfdisk_size -> . SIZE IGUAL NUMERO
+    (33) opcionfdisk_path -> . PATH IGUAL RUTA DSK
+    (34) opcionfdisk_path -> . PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE
+    (35) opcionfdisk_name -> . NAME IGUAL ID
+    (36) opcionfdisk_name -> . NAME IGUAL COMILLADOBLE ID COMILLADOBLE
+    (37) opcionfdisk_unit -> . UNIT IGUAL ID
+    (38) opcionfdisk_type -> . TYPE IGUAL ID
+    (39) opcionfdisk_fit -> . FIT IGUAL ID
+    (40) opcionfdisk_delete -> . DELETE IGUAL ID
+    (41) opcionfdisk_add -> . ADD IGUAL NUMERO
+    (42) opcionfdisk_add -> . ADD IGUAL ID
 
-    RUTA            shift and go to state 28
-    COMILLADOBLE    shift and go to state 29
+    $end            reduce using rule 21 (fdisk_command -> FDISK opciones_fdisk .)
+    SIZE            shift and go to state 32
+    PATH            shift and go to state 33
+    NAME            shift and go to state 34
+    UNIT            shift and go to state 35
+    TYPE            shift and go to state 36
+    FIT             shift and go to state 37
+    DELETE          shift and go to state 38
+    ADD             shift and go to state 39
 
+    opciones_element_fdisk         shift and go to state 47
+    opcionfdisk_size               shift and go to state 24
+    opcionfdisk_path               shift and go to state 25
+    opcionfdisk_name               shift and go to state 26
+    opcionfdisk_unit               shift and go to state 27
+    opcionfdisk_type               shift and go to state 28
+    opcionfdisk_fit                shift and go to state 29
+    opcionfdisk_delete             shift and go to state 30
+    opcionfdisk_add                shift and go to state 31
 
 state 23
 
-    (14) opcion_unit -> UNIT IGUAL . ID
+    (23) opciones_fdisk -> opciones_element_fdisk .
 
-    ID              shift and go to state 30
+    SIZE            reduce using rule 23 (opciones_fdisk -> opciones_element_fdisk .)
+    PATH            reduce using rule 23 (opciones_fdisk -> opciones_element_fdisk .)
+    NAME            reduce using rule 23 (opciones_fdisk -> opciones_element_fdisk .)
+    UNIT            reduce using rule 23 (opciones_fdisk -> opciones_element_fdisk .)
+    TYPE            reduce using rule 23 (opciones_fdisk -> opciones_element_fdisk .)
+    FIT             reduce using rule 23 (opciones_fdisk -> opciones_element_fdisk .)
+    DELETE          reduce using rule 23 (opciones_fdisk -> opciones_element_fdisk .)
+    ADD             reduce using rule 23 (opciones_fdisk -> opciones_element_fdisk .)
+    $end            reduce using rule 23 (opciones_fdisk -> opciones_element_fdisk .)
 
 
 state 24
 
-    (15) opcion_fit -> FIT IGUAL . ID
+    (24) opciones_element_fdisk -> opcionfdisk_size .
 
-    ID              shift and go to state 31
+    SIZE            reduce using rule 24 (opciones_element_fdisk -> opcionfdisk_size .)
+    PATH            reduce using rule 24 (opciones_element_fdisk -> opcionfdisk_size .)
+    NAME            reduce using rule 24 (opciones_element_fdisk -> opcionfdisk_size .)
+    UNIT            reduce using rule 24 (opciones_element_fdisk -> opcionfdisk_size .)
+    TYPE            reduce using rule 24 (opciones_element_fdisk -> opcionfdisk_size .)
+    FIT             reduce using rule 24 (opciones_element_fdisk -> opcionfdisk_size .)
+    DELETE          reduce using rule 24 (opciones_element_fdisk -> opcionfdisk_size .)
+    ADD             reduce using rule 24 (opciones_element_fdisk -> opcionfdisk_size .)
+    $end            reduce using rule 24 (opciones_element_fdisk -> opcionfdisk_size .)
 
 
 state 25
 
-    (16) execute_command -> EXECUTE PATH IGUAL . RUTA
-    (17) execute_command -> EXECUTE PATH IGUAL . COMILLADOBLE RUTA COMILLADOBLE
+    (25) opciones_element_fdisk -> opcionfdisk_path .
 
-    RUTA            shift and go to state 32
-    COMILLADOBLE    shift and go to state 33
+    SIZE            reduce using rule 25 (opciones_element_fdisk -> opcionfdisk_path .)
+    PATH            reduce using rule 25 (opciones_element_fdisk -> opcionfdisk_path .)
+    NAME            reduce using rule 25 (opciones_element_fdisk -> opcionfdisk_path .)
+    UNIT            reduce using rule 25 (opciones_element_fdisk -> opcionfdisk_path .)
+    TYPE            reduce using rule 25 (opciones_element_fdisk -> opcionfdisk_path .)
+    FIT             reduce using rule 25 (opciones_element_fdisk -> opcionfdisk_path .)
+    DELETE          reduce using rule 25 (opciones_element_fdisk -> opcionfdisk_path .)
+    ADD             reduce using rule 25 (opciones_element_fdisk -> opcionfdisk_path .)
+    $end            reduce using rule 25 (opciones_element_fdisk -> opcionfdisk_path .)
 
 
 state 26
 
-    (18) rmdisk_command -> RMDISK PATH IGUAL . RUTA
-    (19) rmdisk_command -> RMDISK PATH IGUAL . COMILLADOBLE RUTA COMILLADOBLE
+    (26) opciones_element_fdisk -> opcionfdisk_name .
 
-    RUTA            shift and go to state 34
-    COMILLADOBLE    shift and go to state 35
+    SIZE            reduce using rule 26 (opciones_element_fdisk -> opcionfdisk_name .)
+    PATH            reduce using rule 26 (opciones_element_fdisk -> opcionfdisk_name .)
+    NAME            reduce using rule 26 (opciones_element_fdisk -> opcionfdisk_name .)
+    UNIT            reduce using rule 26 (opciones_element_fdisk -> opcionfdisk_name .)
+    TYPE            reduce using rule 26 (opciones_element_fdisk -> opcionfdisk_name .)
+    FIT             reduce using rule 26 (opciones_element_fdisk -> opcionfdisk_name .)
+    DELETE          reduce using rule 26 (opciones_element_fdisk -> opcionfdisk_name .)
+    ADD             reduce using rule 26 (opciones_element_fdisk -> opcionfdisk_name .)
+    $end            reduce using rule 26 (opciones_element_fdisk -> opcionfdisk_name .)
 
 
 state 27
 
-    (11) opcion_size -> SIZE IGUAL NUMERO .
+    (27) opciones_element_fdisk -> opcionfdisk_unit .
 
-    SIZE            reduce using rule 11 (opcion_size -> SIZE IGUAL NUMERO .)
-    PATH            reduce using rule 11 (opcion_size -> SIZE IGUAL NUMERO .)
-    UNIT            reduce using rule 11 (opcion_size -> SIZE IGUAL NUMERO .)
-    FIT             reduce using rule 11 (opcion_size -> SIZE IGUAL NUMERO .)
-    $end            reduce using rule 11 (opcion_size -> SIZE IGUAL NUMERO .)
+    SIZE            reduce using rule 27 (opciones_element_fdisk -> opcionfdisk_unit .)
+    PATH            reduce using rule 27 (opciones_element_fdisk -> opcionfdisk_unit .)
+    NAME            reduce using rule 27 (opciones_element_fdisk -> opcionfdisk_unit .)
+    UNIT            reduce using rule 27 (opciones_element_fdisk -> opcionfdisk_unit .)
+    TYPE            reduce using rule 27 (opciones_element_fdisk -> opcionfdisk_unit .)
+    FIT             reduce using rule 27 (opciones_element_fdisk -> opcionfdisk_unit .)
+    DELETE          reduce using rule 27 (opciones_element_fdisk -> opcionfdisk_unit .)
+    ADD             reduce using rule 27 (opciones_element_fdisk -> opcionfdisk_unit .)
+    $end            reduce using rule 27 (opciones_element_fdisk -> opcionfdisk_unit .)
 
 
 state 28
 
-    (12) opcion_path -> PATH IGUAL RUTA .
+    (28) opciones_element_fdisk -> opcionfdisk_type .
 
-    SIZE            reduce using rule 12 (opcion_path -> PATH IGUAL RUTA .)
-    PATH            reduce using rule 12 (opcion_path -> PATH IGUAL RUTA .)
-    UNIT            reduce using rule 12 (opcion_path -> PATH IGUAL RUTA .)
-    FIT             reduce using rule 12 (opcion_path -> PATH IGUAL RUTA .)
-    $end            reduce using rule 12 (opcion_path -> PATH IGUAL RUTA .)
+    SIZE            reduce using rule 28 (opciones_element_fdisk -> opcionfdisk_type .)
+    PATH            reduce using rule 28 (opciones_element_fdisk -> opcionfdisk_type .)
+    NAME            reduce using rule 28 (opciones_element_fdisk -> opcionfdisk_type .)
+    UNIT            reduce using rule 28 (opciones_element_fdisk -> opcionfdisk_type .)
+    TYPE            reduce using rule 28 (opciones_element_fdisk -> opcionfdisk_type .)
+    FIT             reduce using rule 28 (opciones_element_fdisk -> opcionfdisk_type .)
+    DELETE          reduce using rule 28 (opciones_element_fdisk -> opcionfdisk_type .)
+    ADD             reduce using rule 28 (opciones_element_fdisk -> opcionfdisk_type .)
+    $end            reduce using rule 28 (opciones_element_fdisk -> opcionfdisk_type .)
 
 
 state 29
 
-    (13) opcion_path -> PATH IGUAL COMILLADOBLE . RUTA COMILLADOBLE
+    (29) opciones_element_fdisk -> opcionfdisk_fit .
 
-    RUTA            shift and go to state 36
+    SIZE            reduce using rule 29 (opciones_element_fdisk -> opcionfdisk_fit .)
+    PATH            reduce using rule 29 (opciones_element_fdisk -> opcionfdisk_fit .)
+    NAME            reduce using rule 29 (opciones_element_fdisk -> opcionfdisk_fit .)
+    UNIT            reduce using rule 29 (opciones_element_fdisk -> opcionfdisk_fit .)
+    TYPE            reduce using rule 29 (opciones_element_fdisk -> opcionfdisk_fit .)
+    FIT             reduce using rule 29 (opciones_element_fdisk -> opcionfdisk_fit .)
+    DELETE          reduce using rule 29 (opciones_element_fdisk -> opcionfdisk_fit .)
+    ADD             reduce using rule 29 (opciones_element_fdisk -> opcionfdisk_fit .)
+    $end            reduce using rule 29 (opciones_element_fdisk -> opcionfdisk_fit .)
 
 
 state 30
 
-    (14) opcion_unit -> UNIT IGUAL ID .
+    (30) opciones_element_fdisk -> opcionfdisk_delete .
 
-    SIZE            reduce using rule 14 (opcion_unit -> UNIT IGUAL ID .)
-    PATH            reduce using rule 14 (opcion_unit -> UNIT IGUAL ID .)
-    UNIT            reduce using rule 14 (opcion_unit -> UNIT IGUAL ID .)
-    FIT             reduce using rule 14 (opcion_unit -> UNIT IGUAL ID .)
-    $end            reduce using rule 14 (opcion_unit -> UNIT IGUAL ID .)
+    SIZE            reduce using rule 30 (opciones_element_fdisk -> opcionfdisk_delete .)
+    PATH            reduce using rule 30 (opciones_element_fdisk -> opcionfdisk_delete .)
+    NAME            reduce using rule 30 (opciones_element_fdisk -> opcionfdisk_delete .)
+    UNIT            reduce using rule 30 (opciones_element_fdisk -> opcionfdisk_delete .)
+    TYPE            reduce using rule 30 (opciones_element_fdisk -> opcionfdisk_delete .)
+    FIT             reduce using rule 30 (opciones_element_fdisk -> opcionfdisk_delete .)
+    DELETE          reduce using rule 30 (opciones_element_fdisk -> opcionfdisk_delete .)
+    ADD             reduce using rule 30 (opciones_element_fdisk -> opcionfdisk_delete .)
+    $end            reduce using rule 30 (opciones_element_fdisk -> opcionfdisk_delete .)
 
 
 state 31
 
-    (15) opcion_fit -> FIT IGUAL ID .
+    (31) opciones_element_fdisk -> opcionfdisk_add .
 
-    SIZE            reduce using rule 15 (opcion_fit -> FIT IGUAL ID .)
-    PATH            reduce using rule 15 (opcion_fit -> FIT IGUAL ID .)
-    UNIT            reduce using rule 15 (opcion_fit -> FIT IGUAL ID .)
-    FIT             reduce using rule 15 (opcion_fit -> FIT IGUAL ID .)
-    $end            reduce using rule 15 (opcion_fit -> FIT IGUAL ID .)
+    SIZE            reduce using rule 31 (opciones_element_fdisk -> opcionfdisk_add .)
+    PATH            reduce using rule 31 (opciones_element_fdisk -> opcionfdisk_add .)
+    NAME            reduce using rule 31 (opciones_element_fdisk -> opcionfdisk_add .)
+    UNIT            reduce using rule 31 (opciones_element_fdisk -> opcionfdisk_add .)
+    TYPE            reduce using rule 31 (opciones_element_fdisk -> opcionfdisk_add .)
+    FIT             reduce using rule 31 (opciones_element_fdisk -> opcionfdisk_add .)
+    DELETE          reduce using rule 31 (opciones_element_fdisk -> opcionfdisk_add .)
+    ADD             reduce using rule 31 (opciones_element_fdisk -> opcionfdisk_add .)
+    $end            reduce using rule 31 (opciones_element_fdisk -> opcionfdisk_add .)
 
 
 state 32
 
-    (16) execute_command -> EXECUTE PATH IGUAL RUTA .
+    (32) opcionfdisk_size -> SIZE . IGUAL NUMERO
 
-    $end            reduce using rule 16 (execute_command -> EXECUTE PATH IGUAL RUTA .)
+    IGUAL           shift and go to state 48
 
 
 state 33
 
-    (17) execute_command -> EXECUTE PATH IGUAL COMILLADOBLE . RUTA COMILLADOBLE
+    (33) opcionfdisk_path -> PATH . IGUAL RUTA DSK
+    (34) opcionfdisk_path -> PATH . IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE
 
-    RUTA            shift and go to state 37
+    IGUAL           shift and go to state 49
 
 
 state 34
 
-    (18) rmdisk_command -> RMDISK PATH IGUAL RUTA .
+    (35) opcionfdisk_name -> NAME . IGUAL ID
+    (36) opcionfdisk_name -> NAME . IGUAL COMILLADOBLE ID COMILLADOBLE
 
-    $end            reduce using rule 18 (rmdisk_command -> RMDISK PATH IGUAL RUTA .)
+    IGUAL           shift and go to state 50
 
 
 state 35
 
-    (19) rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE . RUTA COMILLADOBLE
+    (37) opcionfdisk_unit -> UNIT . IGUAL ID
 
-    RUTA            shift and go to state 38
+    IGUAL           shift and go to state 51
 
 
 state 36
 
-    (13) opcion_path -> PATH IGUAL COMILLADOBLE RUTA . COMILLADOBLE
+    (38) opcionfdisk_type -> TYPE . IGUAL ID
 
-    COMILLADOBLE    shift and go to state 39
+    IGUAL           shift and go to state 52
 
 
 state 37
 
-    (17) execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA . COMILLADOBLE
+    (39) opcionfdisk_fit -> FIT . IGUAL ID
 
-    COMILLADOBLE    shift and go to state 40
+    IGUAL           shift and go to state 53
 
 
 state 38
 
-    (19) rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE RUTA . COMILLADOBLE
+    (40) opcionfdisk_delete -> DELETE . IGUAL ID
 
-    COMILLADOBLE    shift and go to state 41
+    IGUAL           shift and go to state 54
 
 
 state 39
 
-    (13) opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .
+    (41) opcionfdisk_add -> ADD . IGUAL NUMERO
+    (42) opcionfdisk_add -> ADD . IGUAL ID
 
-    SIZE            reduce using rule 13 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
-    PATH            reduce using rule 13 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
-    UNIT            reduce using rule 13 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
-    FIT             reduce using rule 13 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
-    $end            reduce using rule 13 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
+    IGUAL           shift and go to state 55
 
 
 state 40
 
-    (17) execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .
+    (6) opciones -> opciones opciones_element .
 
-    $end            reduce using rule 17 (execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
+    SIZE            reduce using rule 6 (opciones -> opciones opciones_element .)
+    PATH            reduce using rule 6 (opciones -> opciones opciones_element .)
+    UNIT            reduce using rule 6 (opciones -> opciones opciones_element .)
+    FIT             reduce using rule 6 (opciones -> opciones opciones_element .)
+    $end            reduce using rule 6 (opciones -> opciones opciones_element .)
 
 
 state 41
 
-    (19) rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .
+    (12) opcion_size -> SIZE IGUAL . NUMERO
 
-    $end            reduce using rule 19 (rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE RUTA COMILLADOBLE .)
+    NUMERO          shift and go to state 56
+
+
+state 42
+
+    (13) opcion_path -> PATH IGUAL . RUTA DSK
+    (14) opcion_path -> PATH IGUAL . COMILLADOBLE RUTA DSK COMILLADOBLE
+
+    RUTA            shift and go to state 57
+    COMILLADOBLE    shift and go to state 58
+
+
+state 43
+
+    (15) opcion_unit -> UNIT IGUAL . ID
+
+    ID              shift and go to state 59
+
+
+state 44
+
+    (16) opcion_fit -> FIT IGUAL . ID
+
+    ID              shift and go to state 60
+
+
+state 45
+
+    (17) execute_command -> EXECUTE PATH IGUAL . RUTA ADJ
+    (18) execute_command -> EXECUTE PATH IGUAL . COMILLADOBLE RUTA ADJ COMILLADOBLE
+
+    RUTA            shift and go to state 61
+    COMILLADOBLE    shift and go to state 62
+
+
+state 46
+
+    (19) rmdisk_command -> RMDISK PATH IGUAL . RUTA DSK
+    (20) rmdisk_command -> RMDISK PATH IGUAL . COMILLADOBLE RUTA DSK COMILLADOBLE
+
+    RUTA            shift and go to state 63
+    COMILLADOBLE    shift and go to state 64
+
+
+state 47
+
+    (22) opciones_fdisk -> opciones_fdisk opciones_element_fdisk .
+
+    SIZE            reduce using rule 22 (opciones_fdisk -> opciones_fdisk opciones_element_fdisk .)
+    PATH            reduce using rule 22 (opciones_fdisk -> opciones_fdisk opciones_element_fdisk .)
+    NAME            reduce using rule 22 (opciones_fdisk -> opciones_fdisk opciones_element_fdisk .)
+    UNIT            reduce using rule 22 (opciones_fdisk -> opciones_fdisk opciones_element_fdisk .)
+    TYPE            reduce using rule 22 (opciones_fdisk -> opciones_fdisk opciones_element_fdisk .)
+    FIT             reduce using rule 22 (opciones_fdisk -> opciones_fdisk opciones_element_fdisk .)
+    DELETE          reduce using rule 22 (opciones_fdisk -> opciones_fdisk opciones_element_fdisk .)
+    ADD             reduce using rule 22 (opciones_fdisk -> opciones_fdisk opciones_element_fdisk .)
+    $end            reduce using rule 22 (opciones_fdisk -> opciones_fdisk opciones_element_fdisk .)
+
+
+state 48
+
+    (32) opcionfdisk_size -> SIZE IGUAL . NUMERO
+
+    NUMERO          shift and go to state 65
+
+
+state 49
+
+    (33) opcionfdisk_path -> PATH IGUAL . RUTA DSK
+    (34) opcionfdisk_path -> PATH IGUAL . COMILLADOBLE RUTA DSK COMILLADOBLE
+
+    RUTA            shift and go to state 66
+    COMILLADOBLE    shift and go to state 67
+
+
+state 50
+
+    (35) opcionfdisk_name -> NAME IGUAL . ID
+    (36) opcionfdisk_name -> NAME IGUAL . COMILLADOBLE ID COMILLADOBLE
+
+    ID              shift and go to state 68
+    COMILLADOBLE    shift and go to state 69
+
+
+state 51
+
+    (37) opcionfdisk_unit -> UNIT IGUAL . ID
+
+    ID              shift and go to state 70
+
+
+state 52
+
+    (38) opcionfdisk_type -> TYPE IGUAL . ID
+
+    ID              shift and go to state 71
+
+
+state 53
+
+    (39) opcionfdisk_fit -> FIT IGUAL . ID
+
+    ID              shift and go to state 72
+
+
+state 54
+
+    (40) opcionfdisk_delete -> DELETE IGUAL . ID
+
+    ID              shift and go to state 73
+
+
+state 55
+
+    (41) opcionfdisk_add -> ADD IGUAL . NUMERO
+    (42) opcionfdisk_add -> ADD IGUAL . ID
+
+    NUMERO          shift and go to state 74
+    ID              shift and go to state 75
+
+
+state 56
+
+    (12) opcion_size -> SIZE IGUAL NUMERO .
+
+    SIZE            reduce using rule 12 (opcion_size -> SIZE IGUAL NUMERO .)
+    PATH            reduce using rule 12 (opcion_size -> SIZE IGUAL NUMERO .)
+    UNIT            reduce using rule 12 (opcion_size -> SIZE IGUAL NUMERO .)
+    FIT             reduce using rule 12 (opcion_size -> SIZE IGUAL NUMERO .)
+    $end            reduce using rule 12 (opcion_size -> SIZE IGUAL NUMERO .)
+
+
+state 57
+
+    (13) opcion_path -> PATH IGUAL RUTA . DSK
+
+    DSK             shift and go to state 76
+
+
+state 58
+
+    (14) opcion_path -> PATH IGUAL COMILLADOBLE . RUTA DSK COMILLADOBLE
+
+    RUTA            shift and go to state 77
+
+
+state 59
+
+    (15) opcion_unit -> UNIT IGUAL ID .
+
+    SIZE            reduce using rule 15 (opcion_unit -> UNIT IGUAL ID .)
+    PATH            reduce using rule 15 (opcion_unit -> UNIT IGUAL ID .)
+    UNIT            reduce using rule 15 (opcion_unit -> UNIT IGUAL ID .)
+    FIT             reduce using rule 15 (opcion_unit -> UNIT IGUAL ID .)
+    $end            reduce using rule 15 (opcion_unit -> UNIT IGUAL ID .)
+
+
+state 60
+
+    (16) opcion_fit -> FIT IGUAL ID .
+
+    SIZE            reduce using rule 16 (opcion_fit -> FIT IGUAL ID .)
+    PATH            reduce using rule 16 (opcion_fit -> FIT IGUAL ID .)
+    UNIT            reduce using rule 16 (opcion_fit -> FIT IGUAL ID .)
+    FIT             reduce using rule 16 (opcion_fit -> FIT IGUAL ID .)
+    $end            reduce using rule 16 (opcion_fit -> FIT IGUAL ID .)
+
+
+state 61
+
+    (17) execute_command -> EXECUTE PATH IGUAL RUTA . ADJ
+
+    ADJ             shift and go to state 78
+
+
+state 62
+
+    (18) execute_command -> EXECUTE PATH IGUAL COMILLADOBLE . RUTA ADJ COMILLADOBLE
+
+    RUTA            shift and go to state 79
+
+
+state 63
+
+    (19) rmdisk_command -> RMDISK PATH IGUAL RUTA . DSK
+
+    DSK             shift and go to state 80
+
+
+state 64
+
+    (20) rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE . RUTA DSK COMILLADOBLE
+
+    RUTA            shift and go to state 81
+
+
+state 65
+
+    (32) opcionfdisk_size -> SIZE IGUAL NUMERO .
+
+    SIZE            reduce using rule 32 (opcionfdisk_size -> SIZE IGUAL NUMERO .)
+    PATH            reduce using rule 32 (opcionfdisk_size -> SIZE IGUAL NUMERO .)
+    NAME            reduce using rule 32 (opcionfdisk_size -> SIZE IGUAL NUMERO .)
+    UNIT            reduce using rule 32 (opcionfdisk_size -> SIZE IGUAL NUMERO .)
+    TYPE            reduce using rule 32 (opcionfdisk_size -> SIZE IGUAL NUMERO .)
+    FIT             reduce using rule 32 (opcionfdisk_size -> SIZE IGUAL NUMERO .)
+    DELETE          reduce using rule 32 (opcionfdisk_size -> SIZE IGUAL NUMERO .)
+    ADD             reduce using rule 32 (opcionfdisk_size -> SIZE IGUAL NUMERO .)
+    $end            reduce using rule 32 (opcionfdisk_size -> SIZE IGUAL NUMERO .)
+
+
+state 66
+
+    (33) opcionfdisk_path -> PATH IGUAL RUTA . DSK
+
+    DSK             shift and go to state 82
+
+
+state 67
+
+    (34) opcionfdisk_path -> PATH IGUAL COMILLADOBLE . RUTA DSK COMILLADOBLE
+
+    RUTA            shift and go to state 83
+
+
+state 68
+
+    (35) opcionfdisk_name -> NAME IGUAL ID .
+
+    SIZE            reduce using rule 35 (opcionfdisk_name -> NAME IGUAL ID .)
+    PATH            reduce using rule 35 (opcionfdisk_name -> NAME IGUAL ID .)
+    NAME            reduce using rule 35 (opcionfdisk_name -> NAME IGUAL ID .)
+    UNIT            reduce using rule 35 (opcionfdisk_name -> NAME IGUAL ID .)
+    TYPE            reduce using rule 35 (opcionfdisk_name -> NAME IGUAL ID .)
+    FIT             reduce using rule 35 (opcionfdisk_name -> NAME IGUAL ID .)
+    DELETE          reduce using rule 35 (opcionfdisk_name -> NAME IGUAL ID .)
+    ADD             reduce using rule 35 (opcionfdisk_name -> NAME IGUAL ID .)
+    $end            reduce using rule 35 (opcionfdisk_name -> NAME IGUAL ID .)
+
+
+state 69
+
+    (36) opcionfdisk_name -> NAME IGUAL COMILLADOBLE . ID COMILLADOBLE
+
+    ID              shift and go to state 84
+
+
+state 70
+
+    (37) opcionfdisk_unit -> UNIT IGUAL ID .
+
+    SIZE            reduce using rule 37 (opcionfdisk_unit -> UNIT IGUAL ID .)
+    PATH            reduce using rule 37 (opcionfdisk_unit -> UNIT IGUAL ID .)
+    NAME            reduce using rule 37 (opcionfdisk_unit -> UNIT IGUAL ID .)
+    UNIT            reduce using rule 37 (opcionfdisk_unit -> UNIT IGUAL ID .)
+    TYPE            reduce using rule 37 (opcionfdisk_unit -> UNIT IGUAL ID .)
+    FIT             reduce using rule 37 (opcionfdisk_unit -> UNIT IGUAL ID .)
+    DELETE          reduce using rule 37 (opcionfdisk_unit -> UNIT IGUAL ID .)
+    ADD             reduce using rule 37 (opcionfdisk_unit -> UNIT IGUAL ID .)
+    $end            reduce using rule 37 (opcionfdisk_unit -> UNIT IGUAL ID .)
+
+
+state 71
+
+    (38) opcionfdisk_type -> TYPE IGUAL ID .
+
+    SIZE            reduce using rule 38 (opcionfdisk_type -> TYPE IGUAL ID .)
+    PATH            reduce using rule 38 (opcionfdisk_type -> TYPE IGUAL ID .)
+    NAME            reduce using rule 38 (opcionfdisk_type -> TYPE IGUAL ID .)
+    UNIT            reduce using rule 38 (opcionfdisk_type -> TYPE IGUAL ID .)
+    TYPE            reduce using rule 38 (opcionfdisk_type -> TYPE IGUAL ID .)
+    FIT             reduce using rule 38 (opcionfdisk_type -> TYPE IGUAL ID .)
+    DELETE          reduce using rule 38 (opcionfdisk_type -> TYPE IGUAL ID .)
+    ADD             reduce using rule 38 (opcionfdisk_type -> TYPE IGUAL ID .)
+    $end            reduce using rule 38 (opcionfdisk_type -> TYPE IGUAL ID .)
+
+
+state 72
+
+    (39) opcionfdisk_fit -> FIT IGUAL ID .
+
+    SIZE            reduce using rule 39 (opcionfdisk_fit -> FIT IGUAL ID .)
+    PATH            reduce using rule 39 (opcionfdisk_fit -> FIT IGUAL ID .)
+    NAME            reduce using rule 39 (opcionfdisk_fit -> FIT IGUAL ID .)
+    UNIT            reduce using rule 39 (opcionfdisk_fit -> FIT IGUAL ID .)
+    TYPE            reduce using rule 39 (opcionfdisk_fit -> FIT IGUAL ID .)
+    FIT             reduce using rule 39 (opcionfdisk_fit -> FIT IGUAL ID .)
+    DELETE          reduce using rule 39 (opcionfdisk_fit -> FIT IGUAL ID .)
+    ADD             reduce using rule 39 (opcionfdisk_fit -> FIT IGUAL ID .)
+    $end            reduce using rule 39 (opcionfdisk_fit -> FIT IGUAL ID .)
+
+
+state 73
+
+    (40) opcionfdisk_delete -> DELETE IGUAL ID .
+
+    SIZE            reduce using rule 40 (opcionfdisk_delete -> DELETE IGUAL ID .)
+    PATH            reduce using rule 40 (opcionfdisk_delete -> DELETE IGUAL ID .)
+    NAME            reduce using rule 40 (opcionfdisk_delete -> DELETE IGUAL ID .)
+    UNIT            reduce using rule 40 (opcionfdisk_delete -> DELETE IGUAL ID .)
+    TYPE            reduce using rule 40 (opcionfdisk_delete -> DELETE IGUAL ID .)
+    FIT             reduce using rule 40 (opcionfdisk_delete -> DELETE IGUAL ID .)
+    DELETE          reduce using rule 40 (opcionfdisk_delete -> DELETE IGUAL ID .)
+    ADD             reduce using rule 40 (opcionfdisk_delete -> DELETE IGUAL ID .)
+    $end            reduce using rule 40 (opcionfdisk_delete -> DELETE IGUAL ID .)
+
+
+state 74
+
+    (41) opcionfdisk_add -> ADD IGUAL NUMERO .
+
+    SIZE            reduce using rule 41 (opcionfdisk_add -> ADD IGUAL NUMERO .)
+    PATH            reduce using rule 41 (opcionfdisk_add -> ADD IGUAL NUMERO .)
+    NAME            reduce using rule 41 (opcionfdisk_add -> ADD IGUAL NUMERO .)
+    UNIT            reduce using rule 41 (opcionfdisk_add -> ADD IGUAL NUMERO .)
+    TYPE            reduce using rule 41 (opcionfdisk_add -> ADD IGUAL NUMERO .)
+    FIT             reduce using rule 41 (opcionfdisk_add -> ADD IGUAL NUMERO .)
+    DELETE          reduce using rule 41 (opcionfdisk_add -> ADD IGUAL NUMERO .)
+    ADD             reduce using rule 41 (opcionfdisk_add -> ADD IGUAL NUMERO .)
+    $end            reduce using rule 41 (opcionfdisk_add -> ADD IGUAL NUMERO .)
+
+
+state 75
+
+    (42) opcionfdisk_add -> ADD IGUAL ID .
+
+    SIZE            reduce using rule 42 (opcionfdisk_add -> ADD IGUAL ID .)
+    PATH            reduce using rule 42 (opcionfdisk_add -> ADD IGUAL ID .)
+    NAME            reduce using rule 42 (opcionfdisk_add -> ADD IGUAL ID .)
+    UNIT            reduce using rule 42 (opcionfdisk_add -> ADD IGUAL ID .)
+    TYPE            reduce using rule 42 (opcionfdisk_add -> ADD IGUAL ID .)
+    FIT             reduce using rule 42 (opcionfdisk_add -> ADD IGUAL ID .)
+    DELETE          reduce using rule 42 (opcionfdisk_add -> ADD IGUAL ID .)
+    ADD             reduce using rule 42 (opcionfdisk_add -> ADD IGUAL ID .)
+    $end            reduce using rule 42 (opcionfdisk_add -> ADD IGUAL ID .)
+
+
+state 76
+
+    (13) opcion_path -> PATH IGUAL RUTA DSK .
+
+    SIZE            reduce using rule 13 (opcion_path -> PATH IGUAL RUTA DSK .)
+    PATH            reduce using rule 13 (opcion_path -> PATH IGUAL RUTA DSK .)
+    UNIT            reduce using rule 13 (opcion_path -> PATH IGUAL RUTA DSK .)
+    FIT             reduce using rule 13 (opcion_path -> PATH IGUAL RUTA DSK .)
+    $end            reduce using rule 13 (opcion_path -> PATH IGUAL RUTA DSK .)
+
+
+state 77
+
+    (14) opcion_path -> PATH IGUAL COMILLADOBLE RUTA . DSK COMILLADOBLE
+
+    DSK             shift and go to state 85
+
+
+state 78
+
+    (17) execute_command -> EXECUTE PATH IGUAL RUTA ADJ .
+
+    $end            reduce using rule 17 (execute_command -> EXECUTE PATH IGUAL RUTA ADJ .)
+
+
+state 79
+
+    (18) execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA . ADJ COMILLADOBLE
+
+    ADJ             shift and go to state 86
+
+
+state 80
+
+    (19) rmdisk_command -> RMDISK PATH IGUAL RUTA DSK .
+
+    $end            reduce using rule 19 (rmdisk_command -> RMDISK PATH IGUAL RUTA DSK .)
+
+
+state 81
+
+    (20) rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE RUTA . DSK COMILLADOBLE
+
+    DSK             shift and go to state 87
+
+
+state 82
+
+    (33) opcionfdisk_path -> PATH IGUAL RUTA DSK .
+
+    SIZE            reduce using rule 33 (opcionfdisk_path -> PATH IGUAL RUTA DSK .)
+    PATH            reduce using rule 33 (opcionfdisk_path -> PATH IGUAL RUTA DSK .)
+    NAME            reduce using rule 33 (opcionfdisk_path -> PATH IGUAL RUTA DSK .)
+    UNIT            reduce using rule 33 (opcionfdisk_path -> PATH IGUAL RUTA DSK .)
+    TYPE            reduce using rule 33 (opcionfdisk_path -> PATH IGUAL RUTA DSK .)
+    FIT             reduce using rule 33 (opcionfdisk_path -> PATH IGUAL RUTA DSK .)
+    DELETE          reduce using rule 33 (opcionfdisk_path -> PATH IGUAL RUTA DSK .)
+    ADD             reduce using rule 33 (opcionfdisk_path -> PATH IGUAL RUTA DSK .)
+    $end            reduce using rule 33 (opcionfdisk_path -> PATH IGUAL RUTA DSK .)
+
+
+state 83
+
+    (34) opcionfdisk_path -> PATH IGUAL COMILLADOBLE RUTA . DSK COMILLADOBLE
+
+    DSK             shift and go to state 88
+
+
+state 84
+
+    (36) opcionfdisk_name -> NAME IGUAL COMILLADOBLE ID . COMILLADOBLE
+
+    COMILLADOBLE    shift and go to state 89
+
+
+state 85
+
+    (14) opcion_path -> PATH IGUAL COMILLADOBLE RUTA DSK . COMILLADOBLE
+
+    COMILLADOBLE    shift and go to state 90
+
+
+state 86
+
+    (18) execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA ADJ . COMILLADOBLE
+
+    COMILLADOBLE    shift and go to state 91
+
+
+state 87
+
+    (20) rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE RUTA DSK . COMILLADOBLE
+
+    COMILLADOBLE    shift and go to state 92
+
+
+state 88
+
+    (34) opcionfdisk_path -> PATH IGUAL COMILLADOBLE RUTA DSK . COMILLADOBLE
+
+    COMILLADOBLE    shift and go to state 93
+
+
+state 89
+
+    (36) opcionfdisk_name -> NAME IGUAL COMILLADOBLE ID COMILLADOBLE .
+
+    SIZE            reduce using rule 36 (opcionfdisk_name -> NAME IGUAL COMILLADOBLE ID COMILLADOBLE .)
+    PATH            reduce using rule 36 (opcionfdisk_name -> NAME IGUAL COMILLADOBLE ID COMILLADOBLE .)
+    NAME            reduce using rule 36 (opcionfdisk_name -> NAME IGUAL COMILLADOBLE ID COMILLADOBLE .)
+    UNIT            reduce using rule 36 (opcionfdisk_name -> NAME IGUAL COMILLADOBLE ID COMILLADOBLE .)
+    TYPE            reduce using rule 36 (opcionfdisk_name -> NAME IGUAL COMILLADOBLE ID COMILLADOBLE .)
+    FIT             reduce using rule 36 (opcionfdisk_name -> NAME IGUAL COMILLADOBLE ID COMILLADOBLE .)
+    DELETE          reduce using rule 36 (opcionfdisk_name -> NAME IGUAL COMILLADOBLE ID COMILLADOBLE .)
+    ADD             reduce using rule 36 (opcionfdisk_name -> NAME IGUAL COMILLADOBLE ID COMILLADOBLE .)
+    $end            reduce using rule 36 (opcionfdisk_name -> NAME IGUAL COMILLADOBLE ID COMILLADOBLE .)
+
+
+state 90
+
+    (14) opcion_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .
+
+    SIZE            reduce using rule 14 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .)
+    PATH            reduce using rule 14 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .)
+    UNIT            reduce using rule 14 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .)
+    FIT             reduce using rule 14 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .)
+    $end            reduce using rule 14 (opcion_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .)
+
+
+state 91
+
+    (18) execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA ADJ COMILLADOBLE .
+
+    $end            reduce using rule 18 (execute_command -> EXECUTE PATH IGUAL COMILLADOBLE RUTA ADJ COMILLADOBLE .)
+
+
+state 92
+
+    (20) rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .
+
+    $end            reduce using rule 20 (rmdisk_command -> RMDISK PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .)
+
+
+state 93
+
+    (34) opcionfdisk_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .
+
+    SIZE            reduce using rule 34 (opcionfdisk_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .)
+    PATH            reduce using rule 34 (opcionfdisk_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .)
+    NAME            reduce using rule 34 (opcionfdisk_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .)
+    UNIT            reduce using rule 34 (opcionfdisk_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .)
+    TYPE            reduce using rule 34 (opcionfdisk_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .)
+    FIT             reduce using rule 34 (opcionfdisk_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .)
+    DELETE          reduce using rule 34 (opcionfdisk_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .)
+    ADD             reduce using rule 34 (opcionfdisk_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .)
+    $end            reduce using rule 34 (opcionfdisk_path -> PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE .)
 

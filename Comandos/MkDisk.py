@@ -98,6 +98,7 @@ class MkDisk():
             file = open(self.path, "rb+")
             Winit_size(file, self.size)
             inicio = 0 #Se escribe en el primer byte del disco
+            
             Fwrite_displacement(file, inicio, disco)
             file.close()
             return True

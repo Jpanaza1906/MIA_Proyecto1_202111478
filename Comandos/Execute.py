@@ -9,14 +9,14 @@ class Execute():
     
     #Setters-------------------------------------------------------------------
     
-    def set_path(self): #Definir el path
-        if(not os.path.exists(self.path)):
+    def set_path(self, path): #Definir el path
+        if(not os.path.exists(path)):
             print("\t Execute>>> El path no existe")
             return False
-        if(not self.path.endswith('.adsj')):
+        if(not path.endswith('.adsj')):
             print("\t Execute>>> El path no tiene la extension .adsj")
             return False
-        self.path = self.path
+        self.path = path
         return True
     
     #Definir el EXECUTE--------------------------------------------------------
