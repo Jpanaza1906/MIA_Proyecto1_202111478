@@ -6,7 +6,11 @@ def p_command(p):
     '''command : mkdisk_command
                | execute_command
                | rmdisk_command
-               | fdisk_command'''
+               | fdisk_command
+               | mount_command
+               | unmount_command
+               | mkfs_command
+    '''
     p[0] = p[1]
 
 # =============================== Reglas de producción para MKDISK ===============================
@@ -206,8 +210,116 @@ def p_opcionfdisk_add(p):
     p[0] = {
         'add': p[3]
     }
+#============================== FIN FDISK =====================================================================
+#==============================COMANDO MOUNT===================================================================
+def p_mount_command(p):
+    '''mount_command : MOUNT opciones_mount'''
+    p[0] = {
+        'command': 'mount',
+        **p[2],
+    }
+def p_opciones_mount(p):
+    '''opciones_mount : opciones_mount opciones_element_mount 
+                      | opciones_element_mount'''
+    #Se guarda el contenido
+    if len(p) > 2:
+        p[0] = {
+            **p[1],
+            **p[2]
+        }
+    else:
+        p[0] = {
+            **p[1]
+        }
+def p_opciones_element_mount(p):
+    '''opciones_element_mount : opcionmount_path
+                              | opcionmount_name'''
+    p[0] = {
+        **p[1]
+    }
+def p_opcionmount_path(p):
+    '''opcionmount_path : PATH IGUAL RUTA DSK
+                        | PATH IGUAL COMILLADOBLE RUTA DSK COMILLADOBLE'''
+    #Se guarda el contenido
+    if len(p) > 5:
+        p[0] = {
+            'path': p[4] + '.' + p[5]
+        }
+    else:
+        p[0] = {
+            'path': p[3] + '.' + p[4]
+        }
+def p_opcionmount_name(p):
+    '''opcionmount_name : NAME IGUAL ID
+                        | NAME IGUAL COMILLADOBLE ID COMILLADOBLE'''
+    #Se guarda el contenido
+    if len(p) > 4:
+        p[0] = {
+            'name': p[4]
+        }
+    else:
+        p[0] = {
+            'name': p[3]
+        }
+    
+#====================FIN COMANDO MOUNT===================================================================
+#====================COMANDO UNMOUNT======================================================================
+def p_unmount_command(p):
+    '''unmount_command : UNMOUNT ID_CMD IGUAL NUMERO ID'''
+    p[0] = {
+        'command': 'unmount',
+        'id':p[4] + p[5],
+    }
+#====================FIN COMANDO UNMOUNT===================================================================
+#=====================COMANDO MKFS=========================================================================
+def p_mkfs_command(p):
+    '''mkfs_command : MKFS opciones_mkfs'''
+    p[0] = {
+        'command': 'mkfs',
+        **p[2],
+    }
+def p_opciones_mkfs(p):
+    '''opciones_mkfs : opciones_mkfs opciones_element_mkfs 
+                      | opciones_element_mkfs'''
+    #Se guarda el contenido
+    if len(p) > 2:
+        p[0] = {
+            **p[1],
+            **p[2]
+        }
+    else:
+        p[0] = {
+            **p[1]
+        }
+def p_opciones_element_mkfs(p):
+    '''opciones_element_mkfs : opcionmkfs_id
+                              | opcionmkfs_type
+                              | opcionmkfs_fs'''
+    p[0] = {
+        **p[1]
+    }
+def p_opcionmkfs_id(p):
+    '''opcionmkfs_id : ID_CMD IGUAL NUMERO ID'''
+    #Se guarda el contenido
+    p[0] = {
+        'id': p[3] + p[4]
+    }
+def p_opcionmkfs_type(p):
+    '''opcionmkfs_type : TYPE IGUAL ID'''
+    #Se guarda el contenido
+    p[0] = {
+        'type': p[3]
+    }
+def p_opcionmkfs_fs(p):
+    '''opcionmkfs_fs : FS IGUAL NUMERO ID'''
+    #Se guarda el contenido
+    p[0] = {
+        'fs': p[3] + p[4]
+    }
+    
 def p_error(p):
-    print("Syntax error in input!",p)
+    #print("\t josep-ubu@Leon-Ubuntu>>> Error al escribir el comando.",p)
+    pass
 
 # Construir el parser
 # parser = yacc.yacc()

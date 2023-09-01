@@ -5,6 +5,9 @@ reserved = {
     'mkdisk': 'MKDISK',
     'rmdisk': 'RMDISK',
     'fdisk': 'FDISK',
+    'mount': 'MOUNT',
+    'unmount': 'UNMOUNT',
+    'mkfs': 'MKFS',
     '-path': 'PATH',
     '-unit': 'UNIT',
     '-fit': 'FIT',
@@ -12,7 +15,9 @@ reserved = {
     '-name': 'NAME',
     '-type': 'TYPE',
     '-delete': 'DELETE',
+    '-id': 'ID_CMD',
     '-add': 'ADD',
+    '-fs': 'FS',
     'adsj': 'ADJ',
     'dsk': 'DSK',
     'execute': 'EXECUTE',
@@ -25,7 +30,7 @@ tokens = [
     'IGUAL',
     'COMILLADOBLE',
     'NUMERO',
-    'NEGATIVO',
+    #'NEGATIVO',
     #'MENOS',
     #'PUNTO',
     #'DIAGONAL',
@@ -34,7 +39,7 @@ tokens = [
 # Expresiones regulares para tokens simples
 t_RUTA = r'\/[^\.\r\n\"]*'
 t_NUMERO = r'\d+'
-t_NEGATIVO = r'\-\d+'
+#t_NEGATIVO = r'\-\d+'
 t_IGUAL = r'\='
 #t_MENOS = r'\-'
 #t_PUNTO = r'\.'

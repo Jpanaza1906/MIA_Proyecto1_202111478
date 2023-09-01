@@ -19,6 +19,8 @@ from Comandos.MkDisk import *
 from Comandos.Execute import *
 from Comandos.RmDisk import *
 from Comandos.FDisk import *
+from Comandos.Mount import *
+from Comandos.Unmount import *
 
 #Funcion ejecutar comando-------------------------------------------------------
 
@@ -114,6 +116,28 @@ def exe_command(result):
             else:
                 print("\t Fdisk>>> Falta un parametro obligatorio\n")
                 return
+        #Comando Mount
+        elif(result['command'] == 'mount'):
+            if('path' in result and 'name' in result):
+                c_mount = Mount()
+                if(c_mount.run(result['path'], result['name'])):
+                    print("\t Mount>>> Comando ejecutado con exito\n")
+                else:
+                    print("\t Mount>>> Error al ejecutar el comando\n")
+            else:
+                print("\t Mount>>> Falta un parametro obligatorio\n")
+                return
+        #Comando Unmount
+        elif(result['command'] == 'unmount'):
+            if('id' in result):
+                c_unmount = Unmount()
+                if(c_unmount.run(result['id'])):
+                    print("\t Unmount>>> Comando ejecutado con exito\n")
+                else:
+                    print("\t Unmount>>> Error al ejecutar el comando\n")
+            else:
+                print("\t Unmount>>> Falta un parametro obligatorio\n")
+                return
                 
                 
 
@@ -133,6 +157,9 @@ if __name__ == '__main__':
             continue
         #Se ejecuta el comando
         result = parser.parse(s)
+        if(result == None):
+            print("\t josep-ubu@Leon-Ubuntu>>> Comando no reconocido, o existe un error en su escritura.\n")
+            continue
         exe_command(result) #Se llama a la funcion que ejecuta el comando
                 
                     

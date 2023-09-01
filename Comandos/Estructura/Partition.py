@@ -1,4 +1,3 @@
-from copy import deepcopy
 import ctypes
 import struct
 from .Load import *

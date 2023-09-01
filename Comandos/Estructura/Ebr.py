@@ -111,6 +111,7 @@ class Ebr(ctypes.Structure):
     #Display--------------------------------------------------------------------
     
     def display_info(self):
+        print("EBR")
         print(f"Status: {self.part_status.decode()}")
         print(f"Fit: {self.part_fit.decode()}")
         print(f"Start: {self.part_start}")

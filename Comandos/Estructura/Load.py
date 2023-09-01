@@ -4,6 +4,11 @@ def Fwrite_displacement(file, displacement, obj): #Escribir en un archivo binari
     data = obj.doSerialize()
     file.seek(displacement)
     file.write(data)
+
+def Fwrite_displacement_normal(file, displacement, text):
+    data = text
+    file.seek(displacement)
+    file.write(data)
     
 def Fread_displacement(file, displacement, obj): #Leer en un archivo binario
     try:

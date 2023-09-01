@@ -160,8 +160,7 @@ class FDisk:
         if(self.create_partition()):
             print("\t Fdisk>>> Se creo la particion")
             return True
-        else:
-            return False
+        return False
     
     #Crear una particion-------------------------------------------------------
     
