@@ -21,6 +21,7 @@ from Comandos.RmDisk import *
 from Comandos.FDisk import *
 from Comandos.Mount import *
 from Comandos.Unmount import *
+from Comandos.Mkfs import *
 
 #Funcion ejecutar comando-------------------------------------------------------
 
@@ -137,6 +138,27 @@ def exe_command(result):
                     print("\t Unmount>>> Error al ejecutar el comando\n")
             else:
                 print("\t Unmount>>> Falta un parametro obligatorio\n")
+                return
+        #Comando Mkfs
+        elif(result['command'] == 'mkfs'):
+            if('id' in result):
+                #Se verifica si tiene los parametros opcionales
+                type = None
+                fs = None
+                
+                if('type' in result):
+                    type = result['type']
+                if('fs' in result):
+                    fs = result['fs']
+                    
+                
+                c_mkfs = Mkfs()
+                if(c_mkfs.run(result['id'], type, fs)):
+                    print("\t Mkfs>>> Comando ejecutado con exito\n")
+                else:
+                    print("\t Mkfs>>> Error al ejecutar el comando\n")
+            else:
+                print("\t Mkfs>>> Falta un parametro obligatorio\n")
                 return
                 
                 

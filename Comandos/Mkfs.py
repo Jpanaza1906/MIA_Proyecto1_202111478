@@ -10,6 +10,7 @@ from .Estructura.File_block import *
 from .Estructura.Load import *
 from Global.Global import *
 from .Estructura.Ext import *
+from datetime import datetime
 
 class Mkfs():
     #Constructor---------------------------------------------------------------
@@ -66,7 +67,7 @@ class Mkfs():
     def formatear_particion(self):
         mPartition = None
         for partition in mounted_partitions:
-            if(partition.id == self.id):
+            if(partition[0] == self.id):
                 mPartition = partition
                 break
         if(mPartition == None):
@@ -82,19 +83,25 @@ class Mkfs():
         
         #creando super bloque
         new_super_block = Super_block()
-        new_super_block.set_s_inodes_count(0)
-        new_super_block.set_s_blocks_count(0)
+        new_super_block.set_inodes_count(0)
+        new_super_block.set_blocks_count(0)
         
-        new_super_block.set_s_free_blocks_count(3 * n)
+        new_super_block.set_free_blocks_count(3 * n)
         new_super_block.set_free_inodes_count(n)
         
         date = datetime.now().strftime("%d/%m/%Y")
-        new_super_block.set_s_mtime(date)
-        new_super_block.set_s_umtime(date)
+        new_super_block.set_mount_time(date)
+        new_super_block.set_unmount_time(date)
         new_super_block.mount_count = 1
+        
         #Creando super bloque
         if(self.fs == '2fs'):
-            create_ext2(n, mPartition, new_super_block, date)
+            if(create_ext2(n, mPartition, new_super_block, date)):
+                return True
+            return False
         elif(self.fs == '3fs'):
-            pass
+            if(create_ext3(n, mPartition, new_super_block, date)):
+                return True
+            return False
+        return False
         

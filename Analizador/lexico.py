@@ -2,12 +2,37 @@ import ply.lex as lex
 
 # Lista de palabras reservadas
 reserved = {
+    #COMANDOS    
+    'execute': 'EXECUTE',
     'mkdisk': 'MKDISK',
     'rmdisk': 'RMDISK',
     'fdisk': 'FDISK',
     'mount': 'MOUNT',
     'unmount': 'UNMOUNT',
     'mkfs': 'MKFS',
+    'login': 'LOGIN',
+    'logout': 'LOGOUT',
+    'mkgrp': 'MKGRP',  
+    'rmgrp': 'RMGRP',
+    'mkusr': 'MKUSR',
+    'rmusr': 'RMUSR',
+    'mkfile': 'MKFILE',
+    'cat': 'CAT',
+    'remove': 'REMOVE',
+    'edit': 'EDIT',
+    'rename': 'RENAME',
+    'mkdir': 'MKDIR',
+    'copy': 'COPY',
+    'move': 'MOVE',
+    'find': 'FIND',
+    'chown': 'CHOWN',
+    'chgrp': 'CHGRP',
+    'chmod': 'CHMOD',
+    'pause': 'PAUSE',
+    'recovery': 'RECOVERY',
+    'loss': 'LOSS',
+    'rep': 'REP',
+    #PARAMETROS
     '-path': 'PATH',
     '-unit': 'UNIT',
     '-fit': 'FIT',
@@ -18,9 +43,14 @@ reserved = {
     '-id': 'ID_CMD',
     '-add': 'ADD',
     '-fs': 'FS',
-    'adsj': 'ADJ',
-    'dsk': 'DSK',
-    'execute': 'EXECUTE',
+    '-user': 'USER',
+    '-pass': 'PASS',
+    '-grp': 'GRP',
+    '-r': 'R',
+    '-cont': 'CONT',
+    '-destino': 'DEST',
+    '-ugo': 'UGO',
+    '-ruta': 'RUTAC',
 }
 
 # Lista de tokens
@@ -28,8 +58,10 @@ tokens = [
     'ID',
     'RUTA',
     'IGUAL',
-    'COMILLADOBLE',
+    #'COMILLADOBLE',
     'NUMERO',
+    'CADENA',
+    'BUSCAR',
     #'NEGATIVO',
     #'MENOS',
     #'PUNTO',
@@ -37,19 +69,22 @@ tokens = [
 ] + list(reserved.values())
 
 # Expresiones regulares para tokens simples
-t_RUTA = r'\/[^\.\r\n\"]*'
+t_RUTA = r'\/[^\.\r\n\" ]*'
 t_NUMERO = r'\d+'
 #t_NEGATIVO = r'\-\d+'
 t_IGUAL = r'\='
+t_CADENA = r'\"[^\r\n\"]*\"'
+t_BUSCAR = r'[\?\*][\.]?[\?\*]?'
+
 #t_MENOS = r'\-'
 #t_PUNTO = r'\.'
 #t_DIAGONAL = r'\/'
-t_COMILLADOBLE = r'\"'
+#t_COMILLADOBLE = r'\"'
 
 # Función para manejar palabras reservadas
 def t_ID(t):
     r'[a-zA-Z_-][a-zA-Z0-9_-]*'
-    t.type = reserved.get(t.value, 'ID')
+    t.type = reserved.get(t.value.lower(), 'ID')
     return t
 # Ignorar espacios y tabulaciones
 t_ignore = ' \t'
