@@ -2,7 +2,7 @@ import ctypes
 import struct
 from .Load import *
 
-const = "1s 1s 1s I I 16s"
+const = "1s 1s 1s i i 16s"
 
 class Partition(ctypes.Structure):
     
@@ -23,8 +23,8 @@ class Partition(ctypes.Structure):
         self.part_status = b'\0'
         self.part_type = b'\0'
         self.part_fit = b'\0'
-        self.part_start = 0
-        self.part_size = 0
+        self.part_start = -1
+        self.part_size = -1
         self.part_name = b'\0'*16
     
     #Setters--------------------------------------------------------------------
@@ -90,12 +90,13 @@ class Partition(ctypes.Structure):
     #Display--------------------------------------------------------------------
     
     def display_info(self):
+        print("===================PARTITION INFO===================")
         print(f"Status: {self.part_status.decode()}")
         print(f"Type: {self.part_type.decode()}")
         print(f"Fit: {self.part_fit.decode()}")
         print(f"Start: {self.part_start}")
         print(f"Size: {self.part_size}")
         print(f"Name: {self.part_name.decode()}")       
-        print("")
+        print("----------------------------------------------------")
     
     

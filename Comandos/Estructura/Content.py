@@ -2,22 +2,22 @@ import ctypes
 import struct
 from .Load import *
 
-const = "12s I"
+const = "i 12s"
 
 class Content(ctypes.Structure):
     
     #Tipos----------------------------------------------------------------------
     
     _fields_ = [
-        ('b_name', ctypes.c_char * 12),
-        ('b_inodo', ctypes.c_int)
+        ('b_inodo', ctypes.c_int),
+        ('b_name', ctypes.c_char * 12)
     ]
     
     #Constructor----------------------------------------------------------------
     
-    def __init__(self):
+    def __init__(self):        
+        self.b_inodo = -1
         self.b_name = b'\0'*12
-        self.b_inodo = 0
         
     #Setters--------------------------------------------------------------------
     
@@ -36,22 +36,23 @@ class Content(ctypes.Structure):
     
     def doSerialize(self):
         return struct.pack(
-            const,
-            self.b_name,
-            self.b_inodo
+            const,            
+            self.b_inodo,
+            self.b_name
         )
         
     #Deserialize----------------------------------------------------------------
     
     def doDeserialize(self, data):
-        unpacked = struct.unpack(const, data)
-        self.b_name = unpacked[0]
-        self.b_inodo = unpacked[1]
+        unpacked = struct.unpack(const, data)        
+        self.b_inodo = unpacked[0]
+        self.b_name = unpacked[1]
         
     #Display_info---------------------------------------------------------------
     
     def display_info(self):
-        print("Nombre: ", self.b_name)
+        print("===================CONTENT INFO===================")        
         print("Inodo: ", self.b_inodo)
+        print("Nombre: ", self.b_name)
         print("--------------------------------------------------")
     

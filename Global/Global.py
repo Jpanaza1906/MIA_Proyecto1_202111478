@@ -1,2 +1,2 @@
-#[id, particion, path]
+#[id, particion, path, islogic]
 mounted_partitions = []

@@ -2,7 +2,7 @@ import ctypes
 import struct
 from .Load import *
 
-const = "I I I 10s 10s 10s 15I 1s 9s"
+const = "i i i 10s 10s 10s 15i 1s 3s"
 
 class Table_inode(ctypes.Structure):
     
@@ -16,22 +16,22 @@ class Table_inode(ctypes.Structure):
         ('i_ctime', ctypes.c_char * 10),
         ('i_mtime', ctypes.c_char * 10),
         ('i_block', ctypes.c_int * 15),
-        ('i_type', ctypes.c_char),
-        ('i_perm', ctypes.c_char * 9)
+        ('i_type', ctypes.c_char), # 0 = Carpeta, 1 = Archivo
+        ('i_perm', ctypes.c_char * 3)
     ]
     
     #Constructor----------------------------------------------------------------
     
     def __init__(self):
-        self.i_uid = 0
-        self.i_gid = 0
-        self.i_size = 0
+        self.i_uid = -1
+        self.i_gid = -1
+        self.i_size = -1
         self.i_atime = b'\0'*10
         self.i_ctime = b'\0'*10
         self.i_mtime = b'\0'*10
-        self.i_block = (ctypes.c_int * 15)(*[0] * 15)
+        self.i_block = (ctypes.c_int * 15)(*[-1] * 15)
         self.i_type = b'\0'
-        self.i_perm = b'\0'*9
+        self.i_perm = b'\0'*3
         
     #Setters--------------------------------------------------------------------
     
@@ -60,7 +60,7 @@ class Table_inode(ctypes.Structure):
         self.i_type = coding_str(type, 1)
         
     def set_i_perm(self, perm): # Definir los permisos
-        self.i_perm = coding_str(perm, 9)
+        self.i_perm = coding_str(perm, 3)
         
     #Getters--------------------------------------------------------------------
     
@@ -103,10 +103,11 @@ class Table_inode(ctypes.Structure):
             self.i_perm
         ) = unpacked_data[21:]
         
+        
     #Reportes-------------------------------------------------------------------
     
     def display_info(self):
-        print("Table Inode")
+        print("======================Inode Info=====================")
         print(f"i_uid: {self.i_uid}")
         print(f"i_gid: {self.i_gid}")
         print(f"i_size: {self.i_size}")
@@ -116,3 +117,4 @@ class Table_inode(ctypes.Structure):
         print(f"i_block: {list(self.i_block)}")
         print(f"i_type: {self.i_type.decode()}")
         print(f"i_perm: {self.i_perm.decode()}")
+        print("----------------------------------------------------")

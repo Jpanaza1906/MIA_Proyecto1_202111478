@@ -1219,14 +1219,7 @@ def p_opcionrep_ruta(p):
     
 # Error rule for syntax errors
 def p_error(p):
-    print("\t josep-ubu@Leon-Ubuntu>>> Error al escribir el comando.",p)
+    if p != None:
+        print("\t josep-ubu@Leon-Ubuntu>>> No se reconocio el comando ",p)
     pass
 
-# Construir el parser
-# parser = yacc.yacc()
-
-# # Ejemplo de uso
-# if __name__ == '__main__':
-#     input_string = 'mkdisk -size=5 -unit=M -path="/home/mis discos/Disco3.dsk"'
-#     result = parser.parse(input_string)
-#     print("Resultado:", result)

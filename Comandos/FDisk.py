@@ -1,3 +1,4 @@
+from copy import deepcopy
 import os
 from .Estructura.Mbr import *
 from .Estructura.Ebr import *

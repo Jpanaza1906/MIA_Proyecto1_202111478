@@ -43,5 +43,6 @@ class File_block(ctypes.Structure):
     #Printer--------------------------------------------------------------------
     
     def display_info(self):
-        print("File block")
+        print("=====================File block=====================")
         print(f"b_content: {self.b_content.decode()}")
+        print("----------------------------------------------------")

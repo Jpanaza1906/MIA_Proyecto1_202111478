@@ -2,7 +2,7 @@ import ctypes
 import struct
 from .Load import *
 
-const = "1s 1s I I I 16s"
+const = "1s 1s i i i 16s"
 
 class Ebr(ctypes.Structure):
     
@@ -22,9 +22,9 @@ class Ebr(ctypes.Structure):
     def __init__(self):
         self.part_status = b'\0'
         self.part_fit = b'\0'
-        self.part_start = 0
-        self.part_size = 0
-        self.part_next = 0
+        self.part_start = -1
+        self.part_size = -1
+        self.part_next = -1
         self.part_name = b'\0'*16
         
     #Setters--------------------------------------------------------------------
@@ -111,11 +111,11 @@ class Ebr(ctypes.Structure):
     #Display--------------------------------------------------------------------
     
     def display_info(self):
-        print("EBR")
+        print("========================EBR============================")
         print(f"Status: {self.part_status.decode()}")
         print(f"Fit: {self.part_fit.decode()}")
         print(f"Start: {self.part_start}")
         print(f"Size: {self.part_size}")
         print(f"Next: {self.part_next}")
         print(f"Name: {self.part_name.decode()}")
-        print("")
+        print("---------------------------------------------------------")

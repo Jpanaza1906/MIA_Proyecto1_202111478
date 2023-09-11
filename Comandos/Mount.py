@@ -86,7 +86,7 @@ class Mount():
                 
                 #Se llama la funcion que agrega las particiones montadas a memoria                
                 file.close()
-                if(self.agregar_partition(particion_montar)):
+                if(self.agregar_partition(particion_montar, True)):
                     return True
                 return False
                 
@@ -99,7 +99,7 @@ class Mount():
             
             #Se llama la funcion que agrega las particiones montadas a memoria            
             file.close()
-            if(self.agregar_partition(particion_montar)):
+            if(self.agregar_partition(particion_montar, False)):
                 return True
             return False
                 
@@ -107,11 +107,11 @@ class Mount():
             print(f"\t Mount>>> Ocurrio un error al montar la particion:{e}")
             return False
     #montar particion
-    def agregar_partition(self, particion_montar):
+    def agregar_partition(self, particion_montar, islogic):
         if(particion_montar.part_status.decode() == '0'):
                 print(f"\t Mount>>> La particion:{self.name} no esta formateada")
                 return False
-        if(particion_montar.part_size == 0):
+        if(particion_montar.part_size == -1):
             print(f"\t Mount>>> La particion:{self.name} no esta formateada")
             return False
         #Se verifica si la particion ya esta montada
@@ -129,10 +129,18 @@ class Mount():
                     
         id = "78" + str(index) + nombre_archivo
             
-        temp = [id, particion_montar, self.path]
+        temp = [id, particion_montar, self.path, islogic]
         mounted_partitions.append(temp)
         print(f"\t Mount>>> Se monto la particion:{self.name} con el id:{id}")
+        #Se muestra la lista de particiones montadas
+        self.mostrar_particion()
+        
         return True
+    
+    def mostrar_particion(self):
+        print("\t\t Lista de particiones montadas:")    
+        for data in mounted_partitions:
+            print(f"\t\t id:{data[0]} path:{data[2]} name:{data[1].part_name.decode()}")
         
         
     

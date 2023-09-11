@@ -2,7 +2,7 @@ import ctypes
 import struct
 from .Load import *
 
-const = "I I I I I 10s 10s I I I I I I I I I I"
+const = "i i i i i 10s 10s i H i i i i i i i i"
 
 class Super_block(ctypes.Structure):
     
@@ -17,7 +17,7 @@ class Super_block(ctypes.Structure):
         ('mount_time', ctypes.c_char * 10),
         ('unmount_time', ctypes.c_char * 10),
         ('mount_count', ctypes.c_int),
-        ('magic', ctypes.c_int),
+        ('magic', ctypes.c_uint16),
         ('inodes_size', ctypes.c_int),
         ('block_size', ctypes.c_int),
         ('first_inode', ctypes.c_int),
@@ -31,23 +31,23 @@ class Super_block(ctypes.Structure):
     #Constructor----------------------------------------------------------------
     
     def __init__(self):
-        self.filesystem_type = 0
-        self.inodes_count = 0
-        self.blocks_count = 0
-        self.free_blocks_count = 0
-        self.free_inodes_count = 0
+        self.filesystem_type = -1
+        self.inodes_count = -1
+        self.blocks_count = -1
+        self.free_blocks_count = -1
+        self.free_inodes_count = -1
         self.mount_time = b'\0'*10
         self.unmount_time = b'\0'*10
-        self.mount_count = 0
+        self.mount_count = -1
         self.magic = 0xEF53
-        self.inodes_size = 0
-        self.block_size = 0
-        self.first_inode = 0
-        self.first_block = 0
-        self.bm_inode_start = 0
-        self.bm_block_start = 0
-        self.inode_start = 0
-        self.block_start = 0
+        self.inodes_size = -1
+        self.block_size = -1
+        self.first_inode = -1
+        self.first_block = -1
+        self.bm_inode_start = -1
+        self.bm_block_start = -1
+        self.inode_start = -1
+        self.block_start = -1
     
     #Setters--------------------------------------------------------------------
     
@@ -164,7 +164,7 @@ class Super_block(ctypes.Structure):
     #Reportes-------------------------------------------------------------------
     
     def display_info(self):
-        print("Super Block")
+        print("=====================Super Block=====================")
         print(f"Filesystem type: {self.filesystem_type}")
         print(f"Inodes count: {self.inodes_count}")
         print(f"Blocks count: {self.blocks_count}")
@@ -173,7 +173,7 @@ class Super_block(ctypes.Structure):
         print(f"Mount time: {self.mount_time.decode()}")
         print(f"Unmount time: {self.unmount_time.decode()}")
         print(f"Mount count: {self.mount_count}")
-        print(f"Magic: {self.magic}")
+        print(f"Magic: {hex(self.magic)}")
         print(f"Inodes size: {self.inodes_size}")
         print(f"Block size: {self.block_size}")
         print(f"First inode: {self.first_inode}")
@@ -182,5 +182,4 @@ class Super_block(ctypes.Structure):
         print(f"Bitmap block start: {self.bm_block_start}")
         print(f"Inode start: {self.inode_start}")
         print(f"Block start: {self.block_start}")
-
-            
+        print("-----------------------------------------------------")

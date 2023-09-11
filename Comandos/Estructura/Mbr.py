@@ -3,7 +3,7 @@ import struct
 from .Partition import *
 from .Load import *
 
-const = "I 10s I 1s"
+const = "i 10s i 1s"
 
 class Mbr(ctypes.Structure):
     
@@ -19,9 +19,9 @@ class Mbr(ctypes.Structure):
     #Constructor----------------------------------------------------------------
     
     def __init__(self):
-        self.mbr_tamano = 0
+        self.mbr_tamano = -1
         self.mbr_fecha_creacion = b'\0'*10
-        self.mbr_dsk_signature = 0
+        self.mbr_dsk_signature = -1
         self.dsk_fit = b'\0'
         self.mbr_partition = [Partition() for _ in range(4)]
     
@@ -112,15 +112,16 @@ class Mbr(ctypes.Structure):
     #Display--------------------------------------------------------------------
     
     def display_info(self):
-        print("MBR")
+        print("========================MBR============================")
         print(f"Size: {self.mbr_tamano}")
         print(f"Date: {self.mbr_fecha_creacion.decode()}")
         print(f"Signature: {self.mbr_dsk_signature}")
         print(f"Fit: {self.dsk_fit.decode()}")
         print("")
-        print("Partitions:\n")
+        print("==================== Partitions: =======================\n")
         cont = 0
         for partition in self.mbr_partition:
             print("Partition ", cont," :")
             partition.display_info()
             cont += 1
+        print("------------------------------------------------------\n")

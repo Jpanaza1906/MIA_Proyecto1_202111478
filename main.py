@@ -38,6 +38,10 @@ def exe_command(result):
                         for line in lines:
                             print(line)
                             result = parser.parse(line)
+                            #Si no devuelve nada
+                            if result == None:
+                                continue        
+                            #se ejecuta el comando                    
                             exe_command(result)
                     print("\t Execute>>> Comando ejecutado con exito\n")
                 else:
@@ -180,7 +184,7 @@ if __name__ == '__main__':
         #Se ejecuta el comando
         result = parser.parse(s)
         if(result == None):
-            print("\t josep-ubu@Leon-Ubuntu>>> Comando no reconocido, o existe un error en su escritura.\n")
+            #print("\t josep-ubu@Leon-Ubuntu>>> Comando no reconocido, o existe un error en su escritura.\n")
             continue
         exe_command(result) #Se llama a la funcion que ejecuta el comando
                 

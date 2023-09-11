@@ -1,4 +1,5 @@
-mkdisk -size=5 -unit=M -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk
+#Disco1_hola123
+
 fdisk -type=E -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -unit=M -name=Particion1 -size=1
 fdisk -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -type=L -unit=K -name=Particionl2 -size=1
 fdisk -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -unit=K -type=L -name=Particionl3 -size=10

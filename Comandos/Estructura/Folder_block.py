@@ -1,6 +1,7 @@
 import struct
-from Content import *
+from .Content import *
 
+const = 'i 10s i 1s'
 class Folder_block():
     
     #Constructor----------------------------------------------------------------
@@ -33,8 +34,10 @@ class Folder_block():
     
     def display_info(self): # Mostrar informacion del bloque carpeta
         i = 0
+        print("===================FOLDER BLOCK===================")
         for content in self.b_content:
             print(f"Contenido {i}:")
             content.display_info()
             i += 1
+        print("--------------------------------------------------")
             

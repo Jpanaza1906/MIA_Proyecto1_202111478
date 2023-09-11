@@ -1,7 +1,11 @@
 import struct
+
+from Comandos.Estructura.Ebr import Ebr
 from .Super_block import *
 from .Table_inode import *
+from .Folder_block import *
 from .File_block import *
+from .Content import *
 from .Load import *
 #FUNCION PARA CREAR EL EXT2
 
@@ -11,9 +15,15 @@ def create_ext2(n, mPartition, new_super_block, date):
         print("Creando EXT2")
         #Se coloca el tipo de sistema de archivos
         new_super_block.set_filesystem_type(2)
-        
-        #Se coloca donde comienza el bitmap de inodos
-        new_super_block.set_bm_inode_start(mPartition[1].part_start + struct.calcsize(Super_block().get_const()))
+        Write_Start = 0
+        # Si es una particion logica se suma el ebr
+        if(mPartition[3]):
+            Write_Start = mPartition[1].part_start + struct.calcsize(Ebr().get_const())
+            new_super_block.set_bm_inode_start(mPartition[1].part_start + struct.calcsize(Ebr().get_const()) + struct.calcsize(Super_block().get_const()))
+        else:
+            #Se coloca donde comienza el bitmap de inodos
+            Write_Start = mPartition[1].part_start
+            new_super_block.set_bm_inode_start(mPartition[1].part_start + struct.calcsize(Super_block().get_const()))
         
         #Se coloca donde comienza el bitmap de bloques
         new_super_block.set_bm_block_start(new_super_block.bm_inode_start + n)
@@ -38,22 +48,20 @@ def create_ext2(n, mPartition, new_super_block, date):
         new_super_block.reduce_free_block()
         
         Crrfile = open(mPartition[2], 'rb+')
-        
-        
-        Fwrite_displacement(Crrfile, mPartition[1].part_start, new_super_block)
+                
         
         #Se llenan las estructuras del ext2
         
         #Se crea un inodo 0
         ##########################################################################################################PROBARRRRRR
-        zero = '0'
+        zero = b'\0'
         #Se llena el bitmap de inodos
         for i in range(n):
-            Fwrite_displacement_normal(Crrfile, new_super_block.bm_inode_start + i, coding_str(zero,1))
+            Fwrite_displacement_normal(Crrfile, new_super_block.bm_inode_start + i, zero)
         
         #Se llena el bitmap de bloques
         for i in range(3 * n):
-            Fwrite_displacement_normal(Crrfile, new_super_block.bm_block_start + i, coding_str(zero,1))
+            Fwrite_displacement_normal(Crrfile, new_super_block.bm_block_start + i, zero)
             
         #Se llena la tabla de inodos
         new_Tinode = Table_inode()
@@ -64,11 +72,85 @@ def create_ext2(n, mPartition, new_super_block, date):
         new_Fblock = File_block()
         for i in range(3 * n):
             Fwrite_displacement(Crrfile, new_super_block.block_start + i * struct.calcsize(File_block().get_const()), new_Fblock)
-            
-        #Se cierra el archivo
-        Crrfile.close()
         
+                
         #Se deben crear las nuevas estructuras
+        
+        #Se crea el inodo 0
+        Inode0 = Table_inode()
+        Inode0.set_i_uid(1)
+        Inode0.set_i_gid(1)
+        Inode0.set_i_size(0)
+        Inode0.set_i_atime(date)
+        Inode0.set_i_ctime(date)
+        Inode0.set_i_mtime(date)
+        Inode0.set_i_block(0, 0)        
+        Inode0.set_i_type('0')
+        Inode0.set_i_perm('664')
+        
+        #Se crea un objeto contenido
+        
+        
+        #EL folder block tiene 4 contenidos
+        #contenido n: nombre | apuntada a nodo n
+        #contenido 0: . | 0
+        #contenido 1: .. | 0
+        #contenido 2: user.txt | 1
+        #contenido 3: espacio
+        
+        folderb0 = Folder_block()
+        #Se llena el contenido 0
+        folderb0.b_content[0].set_inodo(0)
+        folderb0.b_content[0].set_name('.')
+        #Se llena el contenido 1
+        folderb0.b_content[1].set_inodo(0)
+        folderb0.b_content[1].set_name('..')
+        #Se llena el contenido 2
+        folderb0.b_content[2].set_inodo(1)
+        folderb0.b_content[2].set_name('user.txt')
+        
+        #Se muestra el contenido del folder block
+        folderb0.display_info()
+        
+        #Se crea el inodo 1
+        Inode1 = Table_inode()
+        Inode1.set_i_uid(1)
+        Inode1.set_i_gid(1)
+        Inode1.set_i_size(struct.calcsize(File_block().get_const()))
+        Inode1.set_i_atime(date)
+        Inode1.set_i_ctime(date)
+        Inode1.set_i_mtime(date)
+        Inode1.set_i_block(0, 1)
+        Inode1.set_i_type('1')
+        Inode1.set_i_perm('664')
+               
+        
+        data_usertxt = '1,G,root\n1,U,root,root,123\n'
+        fileb1 = File_block()
+        fileb1.set_b_content(data_usertxt)
+        
+        #Se escribe el super bloque
+        Fwrite_displacement(Crrfile, Write_Start, new_super_block)
+        
+        #Se llena el bitmap de inodos
+        Fwrite_displacement_normal(Crrfile, new_super_block.bm_inode_start, b'\1')
+        Fwrite_displacement_normal(Crrfile, new_super_block.bm_inode_start + 1, b'\1')
+        
+        #Se llena el bitmap de bloques
+        Fwrite_displacement_normal(Crrfile, new_super_block.bm_block_start, b'\1')
+        Fwrite_displacement_normal(Crrfile, new_super_block.bm_block_start + 1, b'\1')
+        
+        #Se llenan los indodos
+        Fwrite_displacement(Crrfile, new_super_block.inode_start, Inode0)
+        Fwrite_displacement(Crrfile, new_super_block.inode_start + struct.calcsize(Table_inode().get_const()), Inode1)
+        
+        #Se llenan los bloques
+        Fwrite_displacement(Crrfile, new_super_block.block_start, folderb0)
+        Fwrite_displacement(Crrfile, new_super_block.block_start + struct.calcsize(File_block().get_const()), fileb1)
+        
+        
+        #Se cierra el archivo
+        Crrfile.close()       
         
         return True
     except Exception as e:

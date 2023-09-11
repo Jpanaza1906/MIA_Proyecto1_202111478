@@ -1,5 +1,6 @@
 #COMANDO MKDISK
 import os
+import subprocess
 from .Estructura.Load import *
 from .Estructura.Mbr import *
 from datetime import datetime
@@ -47,7 +48,7 @@ class MkDisk():
             return False
         #Se guarda el path
         folder_path = os.path.dirname(path)
-        os.makedirs(folder_path, exist_ok=True)
+        subprocess.run(f"mkdir -p {folder_path}", shell=True)
         self.path = path
         return True
     
@@ -101,6 +102,7 @@ class MkDisk():
             
             Fwrite_displacement(file, inicio, disco)
             file.close()
+            disco.display_info()
             return True
         except Exception as e:
             print("\t MkDisk>>> Ocurrio un error al crear el disco")
