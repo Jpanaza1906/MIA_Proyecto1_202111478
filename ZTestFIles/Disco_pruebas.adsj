@@ -1,0 +1,37 @@
+#Comandos para la creacion de un disco con varias particiones.
+
+#Se crea el disco
+Mkdisk -s=50 -u=M -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -f=FF
+
+#Particion primaria p1
+fdisk -t=P -u=K -name=Part1 -s=7680 -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -f=BF
+#Particion extendida p1
+fdisk -t=E -u=K -name=Part2 -s=7680 -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -f=FF
+#Particion primaria p3
+fdisk -t=P -u=K -name=Part3 -s=7680 -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -f=WF
+#Particion primaria p4
+fdisk -t=P -u=K -name=Part4 -s=7680 -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -f=BF
+#Particion Logica 1
+FDISK -t=L -u=k -name=Part5 -s=1280 -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -f=BF
+#Particion logica 2
+fdisk -t=L -u=K -name=Part6 -s=1280 -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -f=WF
+#Particion logica 3
+fdisk -t=L -u=K -name=Part7 -s=1280 -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -f=wf
+#Particion logica 4
+fdisk -t=L -u=K -name=Part8 -s=1280 -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -f=ff
+#Particion logica 5
+fdisk -t=L -u=K -name=Part9 -s=1280 -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -f=bf
+
+#Montar particiones para probar
+mount -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -name=Part3 #781Disco1
+mount -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -name=Part4 #782Disco1
+mount -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -name=Part5 #783Disco1
+mount -path=/home/josep-ubu/Lab_Archivos/MIA_P1_202111478/Disco1.dsk -name=Part7 #784Disco1
+
+#Mkfs
+mkfs -type=full -id=781Disco1
+mkfs -type=full -fs=3fs -id=782Disco1
+
+#Login
+
+login -user=root -pass=123 -id=781Disco1

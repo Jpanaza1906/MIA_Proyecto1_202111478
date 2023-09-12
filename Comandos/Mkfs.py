@@ -10,7 +10,9 @@ from .Estructura.File_block import *
 from .Estructura.Load import *
 from Global.Global import *
 from .Estructura.Ext import *
+from .Estructura.Journaling import *
 from datetime import datetime
+from Utilities.Utilities import *
 
 class Mkfs():
     #Constructor---------------------------------------------------------------
@@ -24,7 +26,7 @@ class Mkfs():
     
     def set_id(self, id): #Definir el id
         if(id == None):
-            print("\t Mkfs>>> Falta un parametro obligatorio")
+            printError("\t Mkfs>>> Falta un parametro obligatorio\n")
             return False
         #Se guarda el id
         self.id = id
@@ -35,7 +37,7 @@ class Mkfs():
             self.type = 'full'
             return True
         elif(type.lower() != 'full'):
-            print("\t Mkfs>>> El type no es valido")
+            printError("\t Mkfs>>> El type no es valido\n")
             return False
         #Se guarda el type
         self.type = type
@@ -45,8 +47,8 @@ class Mkfs():
         if(fs == None):
             self.fs = '2fs'
             return True
-        elif(fs.lower() != '2fs' or '3fs'):
-            print("\t Mkfs>>> El fs no es valido")
+        elif(fs.lower() != '2fs' and fs.lower() != '3fs'):
+            printError("\t Mkfs>>> El fs no es valido\n")
             return False
         #Se guarda el fs
         self.fs = fs
@@ -61,23 +63,23 @@ class Mkfs():
         
         #Se formatea la partcion
         if(self.formatear_particion()):
-            print("\t Mkfs>>> Se formateo la particion con exito")
+            printText("\t Mkfs>>> Se formateo la particion con exito\n")
             return True
         return False
     def formatear_particion(self):
         mPartition = None
         for partition in mounted_partitions:
-            if(partition[0] == self.id):
+            if(partition.id == self.id):
                 mPartition = partition
                 break
         if(mPartition == None):
-            print("\t Mkfs>>> No se encontro la particion")
+            printError("\t Mkfs>>> No se encontro la particion\n")
             return False
         
         #Se formatea la particion
-        numerator = mPartition[1].part_size - struct.calcsize(Super_block().get_const())
+        numerator = mPartition.partition.part_size - struct.calcsize(Super_block().get_const())
         denominador = 4 + struct.calcsize(Table_inode().get_const()) + 3 * struct.calcsize(File_block().get_const())
-        temp = 0 if (self.fs == '2fs') else 0
+        temp = 0 if (self.fs == '2fs') else struct.calcsize(Journaling().get_const())
         denominador += temp
         n = math.floor(numerator / denominador)
         
@@ -96,10 +98,12 @@ class Mkfs():
         
         #Creando super bloque
         if(self.fs == '2fs'):
+            mPartition.journaling = False
             if(create_ext2(n, mPartition, new_super_block, date)):
                 return True
             return False
         elif(self.fs == '3fs'):
+            mPartition.journaling = True
             if(create_ext3(n, mPartition, new_super_block, date)):
                 return True
             return False

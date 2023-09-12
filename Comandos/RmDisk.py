@@ -1,5 +1,6 @@
 #COMANDO RMDISK
 import os
+from Utilities.Utilities import *
 
 class RmDisk():
     #Constructor---------------------------------------------------------------
@@ -11,10 +12,10 @@ class RmDisk():
     
     def set_path(self, path): #Definir el path
         if(not os.path.isfile(path)):
-            print("\t RmDisk>>> El disco no existe")
+            printError("\t RmDisk>>> El disco no existe\n")
             return False
         if(not path.endswith('.dsk')):
-            print("\t RmDisk>>> El path no tiene la extension .dsk")
+            printError("\t RmDisk>>> El path no tiene la extension .dsk\n")
             return False
         #Se guarda el path
         self.path = path
@@ -27,13 +28,13 @@ class RmDisk():
         
         try:
             #Mensaje de confirmacion
-            confirm = input("\t RmDisk>>> Esta seguro que desea eliminar el disco? (Y/N): ")
+            confirm = inputWarning("\t RmDisk>>> Esta seguro que desea eliminar el disco? (Y/N):")
             if(confirm.lower() != 'y'): return False
             
             #Se elimina el disco
             os.remove(self.path)
-            print("\t RmDisk>>> Disco eliminado exitosamente")
+            printText("\t RmDisk>>> Disco eliminado exitosamente\n")
             return True
         except Exception as e:
-            print("\t RmDisk>>> Ocurrio un error al eliminar el disco")
+            printError("\t RmDisk>>> Ocurrio un error al eliminar el disco\n")
             return False

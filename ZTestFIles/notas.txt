@@ -1,0 +1,4 @@
+EXT3
+- el temp cuando se crea el mks
+
+temp = 0 if (self.fs == '2fs') else struct.calcsize(journaling)

@@ -3,8 +3,10 @@ import os
 import subprocess
 from .Estructura.Load import *
 from .Estructura.Mbr import *
+from Utilities.Utilities import *
 from datetime import datetime
 import random
+
 
 class MkDisk():
     #Constructor---------------------------------------------------------------
@@ -26,29 +28,29 @@ class MkDisk():
                 elif(self.unit == 'M'):
                     size = size * 1024 * 1024
                 else:
-                    print("\t MkDisk>>> Ocurrio un error al definir el tamaño")
+                    printError("\t MkDisk>>> Ocurrio un error al definir el tamaño\n")
                     return False
             else:
-                print("\t MkDisk>>> El tamaño debe ser mayor a 0")
+                printError("\t MkDisk>>> El tamaño debe ser mayor a 0\n")
                 return False
             
             #Se guarda el tamaño en bytes
             self.size = size
             return True
         except Exception as e:
-            print("\t MkDisk>>> El tamaño debe ser un numero entero")
+            printError("\t MkDisk>>> El tamaño debe ser un numero entero\n")
             return False
     
     def set_path(self, path): #Definir el path
         if(os.path.exists(path)):
-            print("\t MkDisk>>> El path ya existe")
+            printError("\t MkDisk>>> El path ya existe\n")
             return False
         if(not path.endswith('.dsk')):
-            print("\t MkDisk>>> El path no tiene la extension .dsk")
+            printError("\t MkDisk>>> El path no tiene la extension .dsk\n")
             return False
         #Se guarda el path
         folder_path = os.path.dirname(path)
-        subprocess.run(f"mkdir -p {folder_path}", shell=True)
+        os.makedirs(folder_path, exist_ok=True)
         self.path = path
         return True
     
@@ -59,7 +61,7 @@ class MkDisk():
         elif fit.lower() == 'bf' or 'ff' or 'wf' :
             self.fit = fit[0].upper()
             return True
-        print("\t MkDisk>>> El fit no es valido")
+        printError("\t MkDisk>>> El fit no es valido\n")
         return False
     
     def set_unit(self, unit): #Definir el unit
@@ -69,7 +71,7 @@ class MkDisk():
         elif unit.lower() == 'k' or 'm' :
             self.unit = unit.upper()
             return True
-        print("\t MkDisk>>> El unit no es valido")
+        printError("\t MkDisk>>> El unit no es valido\n")
         return False
     
     #Definir el MKDISK --------------------------------------------------------
@@ -82,7 +84,7 @@ class MkDisk():
         
         #Se crea el disco
         if(self.crear_disco()):
-            print("\t MkDisk>>> Disco creado con exito")
+            printText("\t MkDisk>>> Disco creado con exito\n")
             return True
         return False
     
@@ -95,17 +97,16 @@ class MkDisk():
             disco.set_mbr(self.size, datetime.now().strftime("%d/%m/%Y"), random.randint(1,99999999), self.fit)
             
             #Se escribe el Mbr en el disco
-            if(Fcreate_file(self.path)) : exit()
+            if(Fcreate_file(self.path)) : return
             file = open(self.path, "rb+")
             Winit_size(file, self.size)
             inicio = 0 #Se escribe en el primer byte del disco
             
             Fwrite_displacement(file, inicio, disco)
             file.close()
-            disco.display_info()
             return True
         except Exception as e:
-            print("\t MkDisk>>> Ocurrio un error al crear el disco")
+            printError("\t MkDisk>>> Ocurrio un error al crear el disco\n")
             return False
         
         

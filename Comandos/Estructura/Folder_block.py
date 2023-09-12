@@ -1,7 +1,7 @@
 import struct
 from .Content import *
 
-const = 'i 10s i 1s'
+const = "64s"
 class Folder_block():
     
     #Constructor----------------------------------------------------------------
@@ -11,8 +11,13 @@ class Folder_block():
         
     #Setters--------------------------------------------------------------------
     
-    def set_b_content(self, content, index): # Definir un contenido especifico
+    def set_b_content(self, index, content): # Definir un contenido especifico
         self.b_content[index] = content
+        
+    #Getters--------------------------------------------------------------------
+    
+    def get_const(self): # Obtener la constante
+        return const
     
     #Serialize------------------------------------------------------------------
     

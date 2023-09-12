@@ -53,7 +53,7 @@ class Table_inode(ctypes.Structure):
     def set_i_mtime(self, mtime): # Definir el mtime
         self.i_mtime = coding_str(mtime, 10)
         
-    def set_i_block(self, block, index): # Definir un bloque especifico
+    def set_i_block(self, index, block): # Definir un bloque especifico
         self.i_block[index] = block
         
     def set_i_type(self, type): # Definir el tipo

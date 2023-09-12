@@ -38,7 +38,8 @@ class File_block(ctypes.Structure):
     #Deserializer---------------------------------------------------------------
     
     def doDeserialize(self, data):
-        self.b_content = struct.unpack(const, data)
+        unpacked = struct.unpack(const, data)
+        self.b_content = unpacked[0]
         
     #Printer--------------------------------------------------------------------
     

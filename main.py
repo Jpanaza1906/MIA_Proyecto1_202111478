@@ -22,8 +22,20 @@ from Comandos.FDisk import *
 from Comandos.Mount import *
 from Comandos.Unmount import *
 from Comandos.Mkfs import *
+from Comandos.Login import *
+from Comandos.Logout import *
+from Comandos.Mkgrp import *
+from Comandos.Rmgrp import *
+from Comandos.Mkuser import *
+from Comandos.Rmusr import *
+from Utilities.Utilities import *
 
 #Funcion ejecutar comando-------------------------------------------------------
+
+import warnings
+
+# Deshabilitar warnings para la clase Token y sus duplicados
+warnings.filterwarnings("ignore", category=UserWarning, module="ply.lex")
 
 def exe_command(result):
     #Se verifica si existe el comando 
@@ -36,16 +48,17 @@ def exe_command(result):
                     with open(c_execute.path, "r") as file:
                         lines = file.readlines()
                         for line in lines:
-                            print(line)
                             result = parser.parse(line)
                             #Si no devuelve nada
                             if result == None:
-                                continue        
+                                continue 
+                            printComment("-----------------------------------------------------------------------------------------------------------------------")
+                            printSubtitle("\t " + line )    
                             #se ejecuta el comando                    
                             exe_command(result)
-                    print("\t Execute>>> Comando ejecutado con exito\n")
+                    printSuccess("\t Execute>>> Comando ejecutado con exito\n")
                 else:
-                    print("\t Execute>>> Error al ejecutar el comando\n")
+                    printError("\t Execute>>> Error al ejecutar el comando\n")
         # Comando MkDisk
         elif(result['command'] == 'mkdisk'):
             #Se verifica que tenga los parametros obligatorios
@@ -63,20 +76,20 @@ def exe_command(result):
                 #Se ejecuta el comando
                 c_mkdisk = MkDisk()
                 if(c_mkdisk.run(size, path, fit, unit)):
-                    print("\t MkDisk>>> Comando ejecutado con exito\n")
+                    printSuccess("\t MkDisk>>> Comando ejecutado con exito\n")
                 else:
-                    print("\t MkDisk>>> Error al ejecutar el comando\n")
+                    printError("\t MkDisk>>> Error al ejecutar el comando\n")
             else:
-                print("\t MkDisk>>> Falta un parametro obligatorio\n")
+                printError("\t MkDisk>>> Falta un parametro obligatorio\n")
                 return
         # Comando RmDisk
         elif(result['command'] == 'rmdisk'):
             if('path' in result):
                 c_rmdisk = RmDisk()
                 if(c_rmdisk.run(result['path'])):
-                    print("\t RmDisk>>> Comando ejecutado con exito\n")
+                    printSuccess("\t RmDisk>>> Comando ejecutado con exito\n")
                 else:
-                    print("\t RmDisk>>> Error al ejecutar el comando\n")
+                    printError("\t RmDisk>>> Error al ejecutar el comando\n")
         
         # Comando Fdisk
         elif(result['command'] == 'fdisk'):
@@ -86,7 +99,7 @@ def exe_command(result):
                 
                 if(not 'delete' in result and not 'add' in result):
                     if(not 'size' in result):
-                        print("\t Fdisk>>> Falta un parametro obligatorio\n")
+                        printError("\t Fdisk>>> Falta un parametro obligatorio\n")
                         return
                     
                 
@@ -114,34 +127,34 @@ def exe_command(result):
                 #Se ejecuta el comando
                 c_fdisk = FDisk()
                 if(c_fdisk.run(size, path, name, unit, type, fit, delete, add)):
-                    print("\t Fdisk>>> Comando ejecutado con exito\n")
+                    printSuccess("\t Fdisk>>> Comando ejecutado con exito\n")
                 else:
-                    print("\t Fdisk>>> Error al ejecutar el comando\n")
+                    printError("\t Fdisk>>> Error al ejecutar el comando\n")
                 
             else:
-                print("\t Fdisk>>> Falta un parametro obligatorio\n")
+                printError("\t Fdisk>>> Falta un parametro obligatorio\n")
                 return
         #Comando Mount
         elif(result['command'] == 'mount'):
             if('path' in result and 'name' in result):
                 c_mount = Mount()
                 if(c_mount.run(result['path'], result['name'])):
-                    print("\t Mount>>> Comando ejecutado con exito\n")
+                    printSuccess("\t Mount>>> Comando ejecutado con exito\n")
                 else:
-                    print("\t Mount>>> Error al ejecutar el comando\n")
+                    printError("\t Mount>>> Error al ejecutar el comando\n")
             else:
-                print("\t Mount>>> Falta un parametro obligatorio\n")
+                printError("\t Mount>>> Falta un parametro obligatorio\n")
                 return
         #Comando Unmount
         elif(result['command'] == 'unmount'):
             if('id' in result):
                 c_unmount = Unmount()
                 if(c_unmount.run(result['id'])):
-                    print("\t Unmount>>> Comando ejecutado con exito\n")
+                    printSuccess("\t Unmount>>> Comando ejecutado con exito\n")
                 else:
-                    print("\t Unmount>>> Error al ejecutar el comando\n")
+                    printError("\t Unmount>>> Error al ejecutar el comando\n")
             else:
-                print("\t Unmount>>> Falta un parametro obligatorio\n")
+                printError("\t Unmount>>> Falta un parametro obligatorio\n")
                 return
         #Comando Mkfs
         elif(result['command'] == 'mkfs'):
@@ -158,13 +171,74 @@ def exe_command(result):
                 
                 c_mkfs = Mkfs()
                 if(c_mkfs.run(result['id'], type, fs)):
-                    print("\t Mkfs>>> Comando ejecutado con exito\n")
+                    printSuccess("\t Mkfs>>> Comando ejecutado con exito\n")
                 else:
-                    print("\t Mkfs>>> Error al ejecutar el comando\n")
+                    printError("\t Mkfs>>> Error al ejecutar el comando\n")
             else:
-                print("\t Mkfs>>> Falta un parametro obligatorio\n")
+                printError("\t Mkfs>>> Falta un parametro obligatorio\n")
                 return
-                
+        #Comando Login
+        elif(result['command'] == 'login'):
+            if('user' in result and 'pass' in result and 'id' in result):
+                c_login = Login()
+                if(c_login.run(result['user'], result['pass'], result['id'])):
+                    printSuccess("\t Login>>> Comando ejecutado con exito\n")
+                else:
+                    printError("\t Login>>> Error al ejecutar el comando\n")
+            else:
+                printError("\t Login>>> Falta un parametro obligatorio\n")
+                return
+        #Comando Logout
+        elif(result['command'] == 'logout'):
+            c_logout = Logout()
+            if(c_logout.run()):
+                printSuccess("\t Logout>>> Comando ejecutado con exito\n")
+            else:
+                printError("\t Logout>>> Error al ejecutar el comando\n")
+        #Comando Mkgrp
+        elif(result['command'] == 'mkgrp'):
+            if('name' in result):
+                c_mkgrp = Mkgrp()
+                if(c_mkgrp.run(result['name'])):
+                    printSuccess("\t Mkgrp>>> Comando ejecutado con exito\n")
+                else:
+                    printError("\t Mkgrp>>> Error al ejecutar el comando\n")
+            else:
+                printError("\t Mkgrp>>> Falta un parametro obligatorio\n")
+                return
+        #Comando Rmgrp
+        elif(result['command'] == 'rmgrp'):
+            if('name' in result):
+                c_rmgrp = Rmgrp()
+                if(c_rmgrp.run(result['name'])):
+                    printSuccess("\t Rmgrp>>> Comando ejecutado con exito\n")
+                else:
+                    printError("\t Rmgrp>>> Error al ejecutar el comando\n")
+            else:
+                printError("\t Rmgrp>>> Falta un parametro obligatorio\n")
+                return
+        #Comando Mkuser
+        elif(result['command'] == 'mkusr'):
+            if('user' in result and 'pass' in result and 'grp' in result):
+                c_mkusr = Mkuser()
+                if(c_mkusr.run(result['user'], result['pass'], result['grp'])):
+                    printSuccess("\t Mkusr>>> Comando ejecutado con exito\n")
+                else:
+                    printError("\t Mkusr>>> Error al ejecutar el comando\n")
+            else:
+                printError("\t Mkusr>>> Falta un parametro obligatorio\n")
+                return
+        #Comando Rmusr
+        elif(result['command'] == 'rmusr'):
+            if('user' in result):
+                c_rmusr = Rmusr()
+                if(c_rmusr.run(result['user'])):
+                    printSuccess("\t Rmusr>>> Comando ejecutado con exito\n")
+                else:
+                    printError("\t Rmusr>>> Error al ejecutar el comando\n")
+            else:
+                printError("\t Rmusr>>> Falta un parametro obligatorio\n")
+                return
                 
 
 #Main--------------------------------------------------------------------------
@@ -175,12 +249,16 @@ if __name__ == '__main__':
     
     #Se ejecuta el programa
     while True:
+        printComment("-----------------------------------------------------------------------------------------------------------------------")
         try:
-            s = input('josep-ubu@Leon-Ubuntu: ')
+            s = inputConsole("josep-ubu@Leon-Ubuntu>>> ")
+            print("")
         except EOFError:
             break
         if not s:
             continue
+        if(s == 'exit'):
+            break
         #Se ejecuta el comando
         result = parser.parse(s)
         if(result == None):

@@ -3,7 +3,8 @@ import os
 from .Estructura.Mbr import *
 from .Estructura.Ebr import *
 from .Estructura.Load  import *
-from Global.Global import mounted_partitions
+from Global.Global import *
+from Utilities.Utilities import *
 class Mount():
     #Constructor---------------------------------------------------------------
     
@@ -15,10 +16,10 @@ class Mount():
     
     def set_path(self, path): #Definir el path
         if(not os.path.isfile(path)):
-            print("\t Mount>>> El disco no existe")
+            printError("\t Mount>>> El disco no existe\n")
             return False
         if(not path.endswith('.dsk')):
-            print("\t Mount>>> El path no tiene la extension .dsk")
+            printError("\t Mount>>> El path no tiene la extension .dsk\n")
             return False
         #Se guarda el path
         self.path = path
@@ -26,7 +27,7 @@ class Mount():
     
     def set_name(self, name): #Definir el nombre
         if name == None:
-            print("\t Fdisk>>> Falta el nombre de la particion")
+            printError("\t Fdisk>>> Falta el nombre de la particion\n")
             return False
         self.name = name
         return True
@@ -71,8 +72,9 @@ class Mount():
             
             if(not existeP):
                 if(not existePext):
-                    print(f"\t Mount>>> No existe la particion: {self.name}")
-                    return False
+                    printError(f"\t Mount>>> No existe una particion extendida\n")
+                    return False                  
+                        
                 startp = particion_extendida.part_start
                 ebr = Ebr()
                 lista_ebr = ebr.get_logic_partition(file, startp)
@@ -81,7 +83,7 @@ class Mount():
                         particion_montar = cadaebr
                         break
                 if particion_montar == None:
-                    print(f"\t Mount>>> No existe la particion: {self.name}")
+                    printError(f"\t Mount>>> No existe la particion: {self.name}\n")
                     return False
                 
                 #Se llama la funcion que agrega las particiones montadas a memoria                
@@ -94,7 +96,7 @@ class Mount():
             #Si es una particion primaria
             
             if(particion_montar.part_type.decode() == 'E'):
-                print(f"\t Mount>>> La particion:{self.name} es una particion extendida, se deben montar sus particiones lógicas.")
+                printError(f"\t Mount>>> La particion:{self.name} es una particion extendida, se deben montar sus particiones lógicas.\n")
                 return False
             
             #Se llama la funcion que agrega las particiones montadas a memoria            
@@ -104,43 +106,44 @@ class Mount():
             return False
                 
         except Exception as e:
-            print(f"\t Mount>>> Ocurrio un error al montar la particion:{e}")
+            printError(f"\t Mount>>> Ocurrio un error al montar la particion:{e}\n")
             return False
     #montar particion
     def agregar_partition(self, particion_montar, islogic):
         if(particion_montar.part_status.decode() == '0'):
-                print(f"\t Mount>>> La particion:{self.name} no esta formateada")
+                printError(f"\t Mount>>> La particion:{self.name} no esta formateada\n")
                 return False
         if(particion_montar.part_size == -1):
-            print(f"\t Mount>>> La particion:{self.name} no esta formateada")
+            printError(f"\t Mount>>> La particion:{self.name} no esta formateada\n")
             return False
         #Se verifica si la particion ya esta montada
         for data in mounted_partitions:
-            if(data[2] == particion_montar.part_name.decode()):
-                print(f"\t Mount>>> La particion:{self.name} ya esta montada")
+            if(data.partition.part_name.decode() == particion_montar.part_name.decode()):
+                printError(f"\t Mount>>> La particion:{self.name} ya esta montada\n")
                 return False
         
         #Clave para guardar particion = CARNET.substring(6,8) + NUMERO_PARTICION + NOMBRE DISCO
         nombre_archivo = os.path.splitext(os.path.basename(self.path))[0]
         index = 1
         for data in mounted_partitions:
-            if(data[2] == self.path):
-                index = int(data[0][2:3]) + 1
+            if(data.path == self.path):
+                index = int(data.id[2:3]) + 1
                     
         id = "78" + str(index) + nombre_archivo
-            
-        temp = [id, particion_montar, self.path, islogic]
+        
+        temp = MountedPartition(id, particion_montar, self.path, islogic, None)
         mounted_partitions.append(temp)
-        print(f"\t Mount>>> Se monto la particion:{self.name} con el id:{id}")
+        printText(f"\t Mount>>> Se monto la particion:{self.name} con el id:{id}\n")
         #Se muestra la lista de particiones montadas
         self.mostrar_particion()
         
         return True
     
     def mostrar_particion(self):
-        print("\t\t Lista de particiones montadas:")    
+        printInfo("\t\t Lista de particiones montadas:")    
         for data in mounted_partitions:
-            print(f"\t\t id:{data[0]} path:{data[2]} name:{data[1].part_name.decode()}")
+            printInfo(f"\t\t\t id:{data.id} path:{data.path} name:{data.partition.part_name.decode()}")
+        print("")
         
         
     

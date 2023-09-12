@@ -42,6 +42,7 @@ reserved = {
     '-s': 'SIZE',
     '-name': 'NAME',
     '-type': 'TYPE',
+    '-t': 'TYPE',
     '-delete': 'DELETE',
     '-id': 'ID_CMD',
     '-add': 'ADD',

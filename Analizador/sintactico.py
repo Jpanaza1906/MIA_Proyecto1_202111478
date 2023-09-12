@@ -1,4 +1,5 @@
 import ply.yacc as yacc
+from Utilities.Utilities import *
 #from lexico import tokens
 
 #================================ PRODUCCION INICIAL =================================
@@ -1220,6 +1221,6 @@ def p_opcionrep_ruta(p):
 # Error rule for syntax errors
 def p_error(p):
     if p != None:
-        print("\t josep-ubu@Leon-Ubuntu>>> No se reconocio el comando ",p)
+        printError("\t josep-ubu@Leon-Ubuntu>>> No se reconocio el comando " + str(p) + "\n")
     pass
 

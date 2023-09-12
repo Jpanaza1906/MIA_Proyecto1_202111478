@@ -68,7 +68,7 @@ class Ebr(ctypes.Structure):
             ebr = Ebr()
             Fread_displacement(file, displacement, ebr)            
             lista_ebr.append(ebr)
-            if ebr.part_next == 0:
+            if ebr.part_next == -1:
                 break
             displacement = ebr.part_next
         return lista_ebr
@@ -76,7 +76,7 @@ class Ebr(ctypes.Structure):
     def get_freespace(self, lista_ebr, tamaño_p): # Obtener el espacio libre
         lista_free = []
         for ebr in lista_ebr:
-            if(ebr.part_next == 0):
+            if(ebr.part_next == -1):
                 tamaño_entre = tamaño_p - (ebr.part_start + ebr.part_size)
             else: tamaño_entre = ebr.part_next - (ebr.part_start + ebr.part_size)
             lista_free.append(tamaño_entre)

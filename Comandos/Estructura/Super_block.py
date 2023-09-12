@@ -2,7 +2,7 @@ import ctypes
 import struct
 from .Load import *
 
-const = "i i i i i 10s 10s i H i i i i i i i i"
+const = "i i i i i 10s 10s i i i i i i i i i i"
 
 class Super_block(ctypes.Structure):
     
@@ -17,7 +17,7 @@ class Super_block(ctypes.Structure):
         ('mount_time', ctypes.c_char * 10),
         ('unmount_time', ctypes.c_char * 10),
         ('mount_count', ctypes.c_int),
-        ('magic', ctypes.c_uint16),
+        ('magic', ctypes.c_int),
         ('inodes_size', ctypes.c_int),
         ('block_size', ctypes.c_int),
         ('first_inode', ctypes.c_int),
@@ -143,23 +143,25 @@ class Super_block(ctypes.Structure):
     #Deserialize----------------------------------------------------------------
     
     def doDeserialize(self, data): # Deserializar el super bloque
-        self.filesystem_type,
-        self.inodes_count,
-        self.blocks_count,
-        self.free_blocks_count,
-        self.free_inodes_count,
-        self.mount_time,
-        self.unmount_time,
-        self.mount_count,
-        self.magic,
-        self.inodes_size,
-        self.block_size,
-        self.first_inode,
-        self.first_block,
-        self.bm_inode_start,
-        self.bm_block_start,
-        self.inode_start,
-        self.block_start = struct.unpack(const, data)
+        unpacked = struct.unpack(const, data)
+        self.filesystem_type = unpacked[0]
+        self.inodes_count = unpacked[1]
+        self.blocks_count = unpacked[2]
+        self.free_blocks_count = unpacked[3]
+        self.free_inodes_count = unpacked[4]
+        self.mount_time = unpacked[5]
+        self.unmount_time = unpacked[6]
+        self.mount_count = unpacked[7]
+        self.magic = unpacked[8]
+        self.inodes_size = unpacked[9]
+        self.block_size = unpacked[10]
+        self.first_inode = unpacked[11]
+        self.first_block = unpacked[12]
+        self.bm_inode_start = unpacked[13]
+        self.bm_block_start = unpacked[14]
+        self.inode_start = unpacked[15]
+        self.block_start = unpacked[16]
+        
         
     #Reportes-------------------------------------------------------------------
     
@@ -173,7 +175,7 @@ class Super_block(ctypes.Structure):
         print(f"Mount time: {self.mount_time.decode()}")
         print(f"Unmount time: {self.unmount_time.decode()}")
         print(f"Mount count: {self.mount_count}")
-        print(f"Magic: {hex(self.magic)}")
+        print(f"Magic: {self.magic}")
         print(f"Inodes size: {self.inodes_size}")
         print(f"Block size: {self.block_size}")
         print(f"First inode: {self.first_inode}")

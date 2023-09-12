@@ -1,7 +1,7 @@
 #COMANDO UNMOUNT
 import os
 from Global.Global import mounted_partitions
-
+from Utilities.Utilities import *
 class Unmount():    
     #Constructor---------------------------------------------------------------
     
@@ -12,7 +12,7 @@ class Unmount():
     
     def set_id(self, id): #Definir el id
         if(id == None):
-            print("\t Unmount>>> Falta el id de la particion")
+            printError("\t Unmount>>> Falta el id de la particion\n")
             return False
         self.id = id
         return True
@@ -23,16 +23,16 @@ class Unmount():
         if(not self.set_id(id)): return False
         
         for data in mounted_partitions:
-            if data[0] == id:
+            if data.id == id:
                 mounted_partitions.remove(data)
                 #Se confirma el unmount
-                print("\t Unmount>>> Desmontando la particion: " + id)
+                printText("\t Unmount>>> Desmontando la particion: " + id + "\n")
                 self.mostrar_particion()
                 return True
-        print("\t Unmount>>> No se encontro la particion: " + id)
+        printError("\t Unmount>>> No se encontro la particion: " + id +"\n")
         return False
         
     def mostrar_particion(self):
         print("\t\t Lista de particiones montadas:")    
         for data in mounted_partitions:
-            print(f"\t\t id:{data[0]} path:{data[2]} name:{data[1].part_name.decode()}")
+            print(f"\t\t id:{data.id} path:{data.path} name:{data.partition.part_name.decode()}")
