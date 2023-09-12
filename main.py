@@ -15,19 +15,19 @@
 
 from Analizador.lexico import *
 from Analizador.sintactico import *
-from Comandos.MkDisk import *
+from Comandos.Admin_Discos.MkDisk import *
 from Comandos.Execute import *
-from Comandos.RmDisk import *
-from Comandos.FDisk import *
-from Comandos.Mount import *
-from Comandos.Unmount import *
-from Comandos.Mkfs import *
-from Comandos.Login import *
-from Comandos.Logout import *
-from Comandos.Mkgrp import *
-from Comandos.Rmgrp import *
-from Comandos.Mkuser import *
-from Comandos.Rmusr import *
+from Comandos.Admin_Discos.RmDisk import *
+from Comandos.Admin_Discos.FDisk import *
+from Comandos.Admin_Discos.Mount import *
+from Comandos.Admin_Discos.Unmount import *
+from Comandos.Admin_Discos.Mkfs import *
+from Comandos.Admin_UsrGrp.Login import *
+from Comandos.Admin_UsrGrp.Logout import *
+from Comandos.Admin_UsrGrp.Mkgrp import *
+from Comandos.Admin_UsrGrp.Rmgrp import *
+from Comandos.Admin_UsrGrp.Mkuser import *
+from Comandos.Admin_UsrGrp.Rmusr import *
 from Utilities.Utilities import *
 
 #Funcion ejecutar comando-------------------------------------------------------
