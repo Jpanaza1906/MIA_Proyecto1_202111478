@@ -80,7 +80,7 @@ class Rmusr():
             cont += contenido
             
         #Se guarda el contenido en el archivo
-        if(modifyBlockContent(crruser.partitionId, crruser.numfblock, cont)):
+        if(modifyInodePointers(crruser.partitionId, 'user.txt', cont)):
             return True
         return False
     

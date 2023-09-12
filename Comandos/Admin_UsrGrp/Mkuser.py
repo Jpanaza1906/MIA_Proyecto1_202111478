@@ -84,7 +84,9 @@ class Mkuser():
                 if len(usuarioparam) == 3:
                     if buengrupo:
                         cadena_nueva = str(cont_grupo) + ',U,' + self.group + ',' + self.user + ',' + self.password + '\n'
+                        cadena.pop()
                         cadena.append(cadena_nueva)
+                        cadena.append(usuario + '\n')
                         buengrupo = False
                     if usuarioparam[2] == self.group:
                         buengrupo = True
@@ -111,7 +113,7 @@ class Mkuser():
             cont += contenido
             
         #Se guarda el contenido en el archivo
-        if(modifyBlockContent(crruser.partitionId, crruser.numfblock, cont)):
+        if(modifyInodePointers(crruser.partitionId, 'user.txt', cont)):
             return True
         return False
     

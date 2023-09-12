@@ -41,7 +41,7 @@ class Mkgrp():
             return False
         
         ##Se obtiene el contenido
-        vecArch = getInodeInfo(self.id, 'user.txt')
+        vecArch = getInodeInfo(crruser.partitionId, 'user.txt')
         #se une todo el contenido en un solo vector
         contenidoarch = ['']
         for contenido in vecArch:
@@ -49,7 +49,7 @@ class Mkgrp():
         
         contgrupo = 1
         for contenido in contenidoarch:
-            usuarios = contenido[0].split('\n')
+            usuarios = contenido.split('\n')
             for usuario in usuarios:
                 usuarioparam = usuario.split(',')
                 if usuarioparam[0] == '0':
@@ -61,10 +61,10 @@ class Mkgrp():
                         return False
                     contgrupo += 1
         
-        contenido = contenidoarch[0][0]
+        contenido = contenidoarch[0]
         #Se crea el grupo
         contenido += str(contgrupo) + ',G,' + self.name + '\n'
         
-        if (modifyBlockContent(crruser.partitionId, crruser.numfblock, contenido)):
+        if (modifyInodePointers(crruser.partitionId, 'user.txt', contenido)):
             return True
         return False

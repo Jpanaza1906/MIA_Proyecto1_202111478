@@ -24,6 +24,16 @@ def Fread_displacement(file, displacement, obj):  # Leer en un archivo binario
         print(f"Error:{e} while reading in: ", displacement)
         pass
 
+#una funcion para leer una cantidad de bytes en un archivo binario
+def Fread_displacement_normal(file, displacement, size):
+    try:
+        file.seek(displacement)
+        data = file.read(size)
+        return data
+    except Exception as e:
+        print(f"Error:{e} while reading in: ", displacement)
+        pass
+
 
 def Fcreate_file(file_name):  # Crear un archivo binario
     try:
