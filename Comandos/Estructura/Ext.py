@@ -58,6 +58,14 @@ def create_ext2(n, mPartition, new_super_block, date):
         #Posteriormente se debe crear un bloque de archivos
         new_super_block.reduce_free_block()
         
+        #Se suman los inodos y bloques que se usaran
+        new_super_block.Inode_Created()
+        new_super_block.Block_Created()
+        new_super_block.Inode_Created()
+        new_super_block.Block_Created()
+        
+        
+        
         Crrfile = open(mPartition.path, 'rb+')
                 
         

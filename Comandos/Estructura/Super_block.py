@@ -110,11 +110,14 @@ class Super_block(ctypes.Structure):
     
     #Methods
     
-    def reduce_free_block(self):
+    def Block_Created(self):
         self.free_blocks_count -= 1
+        self.blocks_count += 1
     
-    def reduce_free_inode(self):
+    def Inode_Created(self):
         self.free_inodes_count -= 1
+        self.inodes_count += 1
+        
     
     #Serialize------------------------------------------------------------------
     

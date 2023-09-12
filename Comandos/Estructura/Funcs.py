@@ -141,8 +141,11 @@ def modifyInodePointers(id, name, contenidocompleto):
     # Se abre el archivo
     Crrfile = open(mPartition.path, 'rb+')
     
+    WriteStart = mPartition.partition.part_start
+    
     # Si es una particion extendida se suma el ebr
     if (mPartition.islogic):
+        WriteStart += struct.calcsize(Ebr().get_const())
         Fread_displacement(Crrfile, mPartition.partition.part_start +
                            struct.calcsize(Ebr().get_const()), Temp_suberB)
     else:
@@ -179,6 +182,9 @@ def modifyInodePointers(id, name, contenidocompleto):
                 modifyBlockContent(id, nblock, bloques[i])
                 inodo.i_block[i] = nblock
                 
+                #se actualiza el numero de bloques en el super bloque
+                Temp_suberB.Block_Created()
+                
                 #Se escribe el bloque en el bitmap de bloques
                 bitmap = Fread_displacement_normal(Crrfile, Temp_suberB.bm_block_start, Temp_suberB.inode_start)
                 arraybytes = list(bitmap)
@@ -192,8 +198,13 @@ def modifyInodePointers(id, name, contenidocompleto):
         else:
             break
     
+    #Se escribe el superbloque
+    Fwrite_displacement(Crrfile, WriteStart, Temp_suberB)
+    
     #se escribe el inodo
     Fwrite_displacement(Crrfile, inicioInodo + ninodo * struct.calcsize(Table_inode().get_const()), inodo)
+    
+    
     
     #se cierra el archivo
     Crrfile.close()
