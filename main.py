@@ -28,6 +28,7 @@ from Comandos.Admin_UsrGrp.Mkgrp import *
 from Comandos.Admin_UsrGrp.Rmgrp import *
 from Comandos.Admin_UsrGrp.Mkuser import *
 from Comandos.Admin_UsrGrp.Rmusr import *
+from Comandos.Rep import *
 from Utilities.Utilities import *
 
 #Funcion ejecutar comando-------------------------------------------------------
@@ -59,6 +60,20 @@ def exe_command(result):
                     printSuccess("\t Execute>>> Comando ejecutado con exito\n")
                 else:
                     printError("\t Execute>>> Error al ejecutar el comando\n")
+        # Comando Rep
+        elif(result['command'] == 'rep'):
+            if('name' in result and 'path' in result and 'id' in result):
+                ruta = ''
+                if 'ruta' in result:
+                    ruta = result['ruta']
+                c_rep = Rep()
+                if(c_rep.run(result['name'], result['path'], result['id'], ruta)):
+                    printSuccess("\t Rep>>> Comando ejecutado con exito\n")
+                else:
+                    printError("\t Rep>>> Error al ejecutar el comando\n")
+            else:
+                printError("\t Rep>>> Falta un parametro obligatorio\n")
+                return
         # Comando MkDisk
         elif(result['command'] == 'mkdisk'):
             #Se verifica que tenga los parametros obligatorios
@@ -239,6 +254,7 @@ def exe_command(result):
             else:
                 printError("\t Rmusr>>> Falta un parametro obligatorio\n")
                 return
+        
                 
 
 #Main--------------------------------------------------------------------------

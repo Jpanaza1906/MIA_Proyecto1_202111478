@@ -125,3 +125,19 @@ class Mbr(ctypes.Structure):
             partition.display_info()
             cont += 1
         print("------------------------------------------------------\n")
+    
+    def generar_reporte(self, path):
+        reporte = ""
+        #Se agrega el tama;o del disco
+        reporte += "<tr><td>Tamaño</td><td>" + str(self.mbr_tamano) + "</td></tr>"
+        #Se agrega la fecha de creacion
+        reporte += "<tr><td  bgcolor='#d7c7e9'>Fecha de Creacion</td><td bgcolor='#d7c7e9'>" + self.mbr_fecha_creacion.decode() + "</td></tr>"
+        #Se agrega la firma
+        reporte += "<tr><td>Firma</td><td>" + str(self.mbr_dsk_signature) + "</td></tr>"
+        
+        #Se agregan las patriciones
+        for partition in self.mbr_partition:
+            reporte += partition.generar_reporte(path)
+        
+        return reporte
+    
