@@ -29,6 +29,12 @@ from Comandos.Admin_UsrGrp.Rmgrp import *
 from Comandos.Admin_UsrGrp.Mkuser import *
 from Comandos.Admin_UsrGrp.Rmusr import *
 from Comandos.Rep import *
+from Comandos.Admin_Files.Mkdir import *
+from Comandos.Admin_Files.Mkfile import *
+from Comandos.Admin_Files.Cat import *
+from Comandos.Admin_Files.Remove import *
+from Comandos.Admin_Files.Edit import *
+from Comandos.Admin_Files.Rename import *
 from Utilities.Utilities import *
 
 #Funcion ejecutar comando-------------------------------------------------------
@@ -74,6 +80,10 @@ def exe_command(result):
             else:
                 printError("\t Rep>>> Falta un parametro obligatorio\n")
                 return
+        # Comando Pause
+        elif(result['command'] == 'pause'):
+            printComment("\t Pause>>> Presione enter para continuar\n")
+            input()
         # Comando MkDisk
         elif(result['command'] == 'mkdisk'):
             #Se verifica que tenga los parametros obligatorios
@@ -254,7 +264,90 @@ def exe_command(result):
             else:
                 printError("\t Rmusr>>> Falta un parametro obligatorio\n")
                 return
-        
+        #Comando Mkdir
+        elif(result['command'] == 'mkdir'):
+            if('path' in result):
+                #Se verifica si tiene los parametros opcionales
+                r = False
+                
+                if('r' in result):
+                    r = True
+                
+                c_mkdir = Mkdir()
+                if(c_mkdir.run(result['path'], r)):
+                    printSuccess("\t Mkdir>>> Comando ejecutado con exito\n")
+                else:
+                    printError("\t Mkdir>>> Error al ejecutar el comando\n")
+            else:
+                printError("\t Mkdir>>> Falta un parametro obligatorio\n")
+                return
+        #Comando Mkfile
+        elif(result['command'] == 'mkfile'):
+            if('path' in result):
+                #Se verifica si tiene los parametros opcionales
+                r = False
+                size = None
+                cont = None
+                
+                if('r' in result):
+                    r = True
+                if('size' in result):
+                    size = result['size']
+                if('cont' in result):
+                    cont = result['cont']
+                
+                c_mkfile = Mkfile()
+                if(c_mkfile.run(result['path'], r, size, cont)):
+                    printSuccess("\t Mkfile>>> Comando ejecutado con exito\n")
+                else:
+                    printError("\t Mkfile>>> Error al ejecutar el comando\n")
+            else:
+                printError("\t Mkfile>>> Falta un parametro obligatorio\n")
+                return
+        #Comando Cat
+        elif(result['command'] == 'cat'):
+            if('file' in result):
+                c_cat = Cat()
+                if(c_cat.run(result['file'])):
+                    printSuccess("\t Cat>>> Comando ejecutado con exito\n")
+                else:
+                    printError("\t Cat>>> Error al ejecutar el comando\n")
+            else:
+                printError("\t Cat>>> Falta un parametro obligatorio\n")
+                return
+        #Comando Remove
+        elif(result['command'] == 'remove'):
+            if('path' in result):
+                c_remove = Remove()
+                if(c_remove.run(result['path'])):
+                    printSuccess("\t Remove>>> Comando ejecutado con exito\n")
+                else:
+                    printError("\t Remove>>> Error al ejecutar el comando\n")
+            else:
+                printError("\t Remove>>> Falta un parametro obligatorio\n")
+                return
+        #Comando Edit
+        elif(result['command'] == 'edit'):
+            if('path' in result and 'cont' in result):
+                c_edit = Edit()
+                if(c_edit.run(result['path'], result['cont'])):
+                    printSuccess("\t Edit>>> Comando ejecutado con exito\n")
+                else:
+                    printError("\t Edit>>> Error al ejecutar el comando\n")
+            else:
+                printError("\t Edit>>> Falta un parametro obligatorio\n")
+                return
+        #Comando Rename
+        elif(result['command'] == 'rename'):
+            if('path' in result and 'name' in result):
+                c_rename = Rename()
+                if(c_rename.run(result['path'], result['name'])):
+                    printSuccess("\t Rename>>> Comando ejecutado con exito\n")
+                else:
+                    printError("\t Rename>>> Error al ejecutar el comando\n")
+            else:
+                printError("\t Rename>>> Falta un parametro obligatorio\n")
+                return
                 
 
 #Main--------------------------------------------------------------------------

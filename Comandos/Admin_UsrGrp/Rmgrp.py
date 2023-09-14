@@ -41,7 +41,7 @@ class Rmgrp():
         
         #Se verifica si existe el grupo
         #Se obtiene el contenido
-        vecArch = getInodeInfo(crruser.partitionId, 'user.txt')
+        vecArch = getFileContentFromPath(crruser.partitionId, 'user.txt')
         #se une todo el contenido en un solo vector
         contenidoarch = ['']
         for contenido in vecArch:
@@ -74,6 +74,6 @@ class Rmgrp():
             cont += contenido
             
         #Se guarda el contenido en el archivo
-        if(modifyInodePointers(crruser.partitionId, 'user.txt', cont)):
+        if(modifyFileContent(crruser.partitionId, 'user.txt', cont)):
             return True
         return False

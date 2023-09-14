@@ -64,7 +64,7 @@ class Login():
             return False
         
         #Se obtiene el contenido
-        vecArch = getInodeInfo(self.id, 'user.txt')
+        vecArch = getFileContentFromPath(self.id, 'user.txt')
         #se une todo el contenido en un solo vector
         contenidoArch = ['']
         for contenido in vecArch:

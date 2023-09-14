@@ -576,6 +576,8 @@ def p_opcionmkfile_cont(p):
 #========================COMANDO CAT===================================================================
 def p_cat_command(p):
     '''cat_command : CAT opciones_cat'''
+    global rutas
+    rutas = []
     p[0] = {
         'command': 'cat',
         **p[2],

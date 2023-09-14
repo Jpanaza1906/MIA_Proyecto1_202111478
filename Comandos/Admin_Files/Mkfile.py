@@ -1,5 +1,7 @@
+from datetime import datetime
 from Utilities.Utilities import *
 from Global.Global import *
+from ..Estructura.Funcs import *
 
 class Mkfile():
         
@@ -25,9 +27,12 @@ class Mkfile():
             return True
         
         def set_size(self, size): #Definir el size
+            if size == None:
+                self.size = None
+                return True
             try:
                 size = int(size)
-                if size > 0:
+                if size >= 0:
                     self.size = size
                     return True
                 else:
@@ -57,7 +62,46 @@ class Mkfile():
         #Crear un archivo-----------------------------------------------------------------------------------
         
         def crear_archivo(self):
-            pass
+            if(len(user_session) == 0):
+                printError("\t Mkfile>>> No existe una sesion iniciada\n")
+                return False
+            
+            crruser = user_session[0]
+            #Se obtiene la fecha
+            fecha = datetime.now().strftime("%d/%m/%Y")
+            contr = 0
+            if(self.r):
+                #Se verifica que exista carpeta por carpeta en el sistema de archivos
+                carpetas = [elemento for elemento in self.path.split('/') if elemento != '']
+                path = ''
+                
+                if len(carpetas) == 1:
+                    printError("\t Mkfile>>> El parametro -r solo puede ser utilizado cuando no existen las carpetas\n")
+                    return False
+                
+                for i in range(len(carpetas)):
+                    path = path + '/' + carpetas[i] 
+                    inodon = getInodeNumberFromPath(crruser.partitionId, path) 
+                    
+                    if inodon == -1:
+                        if i == len(carpetas) - 1:
+                            if(createFile(crruser.partitionId, path, fecha, self.size, self.cont)):
+                                continue
+                            return False
+                        if(createFolder(crruser.partitionId, path, fecha)):
+                            continue
+                        return False
+                    else:
+                        contr += 1
+                    
+                    if contr == len(carpetas) - 1:
+                        break
+                return True
+            
+            if(createFile(crruser.partitionId, self.path, fecha, self.size, self.cont)):
+                return True
+            return False
+            
                 
             
             

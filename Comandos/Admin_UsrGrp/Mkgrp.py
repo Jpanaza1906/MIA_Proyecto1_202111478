@@ -41,7 +41,7 @@ class Mkgrp():
             return False
         
         ##Se obtiene el contenido
-        vecArch = getInodeInfo(crruser.partitionId, 'user.txt')
+        vecArch = getFileContentFromPath(crruser.partitionId, 'user.txt')
         #se une todo el contenido en un solo vector
         contenidoarch = ['']
         for contenido in vecArch:
@@ -65,6 +65,6 @@ class Mkgrp():
         #Se crea el grupo
         contenido += str(contgrupo) + ',G,' + self.name + '\n'
         
-        if (modifyInodePointers(crruser.partitionId, 'user.txt', contenido)):
+        if (modifyFileContent(crruser.partitionId, 'user.txt', contenido)):
             return True
         return False

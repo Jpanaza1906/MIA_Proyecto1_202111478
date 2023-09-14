@@ -48,3 +48,12 @@ rmusr -user=userG4
 
 rmgrp -name=usuarios4
 
+#Creacion de carpetas
+mkdir -r -path=/home/user
+mkdir -path=/home/archivos
+mkdir -path=/bin
+
+#Creacion de archivos
+mkfile -size=15 -path=/home/user/a.txt
+mkfile -size=10 -path=/bin/b.txt
+mkfile -path=/home/archivos/pruebas/c.txt -cont=/home/josep-ubu/Downloads/arch1.txt -r

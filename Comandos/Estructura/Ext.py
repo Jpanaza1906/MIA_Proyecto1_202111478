@@ -45,19 +45,6 @@ def create_ext2(n, mPartition, new_super_block, date):
         #Se coloca donde comienzan los bloques
         new_super_block.set_block_start(new_super_block.inode_start + n * struct.calcsize(Table_inode().get_const()))
         
-        #Se actualizan los valores del superbloque
-        #Posteriormente se debe crear un inodo 0
-        new_super_block.reduce_free_inode()
-        
-        #Posteriormente se debe crear un bloque de carpetas
-        new_super_block.reduce_free_block()
-        
-        #Posteriormente se debe crear un inodo 1
-        new_super_block.reduce_free_inode()
-        
-        #Posteriormente se debe crear un bloque de archivos
-        new_super_block.reduce_free_block()
-        
         #Se suman los inodos y bloques que se usaran
         new_super_block.Inode_Created()
         new_super_block.Block_Created()
@@ -180,8 +167,7 @@ def create_ext2(n, mPartition, new_super_block, date):
 def create_ext3(n, mPartition, new_super_block, date):
     try:
         printText("\t Mkfs>>> Creando EXT3")
-        #Se coloca el tipo de sistema de archivos
-        new_super_block = Super_block()
+        #Se coloca el tipo de sistema de archivo
         new_super_block.set_filesystem_type(3)
         Write_Start = 0
         
@@ -203,18 +189,11 @@ def create_ext3(n, mPartition, new_super_block, date):
         #Se coloca donde comienzan los bloques
         new_super_block.set_block_start(new_super_block.inode_start + n * struct.calcsize(Table_inode().get_const()))
         
-        #Se actualizan los valores del superbloque
-        #Posteriormente se debe crear un inodo 0
-        new_super_block.reduce_free_inode()
-        
-        #Posteriormente se debe crear un bloque de carpetas
-        new_super_block.reduce_free_block()
-        
-        #Posteriormente se debe crear un inodo 1
-        new_super_block.reduce_free_inode()
-        
-        #Posteriormente se debe crear un bloque de archivos
-        new_super_block.reduce_free_block()
+        #Se suman los inodos y bloques que se usaran
+        new_super_block.Inode_Created()
+        new_super_block.Block_Created()
+        new_super_block.Inode_Created()
+        new_super_block.Block_Created()
         
         Crrfile = open(mPartition.path, 'rb+')
         
