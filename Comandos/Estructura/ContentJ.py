@@ -71,3 +71,14 @@ class ContentJ(ctypes.Structure):
         print("Contenido: ", self.content)
         print("Fecha: ", self.date)
         print("--------------------------------------------------------------")
+        
+    #Reporte--------------------------------------------------------------------
+    
+    def generar_reporte(self):
+        reporte = ""
+        reporte += "<tr><td>" + self.operation.decode() + "</td>"
+        reporte += "<td>" + self.path.decode() + "</td>"
+        reporte += "<td>" + self.content.decode() + "</td>"
+        reporte += "<td>" + self.date.decode() + "</td></tr>"
+        
+        return reporte

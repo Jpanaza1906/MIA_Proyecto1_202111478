@@ -7,7 +7,9 @@ from Comandos.Estructura.Load import *
 from Comandos.Estructura.Folder_block import *
 from Comandos.Estructura.File_block import *
 from Comandos.Estructura.Journaling import *
+from Comandos.Estructura.ContentJ import *
 from Global.Global import *
+from datetime import datetime
 
 # Funciones -----------------------------------------------------------------------------
 
@@ -44,6 +46,25 @@ def modifyFileContent(id, path, contenidocompleto):
             Crrfile, mPartition.partition.part_start, Temp_suberB)
         
     # Temp_suberB.display_info()
+    
+    if (Temp_suberB.filesystem_type == 3):
+        content = ContentJ()
+        content.set_operation("edit")
+        content.set_path(path)
+        content.set_content(contenidocompleto)
+        content.set_date(datetime.now().strftime("%d/%m/%Y"))
+        n = 0
+        for i in range(50):
+            ContenidoJ = ContentJ()
+            Fread_displacement(Crrfile, WriteStart + struct.calcsize(Super_block().get_const()) + (i * struct.calcsize(ContentJ().get_const())), ContenidoJ)
+            #si la fecha es vacia se termina
+            if ContenidoJ.operation == b'':
+                n = i
+                break
+        
+        
+        #Se escribe el journaling
+        Fwrite_displacement(Crrfile, WriteStart + struct.calcsize(Super_block().get_const()) + n * struct.calcsize(ContentJ().get_const()), content)
     
     # Se obtiene el inicio de inodos
     inicioInodo = Temp_suberB.inode_start
@@ -137,6 +158,25 @@ def modifyNameContent(id, path, nombre, nuevonombre):
             Crrfile, mPartition.partition.part_start, Temp_suberB)
         
     # Temp_suberB.display_info()
+    
+    if (Temp_suberB.filesystem_type == 3):
+        content = ContentJ()
+        content.set_operation("rename")
+        content.set_path(path)
+        content.set_content(nuevonombre)
+        content.set_date(datetime.now().strftime("%d/%m/%Y"))
+        n = 0
+        for i in range(50):
+            ContenidoJ = ContentJ()
+            Fread_displacement(Crrfile, WriteStart + struct.calcsize(Super_block().get_const()) + (i * struct.calcsize(ContentJ().get_const())), ContenidoJ)
+            #si la fecha es vacia se termina
+            if ContenidoJ.operation == b'':
+                n = i
+                break
+        
+        
+        #Se escribe el journaling
+        Fwrite_displacement(Crrfile, WriteStart + struct.calcsize(Super_block().get_const()) + n * struct.calcsize(ContentJ().get_const()), content)
     
     # Se obtiene el inicio de inodos
     inicioInodo = Temp_suberB.inode_start
@@ -321,6 +361,26 @@ def createFolder(id, path, date):
         Fread_displacement(Crrfile, mPartition.partition.part_start, Temp_suberB)
         
     # Temp_suberB.display_info()
+    
+    if (Temp_suberB.filesystem_type == 3):
+        content = ContentJ()
+        content.set_operation("mkdir")
+        content.set_path(path)
+        content.set_content('')
+        content.set_date(datetime.now().strftime("%d/%m/%Y"))
+        n = 0
+        for i in range(50):
+            ContenidoJ = ContentJ()
+            Fread_displacement(Crrfile, WriteStart + struct.calcsize(Super_block().get_const()) + (i * struct.calcsize(ContentJ().get_const())), ContenidoJ)
+            #si la fecha es vacia se termina
+            if ContenidoJ.operation == b'':
+                n = i
+                break
+        
+        
+        #Se escribe el journaling
+        Fwrite_displacement(Crrfile, WriteStart + struct.calcsize(Super_block().get_const()) + n * struct.calcsize(ContentJ().get_const()), content)
+    
     
     # Se obtiene el inicio de inodos
     inicioInodo = Temp_suberB.inode_start
@@ -534,6 +594,28 @@ def createFile(id, path, date, size, cont):
     inodopadre = Table_inode()
     Fread_displacement(Crrfile, inicioInodo + ninodopadre * struct.calcsize(Table_inode().get_const()), inodopadre)
     
+    #si es EXT3 se agrega el journaling
+    if (Temp_suberB.filesystem_type == 3):
+        content = ContentJ()
+        content.set_operation("mkfile")
+        content.set_path(path)
+        content.set_content(contenidofinal)
+        content.set_date(datetime.now().strftime("%d/%m/%Y"))
+        n = 0
+        for i in range(50):
+            ContenidoJ = ContentJ()
+            Fread_displacement(Crrfile, WriteStart + struct.calcsize(Super_block().get_const()) + (i * struct.calcsize(ContentJ().get_const())), ContenidoJ)
+            #si la fecha es vacia se termina
+            if ContenidoJ.operation == b'':
+                n = i
+                break
+        
+        
+        #Se escribe el journaling
+        Fwrite_displacement(Crrfile, WriteStart + struct.calcsize(Super_block().get_const()) + n * struct.calcsize(ContentJ().get_const()), content)
+        
+        
+    
     # Se busca entre sus apuntadores de bloques si existe un espacio
     ninodo = getCurrentNinode(id)
     nbloque = getCurrentNblock(id)
@@ -685,6 +767,24 @@ def removeFolderFile(id, pathpadre, nombre):
         Fread_displacement(Crrfile, mPartition.partition.part_start, Temp_suberB)
         
     # Temp_suberB.display_info()
+    if (Temp_suberB.filesystem_type == 3):
+        content = ContentJ()
+        content.set_operation("remove")
+        content.set_path(pathpadre + '/' + nombre)
+        content.set_content('')
+        content.set_date(datetime.now().strftime("%d/%m/%Y"))
+        n = 0
+        for i in range(50):
+            ContenidoJ = ContentJ()
+            Fread_displacement(Crrfile, WriteStart + struct.calcsize(Super_block().get_const()) + (i * struct.calcsize(ContentJ().get_const())), ContenidoJ)
+            #si la fecha es vacia se termina
+            if ContenidoJ.operation == b'':
+                n = i
+                break
+        
+        
+        #Se escribe el journaling
+        Fwrite_displacement(Crrfile, WriteStart + struct.calcsize(Super_block().get_const()) + n * struct.calcsize(ContentJ().get_const()), content)
     
     # Se obtiene el inicio de inodos
     inicioInodo = Temp_suberB.inode_start
@@ -1142,3 +1242,4 @@ def bbreporteBloquesHijos(bloque, Crrfile, Temb_suberB, n):
             reporte += bbreporteInodoHijos(inodo, Crrfile, Temb_suberB)
         
     return reporte
+

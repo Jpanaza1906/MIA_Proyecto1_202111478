@@ -63,6 +63,13 @@ class Login():
             printError("\t Login>>> Ya existe una sesion iniciada\n")
             return False
         
+        #Se verifica si existe la particion
+        crrpartition = buscar_particion(self.id)
+        
+        if crrpartition == None:
+            printError("\t Login>>> No existe la particion\n")
+            return False
+        
         #Se obtiene el contenido
         vecArch = getFileContentFromPath(self.id, 'user.txt')
         #se une todo el contenido en un solo vector

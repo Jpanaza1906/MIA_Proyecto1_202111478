@@ -510,6 +510,64 @@ class Rep():
             print(e)
             return False
     
+    #Reporte JOURNALING --------------------------------------------------------------------------------------
+    
+    def reporte_journaling(self, mtpartition):
+        try:
+            temp_suberBlock = Super_block()
+            file = open(mtpartition.path, "rb+")
+            WriteStart = mtpartition.partition.part_start
+            
+            #Si es una particion logica se le suma el inicio de la particion extendida
+            if mtpartition.islogic:
+                WriteStart += struct.calcsize(Ebr().get_const())
+                Fread_displacement(file, mtpartition.partition.part_start + struct.calcsize(Ebr().get_const(), temp_suberBlock))
+            else:
+                Fread_displacement(file, mtpartition.partition.part_start, temp_suberBlock)
+            
+            #Si el superblock es EXT3
+            if temp_suberBlock.filesystem_type != 3:
+                printError("\t Rep>>> El sistema de archivos no es EXT3\n")
+                return False
+             
+            
+            #Se obtiene el inicio del inodo
+            reporte = "digraph G{ rankdir=TB node [shape=plaintext];"
+            
+            reporte += "tabla[label = <<table border='1' cellborder='1' cellspacing='0'>"
+            
+            reporte += "<tr><td colspan='4' bgcolor='#00952d'><font color='white'><b>REPORTE DEL JOURNALING</b></font></td></tr>"
+            
+            #encabezado
+            
+            reporte += "<tr><td><b>Operacion</b></td><td><b>Path</b></td><td><b>Contenido</b></td><td><b>Fecha</b></td></tr>"
+            
+            #el inicio del journaling es cuando termina el subperbloque
+            
+            start_journaling = struct.calcsize(Super_block().get_const())
+            #comentario multilinea  
+            for i in range(50):
+                ContenidoJ = ContentJ()
+                Fread_displacement(file, WriteStart + start_journaling + (i * struct.calcsize(ContentJ().get_const())), ContenidoJ)
+                #si la fecha es vacia se termina
+                if ContenidoJ.operation == b'':
+                    break
+                
+                reporte += ContenidoJ.generar_reporte()
+            
+            reporte += "</table>>];}"
+            
+            file.close()
+            
+            if self.CreateGraph(reporte):
+                return True
+            return False                
+            
+        except Exception as e:
+            printError("\t Rep>>> Error al crear el reporte JOURNALING\n")
+            print(e)
+            return False
+    
     #Funcion para crear la grafica con graphviz---------------------------------------------------------------------------
     
     def CreateGraph(self, reporte):
