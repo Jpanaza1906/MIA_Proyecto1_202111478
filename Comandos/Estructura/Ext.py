@@ -84,8 +84,8 @@ def create_ext2(n, mPartition, new_super_block, date):
         
         #Se crea el inodo 0
         Inode0 = Table_inode()
-        Inode0.set_i_uid(1)
-        Inode0.set_i_gid(1)
+        Inode0.set_i_uid(0)
+        Inode0.set_i_gid(0)
         Inode0.set_i_size(0)
         Inode0.set_i_atime(date)
         Inode0.set_i_ctime(date)
@@ -224,8 +224,8 @@ def create_ext3(n, mPartition, new_super_block, date):
         
         #Se crea el inodo 0
         Inode0 = Table_inode()
-        Inode0.set_i_uid(1)
-        Inode0.set_i_gid(1)
+        Inode0.set_i_uid(0)
+        Inode0.set_i_gid(0)
         Inode0.set_i_size(0)
         Inode0.set_i_atime(date)
         Inode0.set_i_ctime(date)

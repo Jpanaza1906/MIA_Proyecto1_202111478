@@ -3,7 +3,6 @@
 # [id, particion, path, islogic, journaling]
 mounted_partitions = []
 
-
 class MountedPartition():
     # Constructor----------------------------------------------------------------
     def __init__(self, id, partition, path, islogic, journaling):

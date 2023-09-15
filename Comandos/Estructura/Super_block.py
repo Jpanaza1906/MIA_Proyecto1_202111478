@@ -188,3 +188,29 @@ class Super_block(ctypes.Structure):
         print(f"Inode start: {self.inode_start}")
         print(f"Block start: {self.block_start}")
         print("-----------------------------------------------------")
+    
+    #Reportes-------------------------------------------------------------------
+    def generar_reporte(self):
+        reporte = ""
+        #Se agregan los datos del super bloque, intercalando colores entra las filas
+        reporte += "<tr><td>Tipo de Sistema de Archivos</td><td>" + str(self.filesystem_type) + "</td></tr>"
+        reporte += "<tr><td bgcolor='#6be38f'>Cantidad de Inodos</td><td bgcolor='#6be38f'>" + str(self.inodes_count) + "</td></tr>"
+        reporte += "<tr><td>Cantidad de Bloques</td><td>" + str(self.blocks_count) + "</td></tr>"
+        reporte += "<tr><td bgcolor='#6be38f'>Cantidad de Bloques Libres</td><td bgcolor='#6be38f'>" + str(self.free_blocks_count) + "</td></tr>"
+        reporte += "<tr><td>Cantidad de Inodos Libres</td><td>" + str(self.free_inodes_count) + "</td></tr>"
+        reporte += "<tr><td bgcolor='#6be38f'>Fecha de Montaje</td><td bgcolor='#6be38f'>" + self.mount_time.decode() + "</td></tr>"
+        reporte += "<tr><td>Fecha de Desmontaje</td><td>" + self.unmount_time.decode() + "</td></tr>"
+        reporte += "<tr><td bgcolor='#6be38f'>Numero de Montajes</td><td bgcolor='#6be38f'>" + str(self.mount_count) + "</td></tr>"
+        reporte += "<tr><td>Firma</td><td>" + str(self.magic) + "</td></tr>"
+        reporte += "<tr><td bgcolor='#6be38f'>Tamaño de Inodos</td><td bgcolor='#6be38f'>" + str(self.inodes_size) + "</td></tr>"
+        reporte += "<tr><td>Tamaño de Bloques</td><td>" + str(self.block_size) + "</td></tr>"
+        reporte += "<tr><td bgcolor='#6be38f'>Primer Inodo</td><td bgcolor='#6be38f'>" + str(self.first_inode) + "</td></tr>"
+        reporte += "<tr><td>Primer Bloque</td><td>" + str(self.first_block) + "</td></tr>"
+        reporte += "<tr><td bgcolor='#6be38f'>Inicio del Bitmap de Inodos</td><td bgcolor='#6be38f'>" + str(self.bm_inode_start) + "</td></tr>"
+        reporte += "<tr><td>Inicio del Bitmap de Bloques</td><td>" + str(self.bm_block_start) + "</td></tr>"
+        reporte += "<tr><td bgcolor='#6be38f'>Inicio de Inodos</td><td bgcolor='#6be38f'>" + str(self.inode_start) + "</td></tr>"
+        reporte += "<tr><td>Inicio de Bloques</td><td>" + str(self.block_start) + "</td></tr>"
+        
+        return reporte
+        
+        

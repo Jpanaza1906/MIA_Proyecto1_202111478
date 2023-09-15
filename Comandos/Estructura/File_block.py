@@ -47,3 +47,16 @@ class File_block(ctypes.Structure):
         print("=====================File block=====================")
         print(f"b_content: {self.b_content.decode()}")
         print("----------------------------------------------------")
+        
+    #Reportes-------------------------------------------------------------------
+    
+    def generar_reporte(self, n):
+        reporte = ""
+        #Se crea la etiqueta
+        reporte += "Bloque" + str(n) + "[label =<"
+        reporte += "<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">"
+        reporte += "<tr><td colspan=\"2\" port=\"0\" >Bloque Archivo "+ str(n) +"</td></tr>"
+        reporte += "<tr><td>Contenido</td><td>"+ self.b_content.decode() +"</td></tr>"
+        reporte += "</table>>];"
+        return reporte
+    

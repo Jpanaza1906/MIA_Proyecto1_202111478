@@ -57,3 +57,10 @@ mkdir -path=/bin
 mkfile -size=15 -path=/home/user/a.txt
 mkfile -size=10 -path=/bin/b.txt
 mkfile -path=/home/archivos/pruebas/c.txt -cont=/home/josep-ubu/Downloads/arch1.txt -r
+
+#rep -id=781Disco1 -path=/home/user/reports/report8.jpg -name=tree
+#rep -id=781Disco1 -path=/home/user/reports/report9.jpg -name=inode
+#rep -id=781Disco1 -path=/home/user/reports/report10.jpg -name=block
+#rep -id=781Disco1 -path=/home/user/reports/reportbmi.txt -name=bm_inode
+#rep -id=781Disco1 -path=/home/user/reports/reportbmb.txt -name=bm_block
+#rep -id=781Disco1 -ruta=/home/archivos/pruebas/c.txt -path=/home/user/reports/reportfile.txt -name=file

@@ -56,3 +56,17 @@ class Content(ctypes.Structure):
         print("Nombre: ", self.b_name)
         print("--------------------------------------------------")
     
+    #Reportes-------------------------------------------------------------------
+    
+    def generar_reporte(self):
+        reporte = ""
+        #Se crea la etiqueta
+        reporte += "<tr><td>" + self.b_name.decode() + "</td><td>" + str(self.b_inodo) + "</td></tr>"
+        return reporte
+    
+    def generarContentRep(self, n):
+        reporte = ""
+        #Se crea la etiqueta
+        reporte += "<tr><td>" + self.b_name.decode() + "</td><td port=\"" + str(n+1) + "\">" + str(self.b_inodo) + "</td></tr>"
+        
+        return reporte

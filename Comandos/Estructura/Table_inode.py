@@ -118,3 +118,37 @@ class Table_inode(ctypes.Structure):
         print(f"i_type: {self.i_type.decode()}")
         print(f"i_perm: {self.i_perm.decode()}")
         print("----------------------------------------------------")
+        
+    #Reportes-------------------------------------------------------------------
+    
+    def generar_reporte(self):
+        reporte = ""
+        #Se crea la etiqueta
+        reporte += "Inodo" + str(self.i_uid) + "[ label =<"
+        reporte += "<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">"
+        reporte += "<tr><td colspan=\"2\">Inodo " + str(self.i_uid) + "</td></tr>"
+        reporte += "<tr><td>uid</td><td>" + str(self.i_uid) + "</td></tr>"
+        reporte += "<tr><td>gid</td><td>" + str(self.i_gid) + "</td></tr>"
+        reporte += "<tr><td>size</td><td>" + str(self.i_size) + "</td></tr>"
+        reporte += "<tr><td>atime</td><td>" + self.i_atime.decode() + "</td></tr>"
+        reporte += "<tr><td>ctime</td><td>" + self.i_ctime.decode() + "</td></tr>"
+        reporte += "<tr><td>mtime</td><td>" + self.i_mtime.decode() + "</td></tr>"
+        reporte += "<tr><td>block</td><td>" + str(list(self.i_block)) + "</td></tr>"
+        reporte += "<tr><td>type</td><td>" + self.i_type.decode() + "</td></tr>"
+        reporte += "<tr><td>perm</td><td>" + self.i_perm.decode() + "</td></tr>"
+        reporte += "</table>>];"
+        
+        return reporte
+    
+    def generarInodoRep(self):
+        reporte = ""
+        #Se crea la etiqueta
+        reporte += "Inodo" + str(self.i_uid) + " [label =<"
+        reporte += "<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">"
+        reporte += "<tr><td colspan=\"2\" port=\"0\">Inodo " + str(self.i_uid) + "</td></tr>"
+        for i in range(15):
+            reporte += "<tr><td>AD" + str(i+1) + "</td><td port=\"" + str(i+1) + "\">" + str(self.i_block[i]) + "</td></tr>"
+            
+        reporte += "</table>>];"
+        
+        return reporte

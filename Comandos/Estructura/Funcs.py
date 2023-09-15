@@ -562,7 +562,7 @@ def createFile(id, path, date, size, cont):
                     inodo.set_i_atime(date)
                     inodo.set_i_ctime(date)
                     inodo.set_i_mtime(date)
-                    inodo.set_i_type('0')
+                    inodo.set_i_type('1')
                     inodo.set_i_perm('664')
                     inodo.set_i_block(0, nbloque) #apunta a un bloque nuevo que indicara su contenido
                     
@@ -615,7 +615,7 @@ def createFile(id, path, date, size, cont):
             inodo.set_i_atime(date)
             inodo.set_i_ctime(date)
             inodo.set_i_mtime(date)
-            inodo.set_i_type('0')
+            inodo.set_i_type('1')
             inodo.set_i_perm('664')
             inodo.set_i_block(0, nbloque) #apunta a un bloque nuevo que indicara su contenido
             
@@ -948,3 +948,197 @@ def addInodetoBitmap(id, n):
 #FUNCION PARA COPIAR UN ARCHIVO O CARPETA A UNA CARPETA CON LA RUTA COMPLETA
 def copyFolderFile(id, path, dest, date):
     pass
+
+#FUNCION PARA RECORRER LOS INODOS Y BLOQUES Y GENERAR UN REPORTE DE LA PARTICION
+def reporteTree(id):
+    
+    #Se busca la particion
+    mPartition = buscar_particion(id)
+    
+    if mPartition is None:
+        printError("\t Error>>> No existe la particion\n")
+        return False
+    
+    # Se verifica que ya este formateada la particion a traves del super bloque
+    # Se crea el super bloque temporal
+    Temp_suberB = Super_block()
+    
+    # Se abre el archivo
+    Crrfile = open(mPartition.path, 'rb+')
+    
+    # Si es una particion extendida se suma el ebr
+    if (mPartition.islogic):
+        Fread_displacement(Crrfile, mPartition.partition.part_start + struct.calcsize(Ebr().get_const()), Temp_suberB)
+    else:
+        Fread_displacement(Crrfile, mPartition.partition.part_start, Temp_suberB)
+        
+    # Temp_suberB.display_info()
+    
+    #Se crea una variable para concatenar los reportes
+    reporte = ''
+    
+    # Se obtiene el inicio de inodos
+    inicioInodo = Temp_suberB.inode_start
+    
+    # Se lee el inodo que se mando
+    inodoinicial = Table_inode()
+    Fread_displacement(Crrfile, inicioInodo, inodoinicial)
+    
+    #Se agrega al reporte el inodo raiz
+    reporte += reporteInodoHijos(inodoinicial, Crrfile, Temp_suberB)
+    
+    #Se cierra el archivo
+    Crrfile.close()
+    
+    return reporte
+
+def reporteInodoHijos(inodo, Crrfile, Temp_suberB):
+    
+    reporte = ''
+    
+    #Se agrega el inodo al reporte
+    reporte += inodo.generarInodoRep()
+    
+    #Se recorren todos los apuntadores de inodoinicio
+    
+    i = 0 #indice para leer cada apuntador del inodo
+    
+    while True:
+        if (inodo.i_block[i] == -1):
+            break
+        readfolderbloq = inodo.i_block[i]
+        # Se lee el bloque
+        bloquefold = Folder_block()
+        bloquearch = File_block()
+        Fread_displacement(Crrfile, Temp_suberB.block_start + readfolderbloq * struct.calcsize(Folder_block().get_const()), bloquefold)
+        Fread_displacement(Crrfile, Temp_suberB.block_start + readfolderbloq * struct.calcsize(File_block().get_const()), bloquearch)
+                
+        #if(bloquefold.b_content[0].b_name.decode() == '.'):    
+        
+        if(inodo.i_type == b'0'):
+            reporte += reporteBloquesHijos(bloquefold, Crrfile, Temp_suberB, inodo.i_block[i])
+        else:
+            reporte += reporteBloquesHijos(bloquearch, Crrfile, Temp_suberB, inodo.i_block[i])
+        reporte += "Inodo" + str(inodo.i_uid) + ":" +str(i+1) + " -> " + "Bloque" + str(inodo.i_block[i])+":0;" + " "
+        i += 1
+    
+    return reporte
+
+def reporteBloquesHijos(bloque, Crrfile, Temb_suberB, n):    
+    reporte = ''
+    
+    #Se verifica si es un bloque de carpetas o de archivos
+    if (not isinstance(bloque.b_content,(list,tuple))):
+        reporte += bloque.generar_reporte(n)
+        
+    #Se recorre el bloque
+    else:
+        reporte += bloque.generarBloqueRep(n)
+        for k in range(4):
+            if(bloque.b_content[k].b_inodo == -1 or bloque.b_content[k].b_inodo == -2):
+                continue
+            if(bloque.b_content[k].b_name.decode() == '.' or bloque.b_content[k].b_name.decode() == '..'):
+                continue
+            inodo = Table_inode()
+            Fread_displacement(Crrfile, Temb_suberB.inode_start + bloque.b_content[k].b_inodo * struct.calcsize(Table_inode().get_const()), inodo)
+            reporte += reporteInodoHijos(inodo, Crrfile, Temb_suberB)
+            reporte += "Bloque" + str(n) + ":" +str(k+1) + " -> " + "Inodo" + str(bloque.b_content[k].b_inodo) +":0;" + " "
+        
+    return reporte
+        
+    
+    
+#FUNCION PARA REPORTES DE LOS BLOQUES
+def reporteBlock(id):
+    
+    #Se busca la particion
+    mPartition = buscar_particion(id)
+    
+    if mPartition is None:
+        printError("\t Error>>> No existe la particion\n")
+        return False
+    
+    # Se verifica que ya este formateada la particion a traves del super bloque
+    # Se crea el super bloque temporal
+    Temp_suberB = Super_block()
+    
+    # Se abre el archivo
+    Crrfile = open(mPartition.path, 'rb+')
+    
+    # Si es una particion extendida se suma el ebr
+    if (mPartition.islogic):
+        Fread_displacement(Crrfile, mPartition.partition.part_start + struct.calcsize(Ebr().get_const()), Temp_suberB)
+    else:
+        Fread_displacement(Crrfile, mPartition.partition.part_start, Temp_suberB)
+        
+    # Temp_suberB.display_info()
+    
+    #Se crea una variable para concatenar los reportes
+    reporte = ''
+    
+    # Se obtiene el inicio de inodos
+    inicioInodo = Temp_suberB.inode_start
+    
+    # Se lee el inodo que se mando
+    inodoinicial = Table_inode()
+    Fread_displacement(Crrfile, inicioInodo, inodoinicial)
+    
+    #Se agrega al reporte el inodo raiz
+    reporte += bbreporteInodoHijos(inodoinicial, Crrfile, Temp_suberB)
+    
+    #Se cierra el archivo
+    Crrfile.close()
+    
+    return reporte
+
+def bbreporteInodoHijos(inodo, Crrfile, Temp_suberB):
+    
+    reporte = ''
+    
+    #Se agrega el inodo al reporte
+    #reporte += inodo.generarInodoRep()
+    
+    #Se recorren todos los apuntadores de inodoinicio
+    
+    i = 0 #indice para leer cada apuntador del inodo
+    
+    while True:
+        if (inodo.i_block[i] == -1):
+            break
+        readfolderbloq = inodo.i_block[i]
+        # Se lee el bloque
+        bloquefold = Folder_block()
+        bloquearch = File_block()
+        Fread_displacement(Crrfile, Temp_suberB.block_start + readfolderbloq * struct.calcsize(Folder_block().get_const()), bloquefold)
+        Fread_displacement(Crrfile, Temp_suberB.block_start + readfolderbloq * struct.calcsize(File_block().get_const()), bloquearch)
+                
+        #if(bloquefold.b_content[0].b_name.decode() == '.'):    
+        
+        if(inodo.i_type == b'0'):
+            reporte += bbreporteBloquesHijos(bloquefold, Crrfile, Temp_suberB, inodo.i_block[i])
+        else:
+            reporte += bbreporteBloquesHijos(bloquearch, Crrfile, Temp_suberB, inodo.i_block[i])
+        i += 1
+    
+    return reporte
+
+def bbreporteBloquesHijos(bloque, Crrfile, Temb_suberB, n):    
+    reporte = ''
+    
+    #Se verifica si es un bloque de carpetas o de archivos
+    if (not isinstance(bloque.b_content,(list,tuple))):
+        reporte += bloque.generar_reporte(n)
+        
+    #Se recorre el bloque
+    else:
+        reporte += bloque.generarBloqueRep(n)
+        for k in range(4):
+            if(bloque.b_content[k].b_inodo == -1 or bloque.b_content[k].b_inodo == -2):
+                continue
+            if(bloque.b_content[k].b_name.decode() == '.' or bloque.b_content[k].b_name.decode() == '..'):
+                continue
+            inodo = Table_inode()
+            Fread_displacement(Crrfile, Temb_suberB.inode_start + bloque.b_content[k].b_inodo * struct.calcsize(Table_inode().get_const()), inodo)
+            reporte += bbreporteInodoHijos(inodo, Crrfile, Temb_suberB)
+        
+    return reporte

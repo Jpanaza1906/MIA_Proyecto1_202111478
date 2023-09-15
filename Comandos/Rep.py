@@ -8,6 +8,7 @@ from .Estructura.Super_block import *
 from .Estructura.Table_inode import *
 from .Estructura.Folder_block import *
 from .Estructura.File_block import *
+from .Estructura.Funcs import *
 from Utilities.Utilities import *
 from Global.Global import *
 
@@ -233,6 +234,279 @@ class Rep():
         
         except Exception as e:
             printError("\t Rep>>> Error al crear el reporte MBR\n")
+            print(e)
+            return False
+        
+    #Reporte SB --------------------------------------------------------------------------------------
+    def reporte_sb(self, mtpartition):
+        try:        
+            temp_suberBlock = Super_block()
+            
+            file = open(mtpartition.path, "rb+")
+            
+            WriteStart = mtpartition.partition.part_start
+            
+            #Si es una particion logica se le suma el inicio de la particion extendida
+            if mtpartition.islogic:
+                WriteStart += struct.calcsize(Ebr().get_const())
+                Fread_displacement(file, mtpartition.partition.part_start + struct.calcsize(Ebr().get_const(), temp_suberBlock))
+            else:
+                Fread_displacement(file, mtpartition.partition.part_start, temp_suberBlock)
+                
+            #Se crea el reporte
+            reporte = "digraph G{ rankdir=TB  node [shape=plaintext]"
+            #Se crea la tabla
+            reporte += "tabla[label = <<table border='1' cellborder='1' cellspacing='0'>"
+            #Se crea el encabezado
+            reporte += "<tr><td colspan='2' bgcolor='#00952d'><font color='white'><b>REPORTE DEL SUPER BLOQUE</b></font></td></tr>"
+            
+            reporte += temp_suberBlock.generar_reporte()
+            
+            #Se cierra la tabla
+            reporte += "</table>>];}"
+            
+            #Se cierra el archivo
+            file.close()
+            
+            if self.CreateGraph(reporte):
+                return True
+
+            return False
+        except Exception as e:
+            printError("\t Rep>>> Error al crear el reporte SB\n")
+            print(e)
+            return False
+    
+        
+    #Reporte INODE --------------------------------------------------------------------------------------
+    def reporte_inode(self, mtpartition):
+        try:
+            temp_suberBlock = Super_block()
+            file = open(mtpartition.path, "rb+")
+            WriteStart = mtpartition.partition.part_start
+            
+            #Si es una particion logica se le suma el inicio de la particion extendida
+            if mtpartition.islogic:
+                WriteStart += struct.calcsize(Ebr().get_const())
+                Fread_displacement(file, mtpartition.partition.part_start + struct.calcsize(Ebr().get_const(), temp_suberBlock))
+            else:
+                Fread_displacement(file, mtpartition.partition.part_start, temp_suberBlock)
+                
+            #Se obtiene el inicio del inodo
+            
+            #Se obtiene el inicio del inodo
+            reporte = "digraph G{ graph [pad=\"0.5\", nodesep=\"0.5\", ranksep=\"1\"];node [shape=plaintext] rankdir=LR;"
+            
+            #se obtiene le inicio de los inodos
+            start_inode = temp_suberBlock.inode_start
+            
+            #se recorren todos los inodos
+            n = 0
+            while True:
+                inodotemp = Table_inode()
+                Fread_displacement(file, start_inode + (n * struct.calcsize(Table_inode().get_const())), inodotemp)            
+                if inodotemp.i_uid == -1:
+                    break                
+                reporte += inodotemp.generar_reporte() 
+                #se conectan los inodos
+                
+                if n > 0:
+                    reporte += "Inodo" + str(n-1) + " -> Inodo" + str(n) + ";"
+                        
+                n += 1
+                
+            reporte += "}"
+            
+            file.close()
+            
+            if self.CreateGraph(reporte):
+                return True
+            return False
+        except Exception as e:
+            printError("\t Rep>>> Error al crear el reporte INODE\n")
+            print(e)
+            return False
+    #Reporte BLOQUES --------------------------------------------------------------------------------------
+    def reporte_block(self, mtpartition):
+        try:
+            temp_suberBlock = Super_block()
+            file = open(mtpartition.path, "rb+")
+            WriteStart = mtpartition.partition.part_start
+            
+            #Si es una particion logica se le suma el inicio de la particion extendida
+            if mtpartition.islogic:
+                WriteStart += struct.calcsize(Ebr().get_const())
+                Fread_displacement(file, mtpartition.partition.part_start + struct.calcsize(Ebr().get_const(), temp_suberBlock))
+            else:
+                Fread_displacement(file, mtpartition.partition.part_start, temp_suberBlock)
+                
+            #Se obtiene el inicio del inodo
+            reporte = "digraph G{ graph [pad=\"0.5\", nodesep=\"0.5\", ranksep=\"1\"];node [shape=plaintext] rankdir=LR;"
+            reporte += reporteBlock(self.id)
+            
+            #Se conectan los bloques en orden
+            for i in range(temp_suberBlock.blocks_count):
+                if i > 0:
+                    reporte += "Bloque" + str(i-1) + " -> Bloque" + str(i) + ";"
+            
+            reporte += "}"
+            
+            file.close()
+            
+            if self.CreateGraph(reporte):
+                return True
+            return False
+        except Exception as e:
+            printError("\t Rep>>> Error al crear el reporte BLOCK\n")
+            print(e)
+            return False
+        
+    #Reporte BM_INODE --------------------------------------------------------------------------------------
+    def bytes_to_binary_string(self, byte_data):
+        return ''.join(['1' if b == 1 else '0' for b in byte_data])
+    
+    def reporte_bm_inode(self, mtpartition):
+        try:
+            temp_suberBlock = Super_block()
+            file = open(mtpartition.path, "rb+")
+            WriteStart = mtpartition.partition.part_start
+            
+            #Si es una particion logica se le suma el inicio de la particion extendida
+            if mtpartition.islogic:
+                WriteStart += struct.calcsize(Ebr().get_const())
+                Fread_displacement(file, mtpartition.partition.part_start + struct.calcsize(Ebr().get_const(), temp_suberBlock))
+            else:
+                Fread_displacement(file, mtpartition.partition.part_start, temp_suberBlock)
+                
+            #Se obtiene el inicio del bitmap de inodos
+            inciobitmapinodo = temp_suberBlock.bm_inode_start
+            
+            bitmap = Fread_displacement_normal(file, inciobitmapinodo, temp_suberBlock.bm_block_start)
+            
+            
+            # Convertir los bytes en una cadena de 1s y 0s
+            bitmap_binary = self.bytes_to_binary_string(bitmap)
+
+            # Dividir la cadena binaria en grupos de 20 caracteres
+            segment_size = 20
+            segments = [bitmap_binary[i:i+segment_size] for i in range(0, len(bitmap_binary), segment_size)]
+
+            # Unir los segmentos con saltos de línea
+            reporte = '\n'.join(segments)
+
+            # Cerrar el archivo original
+            file.close()
+
+            # Crear el directorio y escribir el informe en un archivo de texto
+            os.makedirs(os.path.dirname(self.path), exist_ok=True)
+
+            with open(self.path, "w") as file:
+                file.write(reporte)         
+            
+            return True
+        except Exception as e:
+            printError("\t Rep>>> Error al crear el reporte BM_INODE\n")
+            print(e)
+            return False
+        
+    #Reporte BM_BLOCK --------------------------------------------------------------------------------------
+    
+    def reporte_bm_block(self, mtpartition):
+        try:
+            temp_suberBlock = Super_block()
+            file = open(mtpartition.path, "rb+")
+            WriteStart = mtpartition.partition.part_start
+            
+            #Si es una particion logica se le suma el inicio de la particion extendida
+            if mtpartition.islogic:
+                WriteStart += struct.calcsize(Ebr().get_const())
+                Fread_displacement(file, mtpartition.partition.part_start + struct.calcsize(Ebr().get_const(), temp_suberBlock))
+            else:
+                Fread_displacement(file, mtpartition.partition.part_start, temp_suberBlock)
+                
+            #Se obtiene el inicio del bitmap de inodos
+            inciobitmapblock = temp_suberBlock.bm_block_start
+            
+            bitmap = Fread_displacement_normal(file, inciobitmapblock, temp_suberBlock.inode_start)
+            
+            
+            # Convertir los bytes en una cadena de 1s y 0s
+            bitmap_binary = self.bytes_to_binary_string(bitmap)
+
+            # Dividir la cadena binaria en grupos de 20 caracteres
+            segment_size = 20
+            segments = [bitmap_binary[i:i+segment_size] for i in range(0, len(bitmap_binary), segment_size)]
+
+            # Unir los segmentos con saltos de línea
+            reporte = '\n'.join(segments)
+
+            # Cerrar el archivo original
+            file.close()
+
+            # Crear el directorio y escribir el informe en un archivo de texto
+            os.makedirs(os.path.dirname(self.path), exist_ok=True)
+
+            with open(self.path, "w") as file:
+                file.write(reporte)         
+            
+            return True
+        except Exception as e:
+            printError("\t Rep>>> Error al crear el reporte BM_BLOCK\n")
+            print(e)
+            return False
+        
+        
+    #Reporte TREE --------------------------------------------------------------------------------------
+    def reporte_tree(self, mtpartition):
+        try:
+            temp_suberBlock = Super_block()
+            file = open(mtpartition.path, "rb+")
+            WriteStart = mtpartition.partition.part_start
+            
+            #Si es una particion logica se le suma el inicio de la particion extendida
+            if mtpartition.islogic:
+                WriteStart += struct.calcsize(Ebr().get_const())
+                Fread_displacement(file, mtpartition.partition.part_start + struct.calcsize(Ebr().get_const(), temp_suberBlock))
+            else:
+                Fread_displacement(file, mtpartition.partition.part_start, temp_suberBlock)
+                
+            #Se obtiene el inicio del inodo
+            reporte = "digraph G{ graph [pad=\"0.5\", nodesep=\"0.5\", ranksep=\"1\"];node [shape=plaintext] rankdir=LR;"
+            reporte += reporteTree(self.id)
+            reporte += "}"
+            
+            file.close()
+            
+            if self.CreateGraph(reporte):
+                return True
+            return False
+        except Exception as e:
+            printError("\t Rep>>> Error al crear el reporte TREE\n")
+            print(e)
+            return False
+    
+        
+    #Reporte FILE --------------------------------------------------------------------------------------
+    def reporte_file(self, mtpartition):
+        try:            
+            vecArch = getFileContentFromPath(self.id, self.ruta)
+            
+            contenidoarch = ['']
+            for contenido in vecArch:
+                contenidoarch[0] = contenidoarch[0] + contenido[0]
+            
+            contenidoleido = "Contenido del archivo " + self.ruta + ":\n"
+            contenidoleido = contenidoleido + contenidoarch[0]
+            
+            os.makedirs(os.path.dirname(self.path), exist_ok=True)
+
+            with open(self.path, "w") as file:
+                file.write(contenidoleido)         
+            
+            return True
+            
+        except Exception as e:
+            printError("\t Rep>>> Error al crear el reporte FILE\n")
             print(e)
             return False
     
