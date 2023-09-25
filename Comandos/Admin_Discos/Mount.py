@@ -95,9 +95,9 @@ class Mount():
                 #
             #Si es una particion primaria
             
-            if(particion_montar.part_type.decode() == 'E'):
-                printError(f"\t Mount>>> La particion:{self.name} es una particion extendida, se deben montar sus particiones lógicas.\n")
-                return False
+            #if(particion_montar.part_type.decode() == 'E'):
+            #    printError(f"\t Mount>>> La particion:{self.name} es una particion extendida, se deben montar sus particiones lógicas.\n")
+            #    return False
             
             #Se llama la funcion que agrega las particiones montadas a memoria            
             file.close()
@@ -119,8 +119,9 @@ class Mount():
         #Se verifica si la particion ya esta montada
         for data in mounted_partitions:
             if(data.partition.part_name.decode() == particion_montar.part_name.decode()):
-                printError(f"\t Mount>>> La particion:{self.name} ya esta montada\n")
-                return False
+                if (data.path == self.path):
+                    printError(f"\t Mount>>> La particion:{self.name} ya esta montada\n")
+                    return False
         
         #Clave para guardar particion = CARNET.substring(6,8) + NUMERO_PARTICION + NOMBRE DISCO
         nombre_archivo = os.path.splitext(os.path.basename(self.path))[0]
