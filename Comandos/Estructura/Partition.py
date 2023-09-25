@@ -106,19 +106,19 @@ class Partition(ctypes.Structure):
     def generar_reporte(self,path):
         reporte = ""
         #Se agrega el tipo de la particion
-        reporte += "<tr><td colspan='2' bgcolor='#5004a4'><font color='white'><b>Particion</b></font></td></tr>"
+        reporte += "<tr><td colspan=\"2\" bgcolor=\"#5004a4\"><font color=\"white\"><b>Particion</b></font></td></tr>"
         #Se agrega el status de la particion
         reporte += "<tr><td>Status</td><td>" + self.part_status.decode() + "</td></tr>"
         #Se agrega el tipo de la particion
-        reporte += "<tr><td bgcolor='#d7c7e9'>Tipo</td><td bgcolor='#d7c7e9'>" + self.part_type.decode() + "</td></tr>"
+        reporte += "<tr><td bgcolor=\"#d7c7e9\">Tipo</td><td bgcolor=\"#d7c7e9\">" + self.part_type.decode() + "</td></tr>"
         #Se agrega el fit de la particion
         reporte += "<tr><td>Fit</td><td>" + self.part_fit.decode() + "</td></tr>"
         #Se agrega el inicio de la particion
-        reporte += "<tr><td bgcolor='#d7c7e9'>Inicio</td><td bgcolor='#d7c7e9'>" + str(self.part_start) + "</td></tr>"
+        reporte += "<tr><td bgcolor=\"#d7c7e9\">Inicio</td><td bgcolor=\"#d7c7e9\">" + str(self.part_start) + "</td></tr>"
         #Se agrega el tamaño de la particion
-        reporte += "<tr><td >Tamaño</td><td>" + str(self.part_size) + "</td></tr>"
+        reporte += "<tr><td >Tamano</td><td>" + str(self.part_size) + "</td></tr>"
         #Se agrega el nombre de la particion
-        reporte += "<tr><td bgcolor='#d7c7e9'>Nombre</td><td bgcolor='#d7c7e9'>" + self.part_name.decode() + "</td></tr>"
+        reporte += "<tr><td bgcolor=\"#d7c7e9\">Nombre</td><td bgcolor=\"#d7c7e9\">" + self.part_name.decode() + "</td></tr>"
         
         #Si es una particion extendida se agrega el reporte de las particiones logicas
         if self.part_type.decode().lower() == 'e':

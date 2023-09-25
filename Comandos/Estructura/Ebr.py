@@ -125,19 +125,19 @@ class Ebr(ctypes.Structure):
     def generar_reporte(self, path):
         reporte = ""
         #Se crea el encabezado
-        reporte += "<tr><td colspan='2' bgcolor='#f8853f'><font color='white'><b>Particion Logica</b></font></td></tr>"
+        reporte += "<tr><td colspan=\"2\" bgcolor=\"#f8853f\"><font color=\"white\"><b>Particion Logica</b></font></td></tr>"
         #Se agrega el status de la particion
         reporte += "<tr><td>Status</td><td>" + self.part_status.decode() + "</td></tr>"
         #Se agrega el fit de la particion
-        reporte += "<tr><td bgcolor='#fdc6a4'>Fit</td><td bgcolor='#fdc6a4'>" + self.part_fit.decode() + "</td></tr>"
+        reporte += "<tr><td bgcolor=\"#fdc6a4\">Fit</td><td bgcolor=\"#fdc6a4\">" + self.part_fit.decode() + "</td></tr>"
         #Se agrega el inicio de la particion
         reporte += "<tr><td>Inicio</td><td>" + str(self.part_start) + "</td></tr>"
         #Se agrega el tamaño de la particion
-        reporte += "<tr><td bgcolor='#fdc6a4'>Tamaño</td><td bgcolor='#fdc6a4'>" + str(self.part_size) + "</td></tr>"
+        reporte += "<tr><td bgcolor=\"#fdc6a4\">Tamano</td><td bgcolor=\"#fdc6a4\">" + str(self.part_size) + "</td></tr>"
         #Se agrega el siguiente de la particion
         reporte += "<tr><td>Siguiente</td><td>" + str(self.part_next) + "</td></tr>"
         #Se agrega el nombre de la particion
-        reporte += "<tr><td bgcolor='#fdc6a4'>Nombre</td><td bgcolor='#fdc6a4'>" + self.part_name.decode() + "</td></tr>"
+        reporte += "<tr><td bgcolor=\"#fdc6a4\">Nombre</td><td bgcolor=\"#fdc6a4\">" + self.part_name.decode() + "</td></tr>"
         
         return reporte
         

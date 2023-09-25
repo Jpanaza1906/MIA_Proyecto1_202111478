@@ -135,11 +135,11 @@ class Rep():
             Fread_displacement(file, 0, crr_mbr)
             
             #Se crea el reporte
-            reporte = "digraph G{ rankdir=TB  node [shape=plaintext]"
+            reporte = "digraph G{rankdir=TB  node [shape=plaintext]"
             #Se crea la tabla
-            reporte += "tabla[label = <<table border='0' cellborder='1' cellspacing='0'>"
+            reporte += "tabla[label = <<table border=\"0\" cellborder=\"1\" cellspacing=\"0\">"
             #Se crea el encabezado
-            reporte += "<tr><td colspan='2' bgcolor='#5004a4'><font color='white'><b>REPORTE DEL MBR</b></font></td></tr>"
+            reporte += "<tr><td colspan=\"2\" bgcolor=\"#5004a4\"><font color=\"white\"><b>REPORTE DEL MBR</b></font></td></tr>"
             
             reporte += crr_mbr.generar_reporte(mtpartition.path)
             
@@ -172,53 +172,58 @@ class Rep():
             #Se crea el reporte
             reporte = "digraph G{ rankdir=TB  node [shape=plaintext]"
             #Se crea la tabla
-            reporte += "tabla[label = <<table border='1' cellborder='1' cellspacing='0'>"
+            reporte += "tabla[label = <<table border=\"1\" cellborder=\"1\" cellspacing=\"0\">"
 
             completesize = crr_mbr.mbr_tamano
             
             #porcetaje del mbr
             
             #Se crea el bloque MBR
-            reporte += "<tr><td rowspan='2' ><b>MBR</b></td>"
+            reporte += "<tr><td rowspan=\"2\" ><b>MBR</b></td>"
             
             #se recorren las particiones
-            seek = 133
+            seek = 133            
+            cont = 0
+            porcenext = 0
             for partition in crr_mbr.mbr_partition:
                 if(partition.part_status.decode() == '0'):
                     porcentaje = ((partition.part_start - seek) * 100) / completesize
-                    reporte += "<td rowspan='2' width='" + str(porcentaje) + "%'><b>Libre " + str(porcentaje) +"%" +" del disco</b></td>"
+                    porcentaje = round(porcentaje, 2)
+                    reporte += "<td rowspan=\"2\" width=\"" + str(porcentaje) + "%\"><b>Libre " + str(porcentaje) +"%" +" del disco</b></td>"
                     seek = partition.part_start + partition.part_size
                     continue
                 #Se calcula el porcentaje de la particion
                 porcentaje = (partition.part_size * 100) / completesize
-                
+                porcentaje = round(porcentaje, 2)
                 if partition.part_type.decode().lower() != 'e':
                     #Se crea el bloque de la particion
-                    reporte += "<td rowspan='2' width='" + str(porcentaje) + "%'><b> Primaria " + str(porcentaje) + "%" +" del disco</b></td>"
+                    reporte += "<td rowspan=\"2\" width=\"" + str(porcentaje) + "%\"><b> Primaria " + str(porcentaje) + "%" +" del disco</b></td>"
                     seek = partition.part_start + partition.part_size
                     continue
-                
+                porcenext = porcentaje
                 startp = partition.part_start
-                cont = 0
                 while (startp != -1):
                     if(startp > seek):
                         porcentaje = ((startp - seek) * 100) / completesize
-                        reporte += "<td width='" + str(porcentaje) + "%'><b>Libre " + str(porcentaje) +"%" +" del disco</b></td>"
+                        porcentaje = round(porcentaje, 2)
+                        reporte += "<td width=\"" + str(porcentaje) + "%\"><b>Libre " + str(porcentaje) +"%" +" del disco</b></td>"
                         seek = startp
                         cont += 1
                         continue
                     ebr = Ebr()
                     Fread_displacement(file, startp, ebr)                    
                     porcentaje = (ebr.part_size * 100) / completesize
+                    porcentaje = round(porcentaje, 2)
                     #Se crea el bloque de la particion
-                    reporte += "<td>EBR</td><td width='" + str(porcentaje) + "%'><b> Logica " + str(porcentaje) + "%"+" del disco</b></td>"
+                    reporte += "<td>EBR</td><td width=\"" + str(porcentaje) + "%\"><b> Logica " + str(porcentaje) + "%"+" del disco</b></td>"
                     startp = ebr.part_next
                     seek = startp
                     cont += 2            
             reporte += "</tr>"
-            reporte += "<tr>"                
-            reporte += "<td colspan='" + str(cont) + "'><b>Extendida</b></td>"
-            reporte += "</tr>"
+            if (cont > 0):
+                reporte += "<tr>"                
+                reporte += "<td colspan=\"" + str(cont) + "\"><b>Extendida "+ str(porcenext) + "%" +" del disco</b></td>"
+                reporte += "</tr>"
             #Se cierra la tabla
             reporte += "</table>>];}"
             
@@ -572,6 +577,7 @@ class Rep():
     
     def CreateGraph(self, reporte):
         try:
+            #reporte = 'r\'' + reporte + '\''
             # Obtener el nombre del archivo y la extensión
             nombre_archivo, extension = os.path.splitext(os.path.basename(self.path))
             #le quitamos el punto a la extension
@@ -581,8 +587,8 @@ class Rep():
             folder_path = os.path.dirname(self.path)
             documento = folder_path + '/' + nombre_archivo + ".txt"
 
-            with open(documento, 'w') as grafica:
-                grafica.write(reporte)
+            with open(documento, 'w', encoding='unicode_escape') as archivo:
+                archivo.write(reporte)
 
             # GENERO LA IMAGEN
             

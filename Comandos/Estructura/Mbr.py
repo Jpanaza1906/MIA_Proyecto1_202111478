@@ -131,7 +131,7 @@ class Mbr(ctypes.Structure):
         #Se agrega el tama;o del disco
         reporte += "<tr><td>Tamaño</td><td>" + str(self.mbr_tamano) + "</td></tr>"
         #Se agrega la fecha de creacion
-        reporte += "<tr><td  bgcolor='#d7c7e9'>Fecha de Creacion</td><td bgcolor='#d7c7e9'>" + self.mbr_fecha_creacion.decode() + "</td></tr>"
+        reporte += "<tr><td  bgcolor=\"#d7c7e9\">Fecha de Creacion</td><td bgcolor=\"#d7c7e9\">" + self.mbr_fecha_creacion.decode() + "</td></tr>"
         #Se agrega la firma
         reporte += "<tr><td>Firma</td><td>" + str(self.mbr_dsk_signature) + "</td></tr>"
         

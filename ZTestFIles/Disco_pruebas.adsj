@@ -74,6 +74,7 @@ mkfile -size=15 -path=/home/user/a.txt
 mkfile -size=10 -path=/bin/b.txt
 mkfile -path=/home/archivos/pruebas/c.txt -cont=/home/josep-ubu/Downloads/arch1.txt -r
 
+#rep -id=781Disco1 -path=/home/user/reports/reportembr.jpg -name=mbr
 #rep -id=781Disco1 -path=/home/user/reports/report8.jpg -name=tree
 #rep -id=781Disco1 -path=/home/user/reports/report9.jpg -name=inode
 #rep -id=781Disco1 -path=/home/user/reports/report10.jpg -name=block

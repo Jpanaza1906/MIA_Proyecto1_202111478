@@ -499,6 +499,7 @@ class FDisk:
                 crr_mbr.set_mbr_partition(particion_nuevosize, indexP_cambiar)
                 Fwrite_displacement(file,0,crr_mbr)
                 file.close()
+                return True
         
             
             
