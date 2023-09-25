@@ -68,8 +68,7 @@ class Mkdir():
                     contr += 1
                 
                 if contr == len(carpetas) - 1:
-                    printError("\t Mkdir>>> Ya existe la carpeta\n")
-                    return False    
+                    printError("\t Mkdir>>> Ya existe la carpeta padre para utilizar -r\n")   
             return True
                 
         if(createFolder(crruser.partitionId, self.path, fecha)):

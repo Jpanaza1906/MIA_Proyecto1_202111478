@@ -117,8 +117,6 @@ class Rep():
                     return True
                 return False
             case 'ls':
-                if self.reporte_ls(crrpartition):
-                    return True
                 return False
             case _:
                 printError("\t Rep>>> No existe el reporte\n")

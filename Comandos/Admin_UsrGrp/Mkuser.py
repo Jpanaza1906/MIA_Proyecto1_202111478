@@ -99,7 +99,7 @@ class Mkuser():
                         return False
         
         if buengrupo:
-            cadena_nueva = str(cont_grupo) + ',U,' + self.group + ',' + self.user + ',' + self.password + '\n'
+            cadena_nueva = str(cont_grupo+1) + ',U,' + self.group + ',' + self.user + ',' + self.password + '\n'
             cadena.append(cadena_nueva)
             buengrupo = False
                     
